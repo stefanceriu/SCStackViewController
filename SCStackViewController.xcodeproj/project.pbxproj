@@ -1,0 +1,394 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1823A8E117BEAC7500D58582 /* UIColor+RandomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D017BEAC7500D58582 /* UIColor+RandomColors.m */; };
+		1823A8E217BEAC7500D58582 /* UIViewController+Shadows.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D217BEAC7500D58582 /* UIViewController+Shadows.m */; };
+		1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D417BEAC7500D58582 /* SCAppDelegate.m */; };
+		1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D617BEAC7500D58582 /* SCMenuViewController.m */; };
+		1823A8E517BEAC7500D58582 /* SCMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */; };
+		1823A8E717BEAC7500D58582 /* SCStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8DD17BEAC7500D58582 /* SCStackViewController.m */; };
+		1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8DF17BEAC7500D58582 /* SCRootViewController.m */; };
+		1823A8E917BEAC7500D58582 /* SCRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1823A8E017BEAC7500D58582 /* SCRootViewController.xib */; };
+		1829173B17C9479F00D8015D /* SCMerryGoRoundStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1829173A17C9479F00D8015D /* SCMerryGoRoundStackLayouter.m */; };
+		1829173F17C9492100D8015D /* SCReversedStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1829173E17C9492100D8015D /* SCReversedStackLayouter.m */; };
+		18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18364B4617BFB6450066F67A /* SCMainViewController.m */; };
+		18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18364B4717BFB6450066F67A /* SCMainViewController.xib */; };
+		18384AAB17C9243800D440B2 /* SCParallaxStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18384AA617C9243800D440B2 /* SCParallaxStackLayouter.m */; };
+		18384AAC17C9243800D440B2 /* SCSlidingStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18384AA817C9243800D440B2 /* SCSlidingStackLayouter.m */; };
+		18384AAD17C9243800D440B2 /* SCStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18384AAA17C9243800D440B2 /* SCStackLayouter.m */; };
+		18384AB017C9249E00D440B2 /* SCGoogleMapsStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18384AAF17C9249E00D440B2 /* SCGoogleMapsStackLayouter.m */; };
+		18BF962317BEB56C00109BB7 /* UIViewController+SCStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BF962217BEB56C00109BB7 /* UIViewController+SCStackViewController.m */; };
+		18C8B23317BFC443000FAEE5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C8B23217BFC443000FAEE5 /* QuartzCore.framework */; };
+		18FEAAE617B3ED2F00788EF0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE517B3ED2F00788EF0 /* UIKit.framework */; };
+		18FEAAE817B3ED2F00788EF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE717B3ED2F00788EF0 /* Foundation.framework */; };
+		18FEAAEA17B3ED2F00788EF0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */; };
+		18FEAAF217B3ED2F00788EF0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FEAAF117B3ED2F00788EF0 /* main.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		181ABFFF17C115F3004D5F45 /* SCStackLayouterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStackLayouterProtocol.h; sourceTree = "<group>"; };
+		1823A8CF17BEAC7500D58582 /* UIColor+RandomColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RandomColors.h"; sourceTree = "<group>"; };
+		1823A8D017BEAC7500D58582 /* UIColor+RandomColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RandomColors.m"; sourceTree = "<group>"; };
+		1823A8D117BEAC7500D58582 /* UIViewController+Shadows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Shadows.h"; sourceTree = "<group>"; };
+		1823A8D217BEAC7500D58582 /* UIViewController+Shadows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Shadows.m"; sourceTree = "<group>"; };
+		1823A8D317BEAC7500D58582 /* SCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAppDelegate.h; sourceTree = "<group>"; };
+		1823A8D417BEAC7500D58582 /* SCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCAppDelegate.m; sourceTree = "<group>"; };
+		1823A8D517BEAC7500D58582 /* SCMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMenuViewController.h; sourceTree = "<group>"; };
+		1823A8D617BEAC7500D58582 /* SCMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMenuViewController.m; sourceTree = "<group>"; };
+		1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCMenuViewController.xib; sourceTree = "<group>"; };
+		1823A8DC17BEAC7500D58582 /* SCStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStackViewController.h; sourceTree = "<group>"; };
+		1823A8DD17BEAC7500D58582 /* SCStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStackViewController.m; sourceTree = "<group>"; };
+		1823A8DE17BEAC7500D58582 /* SCRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRootViewController.h; sourceTree = "<group>"; };
+		1823A8DF17BEAC7500D58582 /* SCRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRootViewController.m; sourceTree = "<group>"; };
+		1823A8E017BEAC7500D58582 /* SCRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCRootViewController.xib; sourceTree = "<group>"; };
+		1829173917C9479F00D8015D /* SCMerryGoRoundStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMerryGoRoundStackLayouter.h; sourceTree = "<group>"; };
+		1829173A17C9479F00D8015D /* SCMerryGoRoundStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMerryGoRoundStackLayouter.m; sourceTree = "<group>"; };
+		1829173D17C9492100D8015D /* SCReversedStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCReversedStackLayouter.h; sourceTree = "<group>"; };
+		1829173E17C9492100D8015D /* SCReversedStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCReversedStackLayouter.m; sourceTree = "<group>"; };
+		18364B4517BFB6450066F67A /* SCMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMainViewController.h; sourceTree = "<group>"; };
+		18364B4617BFB6450066F67A /* SCMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMainViewController.m; sourceTree = "<group>"; };
+		18364B4717BFB6450066F67A /* SCMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCMainViewController.xib; sourceTree = "<group>"; };
+		18384AA517C9243800D440B2 /* SCParallaxStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCParallaxStackLayouter.h; sourceTree = "<group>"; };
+		18384AA617C9243800D440B2 /* SCParallaxStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCParallaxStackLayouter.m; sourceTree = "<group>"; };
+		18384AA717C9243800D440B2 /* SCSlidingStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSlidingStackLayouter.h; sourceTree = "<group>"; };
+		18384AA817C9243800D440B2 /* SCSlidingStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSlidingStackLayouter.m; sourceTree = "<group>"; };
+		18384AA917C9243800D440B2 /* SCStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStackLayouter.h; sourceTree = "<group>"; };
+		18384AAA17C9243800D440B2 /* SCStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStackLayouter.m; sourceTree = "<group>"; };
+		18384AAE17C9249E00D440B2 /* SCGoogleMapsStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGoogleMapsStackLayouter.h; sourceTree = "<group>"; };
+		18384AAF17C9249E00D440B2 /* SCGoogleMapsStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGoogleMapsStackLayouter.m; sourceTree = "<group>"; };
+		18BF962117BEB56C00109BB7 /* UIViewController+SCStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SCStackViewController.h"; sourceTree = "<group>"; };
+		18BF962217BEB56C00109BB7 /* UIViewController+SCStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SCStackViewController.m"; sourceTree = "<group>"; };
+		18C8B23217BFC443000FAEE5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		18FEAAE217B3ED2F00788EF0 /* SCStackViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SCStackViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18FEAAE517B3ED2F00788EF0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		18FEAAE717B3ED2F00788EF0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		18FEAAED17B3ED2F00788EF0 /* SCStackViewController-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SCStackViewController-Info.plist"; sourceTree = "<group>"; };
+		18FEAAF117B3ED2F00788EF0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		18FEAAF317B3ED2F00788EF0 /* SCStackViewController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SCStackViewController-Prefix.pch"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		18FEAADF17B3ED2F00788EF0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18C8B23317BFC443000FAEE5 /* QuartzCore.framework in Frameworks */,
+				18FEAAE617B3ED2F00788EF0 /* UIKit.framework in Frameworks */,
+				18FEAAE817B3ED2F00788EF0 /* Foundation.framework in Frameworks */,
+				18FEAAEA17B3ED2F00788EF0 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1823A8CE17BEAC7500D58582 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				1823A8CF17BEAC7500D58582 /* UIColor+RandomColors.h */,
+				1823A8D017BEAC7500D58582 /* UIColor+RandomColors.m */,
+				1823A8D117BEAC7500D58582 /* UIViewController+Shadows.h */,
+				1823A8D217BEAC7500D58582 /* UIViewController+Shadows.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		1823A8D817BEAC7500D58582 /* SCStackViewController */ = {
+			isa = PBXGroup;
+			children = (
+				1823A8DC17BEAC7500D58582 /* SCStackViewController.h */,
+				1823A8DD17BEAC7500D58582 /* SCStackViewController.m */,
+				18BF962117BEB56C00109BB7 /* UIViewController+SCStackViewController.h */,
+				18BF962217BEB56C00109BB7 /* UIViewController+SCStackViewController.m */,
+				18364B3A17BF6BA00066F67A /* Layouters */,
+			);
+			path = SCStackViewController;
+			sourceTree = "<group>";
+		};
+		1829173C17C9492100D8015D /* Reversed */ = {
+			isa = PBXGroup;
+			children = (
+				1829173D17C9492100D8015D /* SCReversedStackLayouter.h */,
+				1829173E17C9492100D8015D /* SCReversedStackLayouter.m */,
+			);
+			path = Reversed;
+			sourceTree = "<group>";
+		};
+		18364B3A17BF6BA00066F67A /* Layouters */ = {
+			isa = PBXGroup;
+			children = (
+				181ABFFF17C115F3004D5F45 /* SCStackLayouterProtocol.h */,
+				18384AA917C9243800D440B2 /* SCStackLayouter.h */,
+				18384AAA17C9243800D440B2 /* SCStackLayouter.m */,
+				18384AA717C9243800D440B2 /* SCSlidingStackLayouter.h */,
+				18384AA817C9243800D440B2 /* SCSlidingStackLayouter.m */,
+				18384AA517C9243800D440B2 /* SCParallaxStackLayouter.h */,
+				18384AA617C9243800D440B2 /* SCParallaxStackLayouter.m */,
+				18384AAE17C9249E00D440B2 /* SCGoogleMapsStackLayouter.h */,
+				18384AAF17C9249E00D440B2 /* SCGoogleMapsStackLayouter.m */,
+				1829173917C9479F00D8015D /* SCMerryGoRoundStackLayouter.h */,
+				1829173A17C9479F00D8015D /* SCMerryGoRoundStackLayouter.m */,
+				1829173C17C9492100D8015D /* Reversed */,
+			);
+			path = Layouters;
+			sourceTree = "<group>";
+		};
+		18FEAAD917B3ED2F00788EF0 = {
+			isa = PBXGroup;
+			children = (
+				18FEAAEB17B3ED2F00788EF0 /* SCStackViewController */,
+				18FEAAE417B3ED2F00788EF0 /* Frameworks */,
+				18FEAAE317B3ED2F00788EF0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		18FEAAE317B3ED2F00788EF0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				18FEAAE217B3ED2F00788EF0 /* SCStackViewController.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		18FEAAE417B3ED2F00788EF0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				18C8B23217BFC443000FAEE5 /* QuartzCore.framework */,
+				18FEAAE517B3ED2F00788EF0 /* UIKit.framework */,
+				18FEAAE717B3ED2F00788EF0 /* Foundation.framework */,
+				18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		18FEAAEB17B3ED2F00788EF0 /* SCStackViewController */ = {
+			isa = PBXGroup;
+			children = (
+				1823A8D817BEAC7500D58582 /* SCStackViewController */,
+				1823A8D317BEAC7500D58582 /* SCAppDelegate.h */,
+				1823A8D417BEAC7500D58582 /* SCAppDelegate.m */,
+				1823A8DE17BEAC7500D58582 /* SCRootViewController.h */,
+				1823A8DF17BEAC7500D58582 /* SCRootViewController.m */,
+				1823A8E017BEAC7500D58582 /* SCRootViewController.xib */,
+				18364B4517BFB6450066F67A /* SCMainViewController.h */,
+				18364B4617BFB6450066F67A /* SCMainViewController.m */,
+				18364B4717BFB6450066F67A /* SCMainViewController.xib */,
+				1823A8D517BEAC7500D58582 /* SCMenuViewController.h */,
+				1823A8D617BEAC7500D58582 /* SCMenuViewController.m */,
+				1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */,
+				1823A8CE17BEAC7500D58582 /* Helpers */,
+				18FEAAEC17B3ED2F00788EF0 /* Supporting Files */,
+			);
+			path = SCStackViewController;
+			sourceTree = "<group>";
+		};
+		18FEAAEC17B3ED2F00788EF0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				18FEAAED17B3ED2F00788EF0 /* SCStackViewController-Info.plist */,
+				18FEAAF117B3ED2F00788EF0 /* main.m */,
+				18FEAAF317B3ED2F00788EF0 /* SCStackViewController-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		18FEAAE117B3ED2F00788EF0 /* SCStackViewController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18FEAB0517B3ED2F00788EF0 /* Build configuration list for PBXNativeTarget "SCStackViewController" */;
+			buildPhases = (
+				18FEAADE17B3ED2F00788EF0 /* Sources */,
+				18FEAADF17B3ED2F00788EF0 /* Frameworks */,
+				18FEAAE017B3ED2F00788EF0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SCStackViewController;
+			productName = SCStackViewController;
+			productReference = 18FEAAE217B3ED2F00788EF0 /* SCStackViewController.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		18FEAADA17B3ED2F00788EF0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = SC;
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Stefan Ceriu";
+			};
+			buildConfigurationList = 18FEAADD17B3ED2F00788EF0 /* Build configuration list for PBXProject "SCStackViewController" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 18FEAAD917B3ED2F00788EF0;
+			productRefGroup = 18FEAAE317B3ED2F00788EF0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				18FEAAE117B3ED2F00788EF0 /* SCStackViewController */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		18FEAAE017B3ED2F00788EF0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1823A8E517BEAC7500D58582 /* SCMenuViewController.xib in Resources */,
+				1823A8E917BEAC7500D58582 /* SCRootViewController.xib in Resources */,
+				18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		18FEAADE17B3ED2F00788EF0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18FEAAF217B3ED2F00788EF0 /* main.m in Sources */,
+				1823A8E117BEAC7500D58582 /* UIColor+RandomColors.m in Sources */,
+				1823A8E217BEAC7500D58582 /* UIViewController+Shadows.m in Sources */,
+				1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */,
+				1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */,
+				1823A8E717BEAC7500D58582 /* SCStackViewController.m in Sources */,
+				1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */,
+				18BF962317BEB56C00109BB7 /* UIViewController+SCStackViewController.m in Sources */,
+				18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */,
+				18384AAB17C9243800D440B2 /* SCParallaxStackLayouter.m in Sources */,
+				18384AAC17C9243800D440B2 /* SCSlidingStackLayouter.m in Sources */,
+				18384AAD17C9243800D440B2 /* SCStackLayouter.m in Sources */,
+				18384AB017C9249E00D440B2 /* SCGoogleMapsStackLayouter.m in Sources */,
+				1829173B17C9479F00D8015D /* SCMerryGoRoundStackLayouter.m in Sources */,
+				1829173F17C9492100D8015D /* SCReversedStackLayouter.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		18FEAB0317B3ED2F00788EF0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		18FEAB0417B3ED2F00788EF0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		18FEAB0617B3ED2F00788EF0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SCStackViewController/SCStackViewController-Prefix.pch";
+				INFOPLIST_FILE = "SCStackViewController/SCStackViewController-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		18FEAB0717B3ED2F00788EF0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SCStackViewController/SCStackViewController-Prefix.pch";
+				INFOPLIST_FILE = "SCStackViewController/SCStackViewController-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		18FEAADD17B3ED2F00788EF0 /* Build configuration list for PBXProject "SCStackViewController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18FEAB0317B3ED2F00788EF0 /* Debug */,
+				18FEAB0417B3ED2F00788EF0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		18FEAB0517B3ED2F00788EF0 /* Build configuration list for PBXNativeTarget "SCStackViewController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18FEAB0617B3ED2F00788EF0 /* Debug */,
+				18FEAB0717B3ED2F00788EF0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 18FEAADA17B3ED2F00788EF0 /* Project object */;
+}
