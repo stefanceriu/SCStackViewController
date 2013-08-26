@@ -55,24 +55,38 @@ Just something I was playing with.. :)
 
 - Import the stack into your project
 
-<code>#import "SCStackViewController.h"</code>
+```
+#import "SCStackViewController.h"
+```
 
 - Create a new instance
 
-<code>stackViewController = [[SCStackViewController alloc] initWithRootViewController:rootViewController];</code>
+```
+stackViewController = [[SCStackViewController alloc] initWithRootViewController:rootViewController];
+```
  
 - Set a touch refusal area (optional)
 
-<code>[stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]]</code>
+```
+[stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]]
+```
  
 - Register layouters
 
-<code>id<SCStackLayouterProtocol> layouter = [[SCParallaxStackLayouter alloc] init];
-[stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionLeft];</code>
+```
+id<SCStackLayouterProtocol> layouter = [[SCParallaxStackLayouter alloc] init];
+[stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionLeft];
+```
 
 - Push view controllers
 
-<code>[self.stackViewController pushViewController:leftViewController atPosition:SCStackViewControllerPositionLeft unfold:NO animated:NO completion:nil];</code>
+```
+[self.stackViewController pushViewController:leftViewController 
+								  atPosition:SCStackViewControllerPositionLeft 
+								  	  unfold:NO 
+								  	animated:NO 
+								  completion:nil];
+```
 
 ######Check out the demo project for more details.
 
