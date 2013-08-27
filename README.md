@@ -91,7 +91,7 @@ id<SCStackLayouterProtocol> layouter = [[SCParallaxStackLayouter alloc] init];
 ######Check out the demo project for more details.
 
 ## License
-SCStackViewController is released under the GNU GENERAL PUBLIC LICENSE (see the LICENSE file)
+SCStackViewController is released under the MIT License (MIT) (see the LICENSE file)
 
 ## Contact
 Any suggestions or improvements are more than welcome.
