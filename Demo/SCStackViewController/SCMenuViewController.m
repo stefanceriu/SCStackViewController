@@ -34,26 +34,6 @@
     [self.view setBackgroundColor:[UIColor randomColor]];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    NSLog(@"%@ - %@", NSStringFromSelector(_cmd), self);
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    NSLog(@"%@ - %@", NSStringFromSelector(_cmd), self);
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    NSLog(@"%@ - %@", NSStringFromSelector(_cmd), self);
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    NSLog(@"%@ - %@", NSStringFromSelector(_cmd), self);
-}
-
 - (IBAction)onPushButtonTap:(id)sender
 {
     if([self.delegate respondsToSelector:@selector(menuViewControllerDidRequestPush:)]) {
