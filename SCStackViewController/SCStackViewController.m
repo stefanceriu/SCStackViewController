@@ -9,6 +9,8 @@
 #import "SCStackViewController.h"
 #import "SCStackLayouterProtocol.h"
 
+#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+
 static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 @interface SCStackScrollView : UIScrollView <UIGestureRecognizerDelegate>
@@ -370,19 +372,24 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         }
     }
     
+    CGFloat iOS5Adjustment = 0.0f;
+    if(SYSTEM_VERSION_LESS_THAN(@"6.0")) {
+        iOS5Adjustment = 0.1f;
+    }
+    
     if(velocity.x || velocity.y == 0) {
         if (velocity.x >= 0.0) {
-            targetContentOffset->x = CGRectGetMaxX(finalFrame);
+            targetContentOffset->x = CGRectGetMaxX(finalFrame) - iOS5Adjustment;
         }
         else if (velocity.x < -0.1) {
-            targetContentOffset->x = CGRectGetMinX(finalFrame);
+            targetContentOffset->x = CGRectGetMinX(finalFrame) + iOS5Adjustment;
         }
     } else {
         if (velocity.y >= 0.0) {
-            targetContentOffset->y = CGRectGetMaxY(finalFrame);
+            targetContentOffset->y = CGRectGetMaxY(finalFrame) - iOS5Adjustment;
         }
         else if (velocity.y < -0.1) {
-            targetContentOffset->y = CGRectGetMinY(finalFrame);
+            targetContentOffset->y = CGRectGetMinY(finalFrame) + iOS5Adjustment;
         }
     }
 }
