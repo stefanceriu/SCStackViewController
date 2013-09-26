@@ -229,6 +229,11 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     return [self.viewControllers[@(position)] copy];
 }
 
+- (BOOL)isViewControllerVisible:(UIViewController *)viewController
+{
+    return [self.visibleViewControllers containsObject:viewController];
+}
+
 #pragma mark - Private Methods
 
 - (void)updateFinalFramesForPosition:(SCStackViewControllerPosition)position

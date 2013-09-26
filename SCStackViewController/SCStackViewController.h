@@ -48,4 +48,6 @@ typedef enum {
 
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position;
 
+- (BOOL)isViewControllerVisible:(UIViewController *)viewController;
+
 @end
