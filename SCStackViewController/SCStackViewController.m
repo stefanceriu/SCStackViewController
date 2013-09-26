@@ -183,34 +183,37 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                         animated:(BOOL)animated
                       completion:(void(^)(BOOL finished))completion;
 {
-    CGRect finalFrame = [[self.finalFrames objectForKey:@(viewController.hash)] CGRectValue];
-    [self.scrollView setContentOffset:finalFrame.origin animated:YES];
-    
-    
-    SCStackViewControllerPosition controllerPosition = -1;
-    for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
-        
-        if([self.viewControllers[@(position)] containsObject:viewController]) {
-            controllerPosition = position;
-        }
-    }
-    
     CGPoint offset = CGPointZero;
-    switch (controllerPosition) {
-        case SCStackViewControllerPositionTop:
-            offset.y = CGRectGetMinY(finalFrame);
-            break;
-        case SCStackViewControllerPositionLeft:
-            offset.x = CGRectGetMinX(finalFrame);
-            break;
-        case SCStackViewControllerPositionBottom:
-            offset.y = CGRectGetMaxY(finalFrame) - CGRectGetHeight(self.view.bounds);
-            break;
-        case SCStackViewControllerPositionRight:
-            offset.x = CGRectGetMaxX(finalFrame) - CGRectGetWidth(self.view.bounds);
-            break;
-        default:
-            break;
+    CGRect finalFrame = CGRectZero;
+    
+    if(![viewController isEqual:self.rootViewController]) {
+        
+        finalFrame = [[self.finalFrames objectForKey:@(viewController.hash)] CGRectValue];
+        
+        SCStackViewControllerPosition controllerPosition = -1;
+        for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
+            
+            if([self.viewControllers[@(position)] containsObject:viewController]) {
+                controllerPosition = position;
+            }
+        }
+        
+        switch (controllerPosition) {
+            case SCStackViewControllerPositionTop:
+                offset.y = CGRectGetMinY(finalFrame);
+                break;
+            case SCStackViewControllerPositionLeft:
+                offset.x = CGRectGetMinX(finalFrame);
+                break;
+            case SCStackViewControllerPositionBottom:
+                offset.y = CGRectGetMaxY(finalFrame) - CGRectGetHeight(self.view.bounds);
+                break;
+            case SCStackViewControllerPositionRight:
+                offset.x = CGRectGetMaxX(finalFrame) - CGRectGetWidth(self.view.bounds);
+                break;
+            default:
+                break;
+        }
     }
     
     [UIView animateWithDuration:(animated ? kDefaultAnimationDuration : 0.0f)
