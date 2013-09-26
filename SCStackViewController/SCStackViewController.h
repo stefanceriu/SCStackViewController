@@ -17,6 +17,8 @@ typedef enum {
 
 @interface SCStackViewController : UIViewController
 
+@property (nonatomic, strong, readonly) UIViewController *rootViewController;
+
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
 @property (nonatomic, assign) BOOL bounces;
 
