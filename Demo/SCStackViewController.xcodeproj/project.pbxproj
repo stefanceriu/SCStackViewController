@@ -25,6 +25,7 @@
 		18C4D6B117F0C82A0046FACD /* SCStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A817F0C82A0046FACD /* SCStackViewController.m */; };
 		18C4D6B217F0C82A0046FACD /* UIViewController+SCStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6AA17F0C82A0046FACD /* UIViewController+SCStackViewController.m */; };
 		18C8B23317BFC443000FAEE5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C8B23217BFC443000FAEE5 /* QuartzCore.framework */; };
+		18DBB2D317F5B2CB0006CBFB /* MOScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */; };
 		18FEAAE617B3ED2F00788EF0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE517B3ED2F00788EF0 /* UIKit.framework */; };
 		18FEAAE817B3ED2F00788EF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE717B3ED2F00788EF0 /* Foundation.framework */; };
 		18FEAAEA17B3ED2F00788EF0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */; };
@@ -65,6 +66,8 @@
 		18C4D6A917F0C82A0046FACD /* UIViewController+SCStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SCStackViewController.h"; sourceTree = "<group>"; };
 		18C4D6AA17F0C82A0046FACD /* UIViewController+SCStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SCStackViewController.m"; sourceTree = "<group>"; };
 		18C8B23217BFC443000FAEE5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		18DBB2D117F5B2CB0006CBFB /* MOScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOScrollView.h; sourceTree = "<group>"; };
+		18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOScrollView.m; sourceTree = "<group>"; };
 		18FEAAE217B3ED2F00788EF0 /* SCStackViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SCStackViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18FEAAE517B3ED2F00788EF0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		18FEAAE717B3ED2F00788EF0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -106,6 +109,8 @@
 				18C4D69817F0C82A0046FACD /* Layouters */,
 				18C4D6A717F0C82A0046FACD /* SCStackViewController.h */,
 				18C4D6A817F0C82A0046FACD /* SCStackViewController.m */,
+				18DBB2D117F5B2CB0006CBFB /* MOScrollView.h */,
+				18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */,
 				18C4D6A917F0C82A0046FACD /* UIViewController+SCStackViewController.h */,
 				18C4D6AA17F0C82A0046FACD /* UIViewController+SCStackViewController.m */,
 			);
@@ -281,6 +286,7 @@
 				1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */,
 				18C4D6AF17F0C82A0046FACD /* SCSlidingStackLayouter.m in Sources */,
 				18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */,
+				18DBB2D317F5B2CB0006CBFB /* MOScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

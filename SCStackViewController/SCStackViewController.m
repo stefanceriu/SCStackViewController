@@ -8,36 +8,17 @@
 
 #import "SCStackViewController.h"
 #import "SCStackLayouterProtocol.h"
+#import "MOScrollView.h"
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 static const CGFloat kDefaultAnimationDuration = 0.25f;
 
-@interface SCStackScrollView : UIScrollView <UIGestureRecognizerDelegate>
-
-@property (nonatomic, strong) UIBezierPath *touchRefusalArea;
-
-@end
-
-@implementation SCStackScrollView
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    if([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
-        CGPoint touchPoint = [touch locationInView:self];
-        return ![self.touchRefusalArea containsPoint:touchPoint];
-    }
-    
-    return YES;
-}
-
-@end
-
 @interface SCStackViewController () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIViewController *rootViewController;
 
-@property (nonatomic, strong) SCStackScrollView *scrollView;
+@property (nonatomic, strong) MOScrollView *scrollView;
 
 @property (nonatomic, strong) NSMutableDictionary *layouters;
 @property (nonatomic, strong) NSMutableDictionary *finalFrames;
@@ -74,7 +55,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                 atPosition:(SCStackViewControllerPosition)position
                     unfold:(BOOL)unfold
                   animated:(BOOL)animated
-                completion:(void(^)(BOOL finished))completion
+                completion:(void(^)())completion
 {
     NSAssert(viewController != nil, @"Trying to push nil view controller");
     NSAssert(![[self.viewControllers.allValues valueForKeyPath:@"@unionOfArrays.self"] containsObject:viewController], @"Trying to push an already pushed view controller");
@@ -91,18 +72,11 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     
     [self updateBounds];
     
-    BOOL isReversed = NO;
-    if([self.layouters[@(position)] respondsToSelector:@selector(isReversed)]) {
-        isReversed = [self.layouters[@(position)] isReversed];
-    }
-    
     if(unfold) {
-        [UIView animateWithDuration:(animated ? kDefaultAnimationDuration : 0.0f)
-                              delay:0.0f
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             [self.scrollView setContentOffset:[self offsetForPosition:position] animated:(isReversed ? NO : animated)];
-                         } completion:completion];
+        [self.scrollView setContentOffset:[self offsetForPosition:position]
+                       withTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
+                                 duration:(animated ? kDefaultAnimationDuration : 0.0f)
+                               completion:completion];
     } else if(completion) {
         completion(YES);
     }
@@ -110,42 +84,47 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 - (void)popViewControllerAtPosition:(SCStackViewControllerPosition)position
                            animated:(BOOL)animated
-                         completion:(void(^)(BOOL finished))completion
+                         completion:(void(^)())completion
 {
     UIViewController *lastViewController = [self.viewControllers[@(position)] lastObject];
-    [self.viewControllers[@(position)] removeObject:lastViewController];
-    [self updateFinalFramesForPosition:position];
     
-    [UIView animateWithDuration:(animated ? kDefaultAnimationDuration : 0.0f)
-                          delay:0.0f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         [self scrollViewDidScroll:self.scrollView];
-                         [self updateBounds];
-                     } completion:^(BOOL finished) {
-                         
-                         if([self.visibleViewControllers containsObject:lastViewController]) {
-                             [lastViewController beginAppearanceTransition:NO animated:animated];
-                         }
-                         
-                         [lastViewController willMoveToParentViewController:nil];
-                         [lastViewController.view removeFromSuperview];
-                         [lastViewController removeFromParentViewController];
-                         
-                         if([self.visibleViewControllers containsObject:lastViewController]) {
-                             [lastViewController endAppearanceTransition];
-                             [self.visibleViewControllers removeObject:lastViewController];
-                         }
-                         
-                         if(completion) {
-                             completion(finished);
-                         }
-                     }];
+    UIViewController *previousViewController;
+    if([self.viewControllers[@(position)] count] == 1) {
+        previousViewController = self.rootViewController;
+    } else {
+        previousViewController = [self.viewControllers[@(position)] objectAtIndex:[self.viewControllers[@(position)] indexOfObject:lastViewController] - 1];
+    }
+    
+    [self navigateToViewController:previousViewController
+                          animated:animated
+                        completion:^{
+                            
+                            [self.viewControllers[@(position)] removeObject:lastViewController];
+                            [self updateFinalFramesForPosition:position];
+                            [self updateBounds];
+                            
+                            if([self.visibleViewControllers containsObject:lastViewController]) {
+                                [lastViewController beginAppearanceTransition:NO animated:animated];
+                            }
+                            
+                            [lastViewController willMoveToParentViewController:nil];
+                            [lastViewController.view removeFromSuperview];
+                            [lastViewController removeFromParentViewController];
+                            
+                            if([self.visibleViewControllers containsObject:lastViewController]) {
+                                [lastViewController endAppearanceTransition];
+                                [self.visibleViewControllers removeObject:lastViewController];
+                            }
+                            
+                            if(completion) {
+                                completion();
+                            }
+                        }];
 }
 
 - (void)popToRootViewControllerFromPosition:(SCStackViewControllerPosition)position
                                    animated:(BOOL)animated
-                                 completion:(void(^)(BOOL finished))completion
+                                 completion:(void(^)())completion
 {
     NSArray *controllersToBeRemoved = [self.viewControllers[@(position)] copy];
     [self.viewControllers[@(position)] removeAllObjects];
@@ -181,7 +160,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 - (void)navigateToViewController:(UIViewController *)viewController
                         animated:(BOOL)animated
-                      completion:(void(^)(BOOL finished))completion;
+                      completion:(void(^)())completion;
 {
     CGPoint offset = CGPointZero;
     CGRect finalFrame = CGRectZero;
@@ -192,36 +171,38 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         
         SCStackViewControllerPosition controllerPosition = -1;
         for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
-            
             if([self.viewControllers[@(position)] containsObject:viewController]) {
                 controllerPosition = position;
             }
         }
         
+        BOOL isReversed = NO;
+        if([self.layouters[@(controllerPosition)] respondsToSelector:@selector(isReversed)]) {
+            isReversed = [self.layouters[@(controllerPosition)] isReversed];
+        }
+        
         switch (controllerPosition) {
             case SCStackViewControllerPositionTop:
-                offset.y = CGRectGetMinY(finalFrame);
+                offset.y = (isReversed ? ([self offsetForPosition:controllerPosition].y - CGRectGetMaxY(finalFrame)) : CGRectGetMinY(finalFrame));
                 break;
             case SCStackViewControllerPositionLeft:
-                offset.x = CGRectGetMinX(finalFrame);
+                offset.x = (isReversed ? ([self offsetForPosition:controllerPosition].x - CGRectGetMaxX(finalFrame)) : CGRectGetMinX(finalFrame));
                 break;
             case SCStackViewControllerPositionBottom:
-                offset.y = CGRectGetMaxY(finalFrame) - CGRectGetHeight(self.view.bounds);
+                offset.y = (isReversed ? ([self offsetForPosition:controllerPosition].y - CGRectGetMinY(finalFrame) + CGRectGetHeight(self.view.bounds)) : CGRectGetMaxY(finalFrame) - CGRectGetHeight(self.view.bounds));
                 break;
             case SCStackViewControllerPositionRight:
-                offset.x = CGRectGetMaxX(finalFrame) - CGRectGetWidth(self.view.bounds);
+                offset.x = (isReversed ? ([self offsetForPosition:controllerPosition].x - CGRectGetMinX(finalFrame) + CGRectGetWidth(self.view.bounds)) : CGRectGetMaxX(finalFrame) - CGRectGetWidth(self.view.bounds));
                 break;
             default:
                 break;
         }
     }
     
-    [UIView animateWithDuration:(animated ? kDefaultAnimationDuration : 0.0f)
-                          delay:0.0f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         [self.scrollView setContentOffset:offset animated:animated];
-                     } completion:completion];
+    [self.scrollView setContentOffset:offset
+                   withTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
+                             duration:(animated ? kDefaultAnimationDuration : 0.0f)
+                           completion:completion];
 }
 
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position
@@ -256,7 +237,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     
     [self.view setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
-    self.scrollView = [[SCStackScrollView alloc] initWithFrame:self.view.bounds];
+    self.scrollView = [[MOScrollView alloc] initWithFrame:self.view.bounds];
     [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.scrollView setDirectionalLockEnabled:YES];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
@@ -367,6 +348,10 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    if(CGPointEqualToPoint(velocity, CGPointZero)) {
+        return;
+    }
+    
     CGRect finalFrame = CGRectMake(targetContentOffset->x, targetContentOffset->y, 0, 0);
     for(NSValue *frameValue in self.finalFrames.allValues) {
         
@@ -465,11 +450,11 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 {
     if(_viewControllers == nil) {
         _viewControllers = (@{
-                            @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
-                            @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
-                            @(SCStackViewControllerPositionBottom): [NSMutableArray array],
-                            @(SCStackViewControllerPositionRight) : [NSMutableArray array]
-                            });
+                              @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
+                              @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
+                              @(SCStackViewControllerPositionBottom): [NSMutableArray array],
+                              @(SCStackViewControllerPositionRight) : [NSMutableArray array]
+                              });
     }
     
     return _viewControllers;

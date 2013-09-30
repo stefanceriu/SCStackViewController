@@ -32,19 +32,19 @@ typedef enum {
                 atPosition:(SCStackViewControllerPosition)position
                     unfold:(BOOL)unfold
                   animated:(BOOL)animated
-                completion:(void(^)(BOOL finished))completion;
+                completion:(void(^)())completion;
 
 - (void)popViewControllerAtPosition:(SCStackViewControllerPosition)position
                            animated:(BOOL)animated
-                         completion:(void(^)(BOOL finished))completion;
+                         completion:(void(^)())completion;
 
 - (void)popToRootViewControllerFromPosition:(SCStackViewControllerPosition)position
                                    animated:(BOOL)animated
-                                 completion:(void(^)(BOOL finished))completion;
+                                 completion:(void(^)())completion;
 
 - (void)navigateToViewController:(UIViewController *)viewController
                         animated:(BOOL)animated
-                      completion:(void(^)(BOOL finished))completion;
+                      completion:(void(^)())completion;
 
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position;
 

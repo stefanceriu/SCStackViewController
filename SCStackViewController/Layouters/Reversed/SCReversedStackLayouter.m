@@ -54,17 +54,46 @@
 }
 
 - (CGRect)currentFrameForViewController:(UIViewController *)viewController
-                            withIndex:(NSUInteger)index
-                           atPosition:(SCStackViewControllerPosition)position
-                           finalFrame:(CGRect)finalFrame
-                        contentOffset:(CGPoint)contentOffset
-                    inStackController:(SCStackViewController *)stackController
+                              withIndex:(NSUInteger)index
+                             atPosition:(SCStackViewControllerPosition)position
+                             finalFrame:(CGRect)finalFrame
+                          contentOffset:(CGPoint)contentOffset
+                      inStackController:(SCStackViewController *)stackController
 {
-//    [UIView animateWithDuration:0.25f animations:^{
-//        viewController.view.frame = finalFrame;
-//    }];
+    NSArray *viewControllers = [stackController viewControllersForPosition:position];
     
-    return finalFrame;
+    CGRect frame = finalFrame;
+    
+    switch (position) {
+        case SCStackViewControllerPositionTop:
+        {
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            frame.origin.y =  MIN(-CGRectGetHeight(((UIViewController*)viewControllers[0]).view.frame), finalFrame.origin.y + (totalSize + contentOffset.y));
+            break;
+        }
+        case SCStackViewControllerPositionLeft:
+        {
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            frame.origin.x =  MIN(-CGRectGetWidth(((UIViewController*)viewControllers[0]).view.frame), finalFrame.origin.x + (totalSize + contentOffset.x));
+            break;
+        }
+        case SCStackViewControllerPositionBottom:
+        {
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            frame.origin.y = MAX(CGRectGetMaxY(stackController.view.bounds), CGRectGetMinY(finalFrame) - (totalSize - contentOffset.y));
+            break;
+        }
+        case SCStackViewControllerPositionRight:
+        {
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            frame.origin.x = MAX(CGRectGetMaxX(stackController.view.bounds), CGRectGetMinX(finalFrame) - (totalSize - contentOffset.x));
+            break;
+        }
+        default:
+            break;
+    }
+    
+    return frame;
 }
 
 - (BOOL)isReversed
