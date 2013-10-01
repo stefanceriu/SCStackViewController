@@ -100,6 +100,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                         completion:^{
                             
                             [self.viewControllers[@(position)] removeObject:lastViewController];
+                            [self.finalFrames removeObjectForKey:@([lastViewController hash])];
                             [self updateFinalFramesForPosition:position];
                             [self updateBounds];
                             
@@ -127,7 +128,12 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                                  completion:(void(^)())completion
 {
     NSArray *controllersToBeRemoved = [self.viewControllers[@(position)] copy];
+    
+    [self.viewControllers[@(position)] enumerateObjectsUsingBlock:^(UIViewController *controller, NSUInteger idx, BOOL *stop) {
+        [self.finalFrames removeObjectForKey:@([controller hash])];
+    }];
     [self.viewControllers[@(position)] removeAllObjects];
+    
     [self updateFinalFramesForPosition:position];
     
     [UIView animateWithDuration:(animated ? kDefaultAnimationDuration : 0.0f)
@@ -220,14 +226,14 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 - (void)updateFinalFramesForPosition:(SCStackViewControllerPosition)position
 {
     NSMutableArray *viewControllers = self.viewControllers[@(position)];
-    [viewControllers enumerateObjectsUsingBlock:^(UIViewController *x, NSUInteger idx, BOOL *stop) {
-        CGRect finalFrame = [self.layouters[@(position)] finalFrameForViewController:x
+    [viewControllers enumerateObjectsUsingBlock:^(UIViewController *controller, NSUInteger idx, BOOL *stop) {
+        CGRect finalFrame = [self.layouters[@(position)] finalFrameForViewController:controller
                                                                            withIndex:idx
                                                                           atPosition:position
                                                                          withinGroup:viewControllers
                                                                    inStackController:self];
         
-        [self.finalFrames setObject:[NSValue valueWithCGRect:finalFrame] forKey:@([x hash])];
+        [self.finalFrames setObject:[NSValue valueWithCGRect:finalFrame] forKey:@([controller hash])];
     }];
 }
 
@@ -307,40 +313,40 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 {
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         
+        CGRectEdge edge = [self edgeFromOffset:scrollView.contentOffset];
+        
+        __block CGRect remainder = rectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame), edge);
+        
         NSArray *viewControllersArray = self.viewControllers[@(position)];
         [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
-            CGRect frame =  [self.layouters[@(position)] currentFrameForViewController:viewController
-                                                                             withIndex:index
-                                                                            atPosition:position
-                                                                            finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue]
-                                                                         contentOffset:scrollView.contentOffset
-                                                                     inStackController:self];
             
-            CGRect intersection = CGRectIntersection(self.scrollView.bounds, frame);
-            __block BOOL visible = YES;
-            [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *obj, NSUInteger idx, BOOL *stop) {
-                if(CGRectContainsRect(obj.view.frame, intersection) && ![viewController isEqual:obj]) {
-                    visible = NO;
-                    *stop = YES;
-                }
-            }];
+            CGRect nextFrame =  [self.layouters[@(position)] currentFrameForViewController:viewController
+                                                                                 withIndex:index
+                                                                                atPosition:position
+                                                                                finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue]
+                                                                             contentOffset:scrollView.contentOffset
+                                                                         inStackController:self];
             
-            if(CGRectContainsRect(self.rootViewController.view.frame, intersection)) {
-                visible = NO;
+            CGRect intersection = CGRectIntersection(remainder, nextFrame);
+            BOOL visible = ((position == SCStackViewControllerPositionLeft || position == SCStackViewControllerPositionRight) && intersection.size.width > 0.0f);
+            visible = visible || ((position == SCStackViewControllerPositionTop || position == SCStackViewControllerPositionBottom) && intersection.size.height > 0.0f);
+            
+            if(visible) {
+                remainder = rectSubtract(remainder, CGRectIntersection(remainder, nextFrame), edge);
             }
             
             if(visible && ![self.visibleViewControllers containsObject:viewController]) {
                 [self.visibleViewControllers addObject:viewController];
                 [viewController beginAppearanceTransition:YES animated:NO];
-                [viewController.view setFrame:frame];
+                [viewController.view setFrame:nextFrame];
                 [viewController endAppearanceTransition];
             } else if(!visible && [self.visibleViewControllers containsObject:viewController]) {
                 [self.visibleViewControllers removeObject:viewController];
                 [viewController beginAppearanceTransition:NO animated:NO];
-                [viewController.view setFrame:frame];
+                [viewController.view setFrame:nextFrame];
                 [viewController endAppearanceTransition];
             } else {
-                [viewController.view setFrame:frame];
+                [viewController.view setFrame:nextFrame];
             }
         }];
     }
@@ -485,6 +491,33 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         default:
             return CGPointZero;
     }
+}
+
+- (CGRectEdge)edgeFromOffset:(CGPoint)offset
+{
+    if(offset.x >= 0.0f) {
+        return CGRectMinXEdge;
+    } else if(offset.x < 0.0f) {
+        return CGRectMaxXEdge;
+    } else if(offset.y >= 0.0f) {
+        return CGRectMinYEdge;
+    } else {
+        return CGRectMaxYEdge;
+    }
+}
+
+CGRect rectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
+{
+    CGRect intersection = CGRectIntersection(r1, r2);
+    if (CGRectIsNull(intersection)) {
+        return r1;
+    }
+    
+    float chopAmount = (edge == CGRectMinXEdge || edge == CGRectMaxXEdge) ? intersection.size.width : intersection.size.height;
+    
+    CGRect r3, throwaway;
+    CGRectDivide(r1, &throwaway, &r3, chopAmount, edge);
+    return r3;
 }
 
 @end
