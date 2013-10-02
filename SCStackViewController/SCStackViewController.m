@@ -396,41 +396,81 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    if(CGPointEqualToPoint(velocity, CGPointZero)) {
-        return;
-    }
     
-    CGRect finalFrame = CGRectMake(targetContentOffset->x, targetContentOffset->y, 0, 0);
-    for(NSValue *frameValue in self.finalFrames.allValues) {
-        
-        CGRect frame = [frameValue CGRectValue];
-        frame.origin.x = frame.origin.x > 0 ? CGRectGetMinX(frame) - CGRectGetWidth(self.view.bounds) : CGRectGetMinX(frame);
-        frame.origin.y = frame.origin.y > 0 ? CGRectGetMinY(frame) - CGRectGetHeight(self.view.bounds) : CGRectGetMinY(frame);
-        
-        if(CGRectContainsPoint(frame, *targetContentOffset)) {
-            finalFrame = frame;
-            break;
-        }
-    }
+    __block CGRect finalFrame = CGRectZero;
     
     CGFloat iOS5Adjustment = 0.0f;
     if(SYSTEM_VERSION_LESS_THAN(@"6.0")) {
         iOS5Adjustment = 0.1f;
     }
     
-    if(velocity.x || velocity.y == 0) {
-        if (velocity.x >= 0.0) {
-            targetContentOffset->x = CGRectGetMaxX(finalFrame) - iOS5Adjustment;
+    for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
+        
+        CGPoint adjustedOffset = *targetContentOffset;
+        
+        BOOL isReversed = NO;
+        if([self.layouters[@(position)] respondsToSelector:@selector(isReversed)]) {
+            isReversed = [self.layouters[@(position)] isReversed];
         }
-        else if (velocity.x < -0.1) {
-            targetContentOffset->x = CGRectGetMinX(finalFrame) + iOS5Adjustment;
+        
+        if(isReversed) {
+            adjustedOffset.x = [self offsetForPosition:position].x - targetContentOffset->x;
         }
-    } else {
-        if (velocity.y >= 0.0) {
-            targetContentOffset->y = CGRectGetMaxY(finalFrame) - iOS5Adjustment;
-        }
-        else if (velocity.y < -0.1) {
-            targetContentOffset->y = CGRectGetMinY(finalFrame) + iOS5Adjustment;
+        
+        NSArray *viewControllersArray = self.viewControllers[@(position)];
+        
+        __block BOOL keepGoing = YES;
+        
+        [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
+            
+            CGRect frame = [self.finalFrames[@(viewController.hash)] CGRectValue];
+            frame.origin.x = frame.origin.x > 0 ? CGRectGetMinX(frame) - CGRectGetWidth(self.view.bounds) : CGRectGetMinX(frame);
+            frame.origin.y = frame.origin.y > 0 ? CGRectGetMinY(frame) - CGRectGetHeight(self.view.bounds) : CGRectGetMinY(frame);
+            
+            if(CGRectContainsPoint(frame, adjustedOffset)) {
+                
+                keepGoing = NO;
+                
+                finalFrame = frame;
+                
+                if(velocity.x || velocity.y == 0) {
+                    if (velocity.x >= 0.0) {
+                        if(isReversed) {
+                            targetContentOffset->x = [self offsetForPosition:position].x - CGRectGetMinX(finalFrame) - iOS5Adjustment;
+                        } else {
+                            targetContentOffset->x = CGRectGetMaxX(finalFrame) - iOS5Adjustment;
+                        }
+                    }
+                    else if (velocity.x < -0.1) {
+                        if(isReversed) {
+                            targetContentOffset->x = [self offsetForPosition:position].x - CGRectGetMaxX(finalFrame) + iOS5Adjustment;
+                        } else {
+                            targetContentOffset->x = CGRectGetMinX(finalFrame) + iOS5Adjustment;
+                        }
+                    }
+                } else {
+                    if (velocity.y >= 0.0) {
+                        if(isReversed) {
+                            targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMaxY(finalFrame) - iOS5Adjustment;
+                        } else {
+                            targetContentOffset->y = CGRectGetMinY(finalFrame) - iOS5Adjustment;
+                        }
+                    }
+                    else if (velocity.y < -0.1) {
+                        if(isReversed) {
+                            targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMinY(finalFrame) + iOS5Adjustment;
+                        } else {
+                            targetContentOffset->y = CGRectGetMaxY(finalFrame) + iOS5Adjustment;
+                        }
+                    }
+                }
+                
+                *stop = YES;
+            }
+        }];
+        
+        if(!keepGoing) {
+            break;
         }
     }
 }
