@@ -19,6 +19,7 @@ typedef enum {
 
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
 @property (nonatomic, assign) BOOL bounces;
+@property (nonatomic, assign) BOOL fadeViewsArrival;
 
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController;

@@ -319,11 +319,13 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         
         NSArray *viewControllersArray = self.viewControllers[@(position)];
+        
         [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
+            CGRect finalFrame = [self.finalFrames[@(viewController.hash)] CGRectValue];
             CGRect frame =  [self.layouters[@(position)] currentFrameForViewController:viewController
                                                                              withIndex:index
                                                                             atPosition:position
-                                                                            finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue]
+                                                                            finalFrame:finalFrame
                                                                          contentOffset:scrollView.contentOffset
                                                                      inStackController:self];
             
@@ -338,6 +340,12 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
             
             if(CGRectContainsRect(self.rootViewController.view.frame, intersection)) {
                 visible = NO;
+            }
+            
+            if(self.fadeViewsArrival){
+                // Fade views arrival
+                CGFloat alpha = 1-(ABS(finalFrame.origin.x) - ABS(scrollView.contentOffset.x))/(finalFrame.size.width);
+                viewController.view.alpha = alpha;
             }
             
             if(visible && ![self.visibleViewControllers containsObject:viewController]) {
