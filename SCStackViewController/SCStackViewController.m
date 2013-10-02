@@ -9,6 +9,7 @@
 #import "SCStackViewController.h"
 #import "SCStackLayouterProtocol.h"
 #import "MOScrollView.h"
+#import "UIViewController+SCStackViewController.h"
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
@@ -315,6 +316,11 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         
         CGRectEdge edge = [self edgeFromOffset:scrollView.contentOffset];
         
+        BOOL isReversed = NO;
+        if([self.layouters[@(position)] respondsToSelector:@selector(isReversed)]) {
+            isReversed = [self.layouters[@(position)] isReversed];
+        }
+        
         __block CGRect remainder = rectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame), edge);
         
         NSArray *viewControllersArray = self.viewControllers[@(position)];
@@ -327,12 +333,48 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                                                                              contentOffset:scrollView.contentOffset
                                                                          inStackController:self];
             
-            CGRect intersection = CGRectIntersection(remainder, nextFrame);
+            CGRect adjustedFrame = nextFrame;
+            if(isReversed) {
+                switch (position) {
+                    case SCStackViewControllerPositionTop:
+                    {
+                        NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
+                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+                        adjustedFrame.origin.y = [self offsetForPosition:position].y + totalSize;
+                        break;
+                    }
+                    case SCStackViewControllerPositionLeft:
+                    {
+                        NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
+                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+                        adjustedFrame.origin.x = [self offsetForPosition:position].x + totalSize;
+                        break;
+                    }
+                    case SCStackViewControllerPositionBottom:
+                    {
+                        NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
+                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+                        adjustedFrame.origin.y = self.rootViewController.view.bounds.size.height + [self offsetForPosition:position].y - totalSize;
+                        break;
+                    }
+                    case SCStackViewControllerPositionRight:
+                    {
+                        NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
+                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+                        adjustedFrame.origin.x = self.rootViewController.view.bounds.size.width + [self offsetForPosition:position].x - totalSize;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            
+            CGRect intersection = CGRectIntersection(remainder, adjustedFrame);
             BOOL visible = ((position == SCStackViewControllerPositionLeft || position == SCStackViewControllerPositionRight) && intersection.size.width > 0.0f);
             visible = visible || ((position == SCStackViewControllerPositionTop || position == SCStackViewControllerPositionBottom) && intersection.size.height > 0.0f);
             
             if(visible) {
-                remainder = rectSubtract(remainder, CGRectIntersection(remainder, nextFrame), edge);
+                remainder = rectSubtract(remainder, CGRectIntersection(remainder, adjustedFrame), edge);
             }
             
             if(visible && ![self.visibleViewControllers containsObject:viewController]) {
