@@ -57,8 +57,8 @@
         }
         case SCStackViewControllerPositionRight: {
             
-            if(contentOffset.x <CGRectGetMinX(finalFrame)){
-                frame.origin.x = CGRectGetMaxX(finalFrame)/2 + contentOffset.x/2;
+            if(contentOffset.x < CGRectGetMinX(finalFrame)){
+                frame.origin.x = CGRectGetMinX(finalFrame)/2 + contentOffset.x/2;
             }else{
                 CGFloat ratio = contentOffset.x / (CGRectGetMaxX(finalFrame) - CGRectGetWidth(stackController.view.bounds));
                 frame.origin.x = (CGRectGetMinX(finalFrame) - CGRectGetWidth(finalFrame)) + CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
