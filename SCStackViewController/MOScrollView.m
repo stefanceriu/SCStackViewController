@@ -67,10 +67,11 @@ const static int maximumSteps = 10;
     void(^_completionBlock)();
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     if([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
-        CGPoint touchPoint = [touch locationInView:self];
+        CGPoint touchPoint = [gestureRecognizer locationInView:self];
         return ![self.touchRefusalArea containsPoint:touchPoint];
     }
     

@@ -382,11 +382,21 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                 [viewController beginAppearanceTransition:YES animated:NO];
                 [viewController.view setFrame:nextFrame];
                 [viewController endAppearanceTransition];
+                
+                if([self.delegate respondsToSelector:@selector(stackViewController:didShowViewController:position:)]) {
+                    [self.delegate stackViewController:self didShowViewController:viewController position:position];
+                }
+                
             } else if(!visible && [self.visibleViewControllers containsObject:viewController]) {
                 [self.visibleViewControllers removeObject:viewController];
                 [viewController beginAppearanceTransition:NO animated:NO];
                 [viewController.view setFrame:nextFrame];
                 [viewController endAppearanceTransition];
+                
+                if([self.delegate respondsToSelector:@selector(stackViewController:didHideViewController:position:)]) {
+                    [self.delegate stackViewController:self didHideViewController:viewController position:position];
+                }
+                
             } else {
                 [viewController.view setFrame:nextFrame];
             }

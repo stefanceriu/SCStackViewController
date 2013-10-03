@@ -15,6 +15,8 @@ typedef enum {
 
 @protocol SCStackLayouterProtocol;
 
+@protocol SCStackViewControllerDelegate;
+
 @interface SCStackViewController : UIViewController
 
 @property (nonatomic, strong, readonly) UIViewController *rootViewController;
@@ -22,6 +24,7 @@ typedef enum {
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
 @property (nonatomic, assign) BOOL bounces;
 
+@property (nonatomic, weak) id<SCStackViewControllerDelegate> delegate;
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController;
 
@@ -49,5 +52,13 @@ typedef enum {
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position;
 
 - (BOOL)isViewControllerVisible:(UIViewController *)viewController;
+
+@end
+
+@protocol SCStackViewControllerDelegate <NSObject>
+
+@optional
+- (void)stackViewController:(SCStackViewController *)stackViewController didShowViewController:(UIViewController *)controller position:(SCStackViewControllerPosition)position;
+- (void)stackViewController:(SCStackViewController *)stackViewController didHideViewController:(UIViewController *)controller position:(SCStackViewControllerPosition)position;
 
 @end
