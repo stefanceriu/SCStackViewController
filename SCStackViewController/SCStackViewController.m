@@ -414,7 +414,12 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         }
         
         if(isReversed) {
-            adjustedOffset.x = [self offsetForPosition:position].x - targetContentOffset->x;
+            
+            if(position == SCStackViewControllerPositionLeft || position == SCStackViewControllerPositionRight) {
+                adjustedOffset.x = [self offsetForPosition:position].x - targetContentOffset->x;
+            } else {
+                adjustedOffset.y = [self offsetForPosition:position].y - targetContentOffset->y;
+            }
         }
         
         NSArray *viewControllersArray = self.viewControllers[@(position)];
@@ -451,16 +456,16 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                 } else {
                     if (velocity.y >= 0.0) {
                         if(isReversed) {
-                            targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMaxY(finalFrame) - iOS5Adjustment;
+                            targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMinY(finalFrame) - iOS5Adjustment;
                         } else {
-                            targetContentOffset->y = CGRectGetMinY(finalFrame) - iOS5Adjustment;
+                            targetContentOffset->y = CGRectGetMaxY(finalFrame) - iOS5Adjustment;
                         }
                     }
                     else if (velocity.y < -0.1) {
                         if(isReversed) {
-                            targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMinY(finalFrame) + iOS5Adjustment;
+                            targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMaxY(finalFrame) + iOS5Adjustment;
                         } else {
-                            targetContentOffset->y = CGRectGetMaxY(finalFrame) + iOS5Adjustment;
+                            targetContentOffset->y = CGRectGetMinY(finalFrame) + iOS5Adjustment;
                         }
                     }
                 }
