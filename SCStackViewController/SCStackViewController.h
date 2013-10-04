@@ -15,6 +15,11 @@ typedef enum {
 
 @protocol SCStackLayouterProtocol;
 
+@protocol SCStackViewControllerProtocol
+- (void) stackviewDidScrollInScrollView:(UIScrollView *) scrollview;
+@end
+
+
 @interface SCStackViewController : UIViewController
 
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;

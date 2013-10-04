@@ -316,11 +316,24 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    //NSLog(@"class = %@", NSStringFromClass([self.rootViewController class]));
+    
+    if([self.rootViewController respondsToSelector:@selector(stackviewDidScrollInScrollView:)]){
+        [self.rootViewController performSelector:@selector(stackviewDidScrollInScrollView:) withObject:self.scrollView];
+    }
+    
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         
         NSArray *viewControllersArray = self.viewControllers[@(position)];
         
         [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
+            
+            
+            if([viewController respondsToSelector:@selector(stackviewDidScrollInScrollView:)]){
+                [viewController performSelector:@selector(stackviewDidScrollInScrollView:) withObject:self.scrollView];
+            }
+            
+            
             CGRect finalFrame = [self.finalFrames[@(viewController.hash)] CGRectValue];
             CGRect frame =  [self.layouters[@(position)] currentFrameForViewController:viewController
                                                                              withIndex:index
@@ -465,11 +478,11 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 {
     if(_viewControllers == nil) {
         _viewControllers = (@{
-                            @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
-                            @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
-                            @(SCStackViewControllerPositionBottom): [NSMutableArray array],
-                            @(SCStackViewControllerPositionRight) : [NSMutableArray array]
-                            });
+                              @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
+                              @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
+                              @(SCStackViewControllerPositionBottom): [NSMutableArray array],
+                              @(SCStackViewControllerPositionRight) : [NSMutableArray array]
+                              });
     }
     
     return _viewControllers;
