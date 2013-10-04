@@ -9,7 +9,6 @@
 #import "SCStackViewController.h"
 #import "SCStackLayouterProtocol.h"
 #import "MOScrollView.h"
-#import "UIViewController+SCStackViewController.h"
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
@@ -261,12 +260,6 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     [self.view addSubview:self.scrollView];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.scrollView setContentOffset:CGPointZero];
-}
-
 - (void)updateBounds
 {
     UIEdgeInsets insets = UIEdgeInsetsZero;
@@ -299,8 +292,17 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         }
     }
     
+    [self.scrollView setDelegate:nil];
+    
+    CGPoint offset = self.scrollView.contentOffset;
     [self.scrollView setContentInset:insets];
+    
+    if((self.scrollView.contentInset.left <= insets.left) || (self.scrollView.contentInset.top <= insets.top)) {
+        [self.scrollView setContentOffset:offset];
+    }
+    
     [self.scrollView setContentSize:self.view.bounds.size];
+    [self.scrollView setDelegate:self];
 }
 
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods
@@ -321,7 +323,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
             isReversed = [self.layouters[@(position)] isReversed];
         }
         
-        __block CGRect remainder = rectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame), edge);
+        __block CGRect remainder = CGRectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame), edge);
         
         NSArray *viewControllersArray = self.viewControllers[@(position)];
         [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
@@ -374,7 +376,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
             visible = visible || ((position == SCStackViewControllerPositionTop || position == SCStackViewControllerPositionBottom) && intersection.size.height > 0.0f);
             
             if(visible) {
-                remainder = rectSubtract(remainder, CGRectIntersection(remainder, adjustedFrame), edge);
+                remainder = CGRectSubtract(remainder, CGRectIntersection(remainder, adjustedFrame), edge);
             }
             
             if(visible && ![self.visibleViewControllers containsObject:viewController]) {
@@ -401,6 +403,10 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                 [viewController.view setFrame:nextFrame];
             }
         }];
+    }
+    
+    if([self.delegate respondsToSelector:@selector(stackViewController:didNavigateToOffset:)]) {
+        [self.delegate stackViewController:self didNavigateToOffset:self.scrollView.contentOffset];
     }
 }
 
@@ -603,7 +609,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     }
 }
 
-CGRect rectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
+CGRect CGRectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
 {
     CGRect intersection = CGRectIntersection(r1, r2);
     if (CGRectIsNull(intersection)) {
@@ -615,6 +621,32 @@ CGRect rectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
     CGRect r3, throwaway;
     CGRectDivide(r1, &throwaway, &r3, chopAmount, edge);
     return r3;
+}
+
+@end
+
+
+@implementation UIViewController (SCStackViewController)
+
+- (SCStackViewController *)stackViewController
+{
+    UIResponder *responder = self;
+    while ((responder = [responder nextResponder])) {
+        if ([responder isKindOfClass:[SCStackViewController class]])  {
+            return (SCStackViewController *)responder;
+        }
+    }
+    return nil;
+}
+
+- (CGFloat)viewWidth
+{
+    return self.view.bounds.size.width;
+}
+
+- (CGFloat)viewHeight
+{
+    return self.view.bounds.size.height;
 }
 
 @end

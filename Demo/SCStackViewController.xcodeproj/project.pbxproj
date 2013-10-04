@@ -23,7 +23,6 @@
 		18C4D6AF17F0C82A0046FACD /* SCSlidingStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A317F0C82A0046FACD /* SCSlidingStackLayouter.m */; };
 		18C4D6B017F0C82A0046FACD /* SCStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A517F0C82A0046FACD /* SCStackLayouter.m */; };
 		18C4D6B117F0C82A0046FACD /* SCStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A817F0C82A0046FACD /* SCStackViewController.m */; };
-		18C4D6B217F0C82A0046FACD /* UIViewController+SCStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6AA17F0C82A0046FACD /* UIViewController+SCStackViewController.m */; };
 		18C8B23317BFC443000FAEE5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C8B23217BFC443000FAEE5 /* QuartzCore.framework */; };
 		18DBB2D317F5B2CB0006CBFB /* MOScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */; };
 		18FEAAE617B3ED2F00788EF0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE517B3ED2F00788EF0 /* UIKit.framework */; };
@@ -63,8 +62,6 @@
 		18C4D6A617F0C82A0046FACD /* SCStackLayouterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStackLayouterProtocol.h; sourceTree = "<group>"; };
 		18C4D6A717F0C82A0046FACD /* SCStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStackViewController.h; sourceTree = "<group>"; };
 		18C4D6A817F0C82A0046FACD /* SCStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStackViewController.m; sourceTree = "<group>"; };
-		18C4D6A917F0C82A0046FACD /* UIViewController+SCStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SCStackViewController.h"; sourceTree = "<group>"; };
-		18C4D6AA17F0C82A0046FACD /* UIViewController+SCStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SCStackViewController.m"; sourceTree = "<group>"; };
 		18C8B23217BFC443000FAEE5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		18DBB2D117F5B2CB0006CBFB /* MOScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOScrollView.h; sourceTree = "<group>"; };
 		18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOScrollView.m; sourceTree = "<group>"; };
@@ -111,8 +108,6 @@
 				18C4D6A817F0C82A0046FACD /* SCStackViewController.m */,
 				18DBB2D117F5B2CB0006CBFB /* MOScrollView.h */,
 				18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */,
-				18C4D6A917F0C82A0046FACD /* UIViewController+SCStackViewController.h */,
-				18C4D6AA17F0C82A0046FACD /* UIViewController+SCStackViewController.m */,
 			);
 			name = SCStackViewController;
 			path = ../../SCStackViewController;
@@ -271,7 +266,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18C4D6B217F0C82A0046FACD /* UIViewController+SCStackViewController.m in Sources */,
 				18FEAAF217B3ED2F00788EF0 /* main.m in Sources */,
 				18C4D6AC17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m in Sources */,
 				18C4D6AE17F0C82A0046FACD /* SCParallaxStackLayouter.m in Sources */,

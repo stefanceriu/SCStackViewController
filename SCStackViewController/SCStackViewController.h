@@ -13,9 +13,12 @@ typedef enum {
     SCStackViewControllerPositionRight
 } SCStackViewControllerPosition;
 
+
 @protocol SCStackLayouterProtocol;
 
+
 @protocol SCStackViewControllerDelegate;
+
 
 @interface SCStackViewController : UIViewController
 
@@ -55,10 +58,23 @@ typedef enum {
 
 @end
 
+
 @protocol SCStackViewControllerDelegate <NSObject>
 
 @optional
 - (void)stackViewController:(SCStackViewController *)stackViewController didShowViewController:(UIViewController *)controller position:(SCStackViewControllerPosition)position;
 - (void)stackViewController:(SCStackViewController *)stackViewController didHideViewController:(UIViewController *)controller position:(SCStackViewControllerPosition)position;
+
+- (void)stackViewController:(SCStackViewController *)stackViewController didNavigateToOffset:(CGPoint)offset;
+
+@end
+
+
+@interface UIViewController (SCStackViewController)
+
+- (SCStackViewController *)stackViewController;
+
+- (CGFloat)viewWidth;
+- (CGFloat)viewHeight;
 
 @end

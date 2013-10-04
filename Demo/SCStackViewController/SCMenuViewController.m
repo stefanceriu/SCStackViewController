@@ -9,8 +9,6 @@
 #import "SCMenuViewController.h"
 #import "UIColor+RandomColors.h"
 
-#import "UIViewController+SCStackViewController.h"
-
 @interface SCMenuViewController ()
 
 @property (nonatomic, assign) SCStackViewControllerPosition position;
