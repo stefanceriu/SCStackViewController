@@ -313,10 +313,19 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 }
 
 #pragma mark - UIScrollViewDelegate
-
+int lastIndex = 0;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    //NSLog(@"class = %@", NSStringFromClass([self.rootViewController class]));
+    // Mimic lifecycle on rootView
+    int index = (int)roundf(self.scrollView.contentOffset.x/320);
+    if(index != lastIndex){
+        if(index == 0){
+            [self.rootViewController viewWillAppear:YES];
+        }else{
+            [self.rootViewController viewWillDisappear:YES];
+        }
+        lastIndex = index;
+    }
     
     if([self.rootViewController respondsToSelector:@selector(stackviewDidScrollInScrollView:)]){
         [self.rootViewController performSelector:@selector(stackviewDidScrollInScrollView:) withObject:self.scrollView];
