@@ -17,6 +17,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
 
+
 @end
 
 @implementation SCStackScrollView
@@ -44,7 +45,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 @property (nonatomic, strong) NSDictionary *viewControllers;
 @property (nonatomic, strong) NSMutableArray *visibleViewControllers;
-
+@property (nonatomic) int currentPage;
 @end
 
 @implementation SCStackViewController
@@ -316,6 +317,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 int lastIndex = 0;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    
     // Mimic lifecycle on rootView
     int index = (int)roundf(self.scrollView.contentOffset.x/320);
     if(index != lastIndex){
@@ -387,28 +389,39 @@ int lastIndex = 0;
     }
 }
 
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    
+    CGFloat pageWidth = self.scrollView.frame.size.width;
+    CGFloat pageHeight= self.scrollView.frame.size.height;
+    int newPage ;
+    
     // Horizontal paging
     if(targetContentOffset->x != 0){
         
-        CGFloat pageWidth = self.scrollView.frame.size.width;
-        int _currentPage = (int)roundf(self.scrollView.contentOffset.x/320);
-        int newPage = _currentPage;
+        if(self.allowScrollMultiplePages){
+            _currentPage =  (int)roundf(self.scrollView.contentOffset.x/pageWidth);
+        }
+        
+        newPage = _currentPage;
         
         if (velocity.x == 0) {
             newPage = floor((targetContentOffset->x - pageWidth / 2) / pageWidth) + 1;
         }else{
             newPage = velocity.x > 0 ? _currentPage + 1 : _currentPage - 1;
         }
+        
         *targetContentOffset = CGPointMake(newPage * pageWidth, targetContentOffset->y);
         
-        // Vertical Paging
+        // Vertical paging
     }else if(targetContentOffset->y != 0){
         
-        CGFloat pageHeight= self.scrollView.frame.size.height;
-        int _currentPage = (int)roundf(self.scrollView.contentOffset.y/self.rootViewController.view.frame.size.height);
-        int newPage = _currentPage;
+        if(self.allowScrollMultiplePages){
+            _currentPage =  (int)roundf(self.scrollView.contentOffset.y/pageHeight);
+        }
+        
+        newPage = _currentPage;
         
         if (velocity.y == 0) {
             newPage = floor((targetContentOffset->x - pageHeight / 2) / pageHeight) + 1;
@@ -417,7 +430,11 @@ int lastIndex = 0;
         }
         *targetContentOffset = CGPointMake(targetContentOffset->x, newPage * pageHeight);
     }
+    
+    _currentPage = newPage;
 }
+
+
 
 #pragma mark - Rotation Handling
 
