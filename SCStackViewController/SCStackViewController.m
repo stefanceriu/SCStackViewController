@@ -389,38 +389,33 @@ int lastIndex = 0;
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    CGRect finalFrame = CGRectMake(targetContentOffset->x, targetContentOffset->y, 0, 0);
-    for(NSValue *frameValue in self.finalFrames.allValues) {
+    // Horizontal paging
+    if(targetContentOffset->x != 0){
         
-        CGRect frame = [frameValue CGRectValue];
-        frame.origin.x = frame.origin.x > 0 ? CGRectGetMinX(frame) - CGRectGetWidth(self.view.bounds) : CGRectGetMinX(frame);
-        frame.origin.y = frame.origin.y > 0 ? CGRectGetMinY(frame) - CGRectGetHeight(self.view.bounds) : CGRectGetMinY(frame);
+        CGFloat pageWidth = self.scrollView.frame.size.width;
+        int _currentPage = (int)roundf(self.scrollView.contentOffset.x/320);
+        int newPage = _currentPage;
         
-        if(CGRectContainsPoint(frame, *targetContentOffset)) {
-            finalFrame = frame;
-            break;
+        if (velocity.x == 0) {
+            newPage = floor((targetContentOffset->x - pageWidth / 2) / pageWidth) + 1;
+        }else{
+            newPage = velocity.x > 0 ? _currentPage + 1 : _currentPage - 1;
         }
-    }
-    
-    CGFloat iOS5Adjustment = 0.0f;
-    if(SYSTEM_VERSION_LESS_THAN(@"6.0")) {
-        iOS5Adjustment = 0.1f;
-    }
-    
-    if(velocity.x || velocity.y == 0) {
-        if (velocity.x >= 0.0) {
-            targetContentOffset->x = CGRectGetMaxX(finalFrame) - iOS5Adjustment;
+        *targetContentOffset = CGPointMake(newPage * pageWidth, targetContentOffset->y);
+        
+        // Vertical Paging
+    }else if(targetContentOffset->y != 0){
+        
+        CGFloat pageHeight= self.scrollView.frame.size.height;
+        int _currentPage = (int)roundf(self.scrollView.contentOffset.y/self.rootViewController.view.frame.size.height);
+        int newPage = _currentPage;
+        
+        if (velocity.y == 0) {
+            newPage = floor((targetContentOffset->x - pageHeight / 2) / pageHeight) + 1;
+        }else{
+            newPage = velocity.y > 0 ? _currentPage + 1 : _currentPage - 1;
         }
-        else if (velocity.x < -0.1) {
-            targetContentOffset->x = CGRectGetMinX(finalFrame) + iOS5Adjustment;
-        }
-    } else {
-        if (velocity.y >= 0.0) {
-            targetContentOffset->y = CGRectGetMaxY(finalFrame) - iOS5Adjustment;
-        }
-        else if (velocity.y < -0.1) {
-            targetContentOffset->y = CGRectGetMinY(finalFrame) + iOS5Adjustment;
-        }
+        *targetContentOffset = CGPointMake(targetContentOffset->x, newPage * pageHeight);
     }
 }
 
