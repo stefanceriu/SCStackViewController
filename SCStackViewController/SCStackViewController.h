@@ -27,6 +27,9 @@ typedef enum {
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
 @property (nonatomic, assign) BOOL bounces;
 
+@property (nonatomic, assign) BOOL pagingEnabled;
+@property (nonatomic, assign) BOOL continuousNavigationEnabled;
+
 @property (nonatomic, weak) id<SCStackViewControllerDelegate> delegate;
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController;

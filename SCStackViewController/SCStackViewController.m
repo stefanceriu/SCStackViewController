@@ -38,6 +38,18 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 {
     if(self = [super init]) {
         self.rootViewController = rootViewController;
+        
+        self.viewControllers = (@{
+                                  @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
+                                  @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
+                                  @(SCStackViewControllerPositionBottom): [NSMutableArray array],
+                                  @(SCStackViewControllerPositionRight) : [NSMutableArray array]
+                                  });
+        
+        self.visibleViewControllers = [NSMutableArray array];
+        
+        self.layouters = [NSMutableDictionary dictionary];
+        self.finalFrames = [NSMutableDictionary dictionary];
     }
     
     return self;
@@ -171,6 +183,8 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     CGPoint offset = CGPointZero;
     CGRect finalFrame = CGRectZero;
     
+    [self updateBounds];
+    
     if(![viewController isEqual:self.rootViewController]) {
         
         finalFrame = [[self.finalFrames objectForKey:@(viewController.hash)] CGRectValue];
@@ -221,21 +235,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     return [self.visibleViewControllers containsObject:viewController];
 }
 
-#pragma mark - Private Methods
-
-- (void)updateFinalFramesForPosition:(SCStackViewControllerPosition)position
-{
-    NSMutableArray *viewControllers = self.viewControllers[@(position)];
-    [viewControllers enumerateObjectsUsingBlock:^(UIViewController *controller, NSUInteger idx, BOOL *stop) {
-        CGRect finalFrame = [self.layouters[@(position)] finalFrameForViewController:controller
-                                                                           withIndex:idx
-                                                                          atPosition:position
-                                                                         withinGroup:viewControllers
-                                                                   inStackController:self];
-        
-        [self.finalFrames setObject:[NSValue valueWithCGRect:finalFrame] forKey:@([controller hash])];
-    }];
-}
+#pragma mark - UIViewController View Events
 
 - (void)viewDidLoad
 {
@@ -250,6 +250,8 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     [self.scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
     [self.scrollView setDelegate:self];
     
+    [self setPagingEnabled:YES];
+    
     [self addChildViewController:self.rootViewController];
     [self.rootViewController.view setFrame:self.scrollView.bounds];
     [self.rootViewController beginAppearanceTransition:YES animated:NO];
@@ -258,6 +260,28 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     [self.rootViewController didMoveToParentViewController:self];
     
     [self.view addSubview:self.scrollView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self scrollViewDidEndDecelerating:self.scrollView];
+}
+
+#pragma mark - Stack Management
+
+- (void)updateFinalFramesForPosition:(SCStackViewControllerPosition)position
+{
+    NSMutableArray *viewControllers = self.viewControllers[@(position)];
+    [viewControllers enumerateObjectsUsingBlock:^(UIViewController *controller, NSUInteger idx, BOOL *stop) {
+        CGRect finalFrame = [self.layouters[@(position)] finalFrameForViewController:controller
+                                                                           withIndex:idx
+                                                                          atPosition:position
+                                                                         withinGroup:viewControllers
+                                                                   inStackController:self];
+        
+        [self.finalFrames setObject:[NSValue valueWithCGRect:finalFrame] forKey:@([controller hash])];
+    }];
 }
 
 - (void)updateBounds
@@ -305,18 +329,90 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     [self.scrollView setDelegate:self];
 }
 
+- (void)updateNavigationContraints
+{
+    if(self.continuousNavigationEnabled) {
+        return;
+    }
+    
+    UIViewController *lastVisibleViewController = [self.visibleViewControllers lastObject];
+    
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    
+    if(CGPointEqualToPoint(self.scrollView.contentOffset, CGPointZero) || lastVisibleViewController == nil) {
+        for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
+            NSArray *viewControllers = self.viewControllers[@(position)];
+            if(viewControllers.count) {
+                switch (position) {
+                    case SCStackViewControllerPositionTop:
+                        insets.top = [viewControllers[0] view].frame.size.height;
+                        break;
+                    case SCStackViewControllerPositionLeft:
+                        insets.left = [viewControllers[0] view].frame.size.width;
+                        break;
+                    case SCStackViewControllerPositionBottom:
+                        insets.bottom = [viewControllers[0] view].frame.size.height;
+                        break;
+                    case SCStackViewControllerPositionRight:
+                        insets.right = [viewControllers[0] view].frame.size.width;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    } else {
+        SCStackViewControllerPosition lastVisibleControllerPosition = -1;
+        NSArray *viewControllersArray;
+        for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
+            if([self.viewControllers[@(position)] containsObject:lastVisibleViewController]) {
+                lastVisibleControllerPosition = position;
+                viewControllersArray = self.viewControllers[@(position)];
+            }
+        }
+        
+        NSUInteger visibleControllerIndex = [viewControllersArray indexOfObject:lastVisibleViewController];
+        NSArray *remainingViewControllers;
+        
+        if(visibleControllerIndex >= viewControllersArray.count - 1) {
+            remainingViewControllers = viewControllersArray;
+        } else {
+            remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(0, visibleControllerIndex + 2)];
+        }
+        
+        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+        
+        switch (lastVisibleControllerPosition) {
+            case SCStackViewControllerPositionTop:
+                insets.top = totalSize;
+                break;
+            case SCStackViewControllerPositionLeft:
+                insets.left = totalSize;
+                break;
+            case SCStackViewControllerPositionBottom:
+                insets.bottom = totalSize;
+                break;
+            case SCStackViewControllerPositionRight:
+                insets.right = totalSize;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    [self.scrollView setContentInset:insets];
+}
+
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods
 {
     return NO;
 }
 
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)updateFramesAndTriggerAppearanceCallbacks
 {
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         
-        CGRectEdge edge = [self edgeFromOffset:scrollView.contentOffset];
+        CGRectEdge edge = [self edgeFromOffset:self.scrollView.contentOffset];
         
         BOOL isReversed = NO;
         if([self.layouters[@(position)] respondsToSelector:@selector(isReversed)]) {
@@ -332,11 +428,11 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                                                                                  withIndex:index
                                                                                 atPosition:position
                                                                                 finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue]
-                                                                             contentOffset:scrollView.contentOffset
+                                                                             contentOffset:self.scrollView.contentOffset
                                                                          inStackController:self];
             
             CGRect adjustedFrame = nextFrame;
-            if(isReversed) {
+            if(isReversed && index > 0) {
                 switch (position) {
                     case SCStackViewControllerPositionTop:
                     {
@@ -404,14 +500,13 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
             }
         }];
     }
-    
-    if([self.delegate respondsToSelector:@selector(stackViewController:didNavigateToOffset:)]) {
-        [self.delegate stackViewController:self didNavigateToOffset:self.scrollView.contentOffset];
-    }
 }
 
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+- (void)adjustTargetContentOffset:(inout CGPoint *)targetContentOffset withVelocity:(CGPoint)velocity
 {
+    if(!self.pagingEnabled && self.continuousNavigationEnabled) {
+        return;
+    }
     
     __block CGRect finalFrame = CGRectZero;
     
@@ -430,10 +525,16 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         }
         
         if(isReversed) {
-            
-            if(position == SCStackViewControllerPositionLeft || position == SCStackViewControllerPositionRight) {
+            if(position == SCStackViewControllerPositionLeft && targetContentOffset->x < 0.0f) {
                 adjustedOffset.x = [self offsetForPosition:position].x - targetContentOffset->x;
-            } else {
+            }
+            else if(position == SCStackViewControllerPositionRight && targetContentOffset->x >= 0.0f) {
+                adjustedOffset.x = [self offsetForPosition:position].x - targetContentOffset->x;
+            }
+            else if(position == SCStackViewControllerPositionTop && targetContentOffset->y < 0.0f) {
+                adjustedOffset.y = [self offsetForPosition:position].y - targetContentOffset->y;
+            }
+            else if(position == SCStackViewControllerPositionBottom && targetContentOffset->y >= 0.0f) {
                 adjustedOffset.y = [self offsetForPosition:position].y - targetContentOffset->y;
             }
         }
@@ -496,6 +597,39 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     }
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self updateFramesAndTriggerAppearanceCallbacks];
+    
+    if([self.delegate respondsToSelector:@selector(stackViewController:didNavigateToOffset:)]) {
+        [self.delegate stackViewController:self didNavigateToOffset:self.scrollView.contentOffset];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self updateNavigationContraints];
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    [self updateNavigationContraints];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if(decelerate == NO) {
+        [self updateNavigationContraints];
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    [self adjustTargetContentOffset:targetContentOffset withVelocity:velocity];
+}
+
 #pragma mark - Rotation Handling
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -535,47 +669,6 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 - (void)setTouchRefusalArea:(UIBezierPath *)path
 {
     [self.scrollView setTouchRefusalArea:path];
-}
-
-- (NSMutableDictionary *)layouters
-{
-    if(_layouters == nil) {
-        _layouters = [NSMutableDictionary dictionary];
-    }
-    
-    return _layouters;
-}
-
-- (NSMutableDictionary *)finalFrames
-{
-    if(_finalFrames == nil) {
-        _finalFrames = [NSMutableDictionary dictionary];
-    }
-    
-    return _finalFrames;
-}
-
-- (NSDictionary *)viewControllers
-{
-    if(_viewControllers == nil) {
-        _viewControllers = (@{
-                              @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
-                              @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
-                              @(SCStackViewControllerPositionBottom): [NSMutableArray array],
-                              @(SCStackViewControllerPositionRight) : [NSMutableArray array]
-                              });
-    }
-    
-    return _viewControllers;
-}
-
-- (NSMutableArray *)visibleViewControllers
-{
-    if(_visibleViewControllers == nil) {
-        _visibleViewControllers = [NSMutableArray array];
-    }
-    
-    return _visibleViewControllers;
 }
 
 #pragma mark - Helpers
@@ -618,9 +711,9 @@ CGRect CGRectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
     
     float chopAmount = (edge == CGRectMinXEdge || edge == CGRectMaxXEdge) ? intersection.size.width : intersection.size.height;
     
-    CGRect r3, throwaway;
-    CGRectDivide(r1, &throwaway, &r3, chopAmount, edge);
-    return r3;
+    CGRect remainder, throwaway;
+    CGRectDivide(r1, &throwaway, &remainder, chopAmount, edge);
+    return remainder;
 }
 
 @end
