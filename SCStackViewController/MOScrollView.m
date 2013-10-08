@@ -94,6 +94,11 @@ const static int maximumSteps = 10;
                 duration:(CFTimeInterval)duration
               completion:(void(^)())completion
 {
+    //Blocking interaction while active
+    if(_displayLink && !_displayLink.paused) {
+        return;
+    }
+    
     _duration = duration;
     _timingFunction = timingFunction;
     _completionBlock = completion;
