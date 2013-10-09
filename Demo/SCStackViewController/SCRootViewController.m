@@ -130,13 +130,9 @@
 
 - (void)menuViewControllerDidRequestPop:(SCMenuViewController *)menuViewController
 {
-//    [self.stackViewController popViewControllerAtPosition:menuViewController.position
-//                                                 animated:YES
-//                                               completion:nil];
-    
-    [self.stackViewController popToRootViewControllerFromPosition:menuViewController.position animated:YES completion:^{
-        NSLog(@"DID FINISH POP!! ");
-    }];
+    [self.stackViewController popViewControllerAtPosition:menuViewController.position
+                                                 animated:YES
+                                               completion:nil];
 }
 
 
