@@ -96,6 +96,15 @@ const static int maximumSteps = 10;
 {
     //Blocking interaction while active
     if(_displayLink && !_displayLink.paused) {
+        NSLog(@"MOScrollView - Action canceled");
+        return;
+    }
+    
+    if(CGPointEqualToPoint(self.contentOffset, contentOffset)) {
+        if(completion) {
+            completion();
+        }
+        
         return;
     }
     

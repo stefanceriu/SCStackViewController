@@ -107,73 +107,58 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         previousViewController = [self.viewControllers[@(position)] objectAtIndex:[self.viewControllers[@(position)] indexOfObject:lastViewController] - 1];
     }
     
-    [self navigateToViewController:previousViewController
-                          animated:animated
-                        completion:^{
-                            
-                            [self.viewControllers[@(position)] removeObject:lastViewController];
-                            [self.finalFrames removeObjectForKey:@([lastViewController hash])];
-                            [self updateFinalFramesForPosition:position];
-                            [self updateBounds];
-                            
-                            if([self.visibleViewControllers containsObject:lastViewController]) {
-                                [lastViewController beginAppearanceTransition:NO animated:animated];
-                            }
-                            
-                            [lastViewController willMoveToParentViewController:nil];
-                            [lastViewController.view removeFromSuperview];
-                            [lastViewController removeFromParentViewController];
-                            
-                            if([self.visibleViewControllers containsObject:lastViewController]) {
-                                [lastViewController endAppearanceTransition];
-                                [self.visibleViewControllers removeObject:lastViewController];
-                            }
-                            
-                            if(completion) {
-                                completion();
-                            }
-                        }];
+    void(^cleanup)() = ^{
+        [self.viewControllers[@(position)] removeObject:lastViewController];
+        [self.finalFrames removeObjectForKey:@([lastViewController hash])];
+        [self updateFinalFramesForPosition:position];
+        [self updateBounds];
+        
+        if([self.visibleViewControllers containsObject:lastViewController]) {
+            [lastViewController beginAppearanceTransition:NO animated:animated];
+        }
+        
+        [lastViewController willMoveToParentViewController:nil];
+        [lastViewController.view removeFromSuperview];
+        [lastViewController removeFromParentViewController];
+        
+        if([self.visibleViewControllers containsObject:lastViewController]) {
+            [lastViewController endAppearanceTransition];
+            [self.visibleViewControllers removeObject:lastViewController];
+        }
+        
+        if(completion) {
+            completion();
+        }
+    };
+    
+    if([self.visibleViewControllers containsObject:lastViewController]) {
+        [self navigateToViewController:previousViewController
+                              animated:animated
+                            completion:cleanup];
+    } else {
+        cleanup();
+    }
 }
 
 - (void)popToRootViewControllerFromPosition:(SCStackViewControllerPosition)position
                                    animated:(BOOL)animated
                                  completion:(void(^)())completion
 {
-    NSArray *controllersToBeRemoved = [self.viewControllers[@(position)] copy];
-    
-    [self.viewControllers[@(position)] enumerateObjectsUsingBlock:^(UIViewController *controller, NSUInteger idx, BOOL *stop) {
-        [self.finalFrames removeObjectForKey:@([controller hash])];
-    }];
-    [self.viewControllers[@(position)] removeAllObjects];
-    
-    [self updateFinalFramesForPosition:position];
-    
-    [UIView animateWithDuration:(animated ? kDefaultAnimationDuration : 0.0f)
-                          delay:0.0f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         [self scrollViewDidScroll:self.scrollView];
-                         [self updateBounds];
-                     } completion:^(BOOL finished) {
-                         for(UIViewController *controller in controllersToBeRemoved) {
-                             
-                             if([self.visibleViewControllers containsObject:controller]) {
-                                 [controller beginAppearanceTransition:NO animated:animated];
-                             }
-                             
-                             [controller willMoveToParentViewController:nil];
-                             [controller.view removeFromSuperview];
-                             [controller removeFromParentViewController];
-                             
-                             if([self.visibleViewControllers containsObject:controller]) {
-                                 [controller endAppearanceTransition];
-                                 [self.visibleViewControllers removeObject:controller];
-                             }
-                             if(completion) {
-                                 completion(finished);
-                             }
-                         }
-                     }];
+    [self navigateToViewController:self.rootViewController
+                          animated:animated
+                        completion:^{
+                            NSMutableArray *viewControllers = self.viewControllers[@(position)];
+                            
+                            for(UIViewController *controller in [viewControllers copy]) {
+                                [self popViewControllerAtPosition:position animated:NO completion:nil];
+                            }
+                            
+                            [viewControllers removeAllObjects];
+                            
+                            if(completion) {
+                                completion();
+                            }
+                        }];
 }
 
 - (void)navigateToViewController:(UIViewController *)viewController

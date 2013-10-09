@@ -70,31 +70,36 @@
     [self.stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionLeft];
     [self.stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionRight];
     
-    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionLeft
-                                                         animated:YES
-                                                       completion:nil];
-    
     SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionLeft];
     [leftViewController.view castShadowWithPosition:SCShadowEdgeLeft];
     [leftViewController setDelegate:self];
-    [self.stackViewController pushViewController:leftViewController
-                                      atPosition:SCStackViewControllerPositionLeft
-                                          unfold:NO
-                                        animated:NO
-                                      completion:nil];
     
-    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionRight
-                                                         animated:YES
-                                                       completion:nil];
+    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionLeft
+                                                         animated:NO
+                                                       completion:^{
+                                                           
+                                                           [self.stackViewController pushViewController:leftViewController
+                                                                                             atPosition:SCStackViewControllerPositionLeft
+                                                                                                 unfold:NO
+                                                                                               animated:NO
+                                                                                             completion:nil];
+                                                       }];
+    
     
     SCMenuViewController *rightViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionRight];
     [rightViewController.view castShadowWithPosition:SCShadowEdgeRight];
     [rightViewController setDelegate:self];
-    [self.stackViewController pushViewController:rightViewController
-                                      atPosition:SCStackViewControllerPositionRight
-                                          unfold:NO
-                                        animated:NO
-                                      completion:nil];
+    
+    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionRight
+                                                         animated:NO
+                                                       completion:^{
+                                                           
+                                                           [self.stackViewController pushViewController:rightViewController
+                                                                                             atPosition:SCStackViewControllerPositionRight
+                                                                                                 unfold:NO
+                                                                                               animated:NO
+                                                                                             completion:nil];
+                                                       }];
 }
 
 #pragma mark - SCMenuViewControllerDelegate
@@ -125,9 +130,13 @@
 
 - (void)menuViewControllerDidRequestPop:(SCMenuViewController *)menuViewController
 {
-    [self.stackViewController popViewControllerAtPosition:menuViewController.position
-                                                 animated:YES
-                                               completion:nil];
+//    [self.stackViewController popViewControllerAtPosition:menuViewController.position
+//                                                 animated:YES
+//                                               completion:nil];
+    
+    [self.stackViewController popToRootViewControllerFromPosition:menuViewController.position animated:YES completion:^{
+        NSLog(@"DID FINISH POP!! ");
+    }];
 }
 
 
