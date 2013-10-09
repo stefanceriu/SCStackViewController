@@ -269,7 +269,6 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.scrollView setContentOffset:CGPointZero];
 }
 
 - (void)updateBounds
