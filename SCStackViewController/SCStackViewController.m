@@ -365,21 +365,31 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
             remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(0, visibleControllerIndex + 2)];
         }
         
-        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-        
         switch (lastVisibleControllerPosition) {
             case SCStackViewControllerPositionTop:
+            {
+                CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
                 insets.top = totalSize;
                 break;
+            }
             case SCStackViewControllerPositionLeft:
+            {
+                CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
                 insets.left = totalSize;
                 break;
+            }
             case SCStackViewControllerPositionBottom:
+            {
+                CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
                 insets.bottom = totalSize;
                 break;
+            }
             case SCStackViewControllerPositionRight:
+            {
+                CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
                 insets.right = totalSize;
                 break;
+            }
             default:
                 break;
         }
