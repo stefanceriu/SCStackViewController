@@ -550,30 +550,42 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                 
                 finalFrame = frame;
                 
-                if(velocity.x || velocity.y == 0) {
-                    if (velocity.x >= 0.0) {
+                CGPoint adjustedVelocity = velocity;
+                if(CGPointEqualToPoint(CGPointZero, adjustedVelocity)) {
+                    CGFloat verticalPercentageShown = ABS((ABS(frame.origin.y) - ABS(adjustedOffset.y))) / frame.size.height;
+                    CGFloat horizontalPercentageShown = ABS((ABS(frame.origin.x) - ABS(adjustedOffset.x))) / frame.size.width;
+                    
+                    if(horizontalPercentageShown != 0.0f) {
+                        adjustedVelocity.x = horizontalPercentageShown > 0.5f ? 1.0f : -1.0f;
+                    } else {
+                        adjustedVelocity.y = verticalPercentageShown > 0.5f ? 1.0f : -1.0f;
+                    }
+                }
+                
+                if(adjustedVelocity.x) {
+                    if (adjustedVelocity.x >= 0.0f) {
                         if(isReversed) {
                             targetContentOffset->x = [self offsetForPosition:position].x - CGRectGetMinX(finalFrame) - iOS5Adjustment;
                         } else {
                             targetContentOffset->x = CGRectGetMaxX(finalFrame) - iOS5Adjustment;
                         }
                     }
-                    else if (velocity.x < -0.1) {
+                    else if (adjustedVelocity.x < 0.0f) {
                         if(isReversed) {
                             targetContentOffset->x = [self offsetForPosition:position].x - CGRectGetMaxX(finalFrame) + iOS5Adjustment;
                         } else {
                             targetContentOffset->x = CGRectGetMinX(finalFrame) + iOS5Adjustment;
                         }
                     }
-                } else {
-                    if (velocity.y >= 0.0) {
+                } else if(adjustedVelocity.y) {
+                    if (adjustedVelocity.y > 0.0f) {
                         if(isReversed) {
                             targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMinY(finalFrame) - iOS5Adjustment;
                         } else {
                             targetContentOffset->y = CGRectGetMaxY(finalFrame) - iOS5Adjustment;
                         }
                     }
-                    else if (velocity.y < -0.1) {
+                    else if (adjustedVelocity.y < 0.0f) {
                         if(isReversed) {
                             targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMaxY(finalFrame) + iOS5Adjustment;
                         } else {
@@ -605,6 +617,10 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+    if(self.scrollView.isTracking) {
+        return;
+    }
+    
     [self updateNavigationContraints];
 }
 
@@ -686,15 +702,19 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 - (CGRectEdge)edgeFromOffset:(CGPoint)offset
 {
-    if(offset.x >= 0.0f) {
-        return CGRectMinXEdge;
+    CGRectEdge edge = -1;
+    
+    if(offset.x > 0.0f) {
+        edge = CGRectMinXEdge;
     } else if(offset.x < 0.0f) {
-        return CGRectMaxXEdge;
-    } else if(offset.y >= 0.0f) {
-        return CGRectMinYEdge;
-    } else {
-        return CGRectMaxYEdge;
+        edge = CGRectMaxXEdge;
+    } else if(offset.y > 0.0f) {
+        edge = CGRectMinYEdge;
+    } else if(offset.y < 0.0f) {
+        edge = CGRectMaxYEdge;
     }
+    
+    return edge;
 }
 
 CGRect CGRectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
