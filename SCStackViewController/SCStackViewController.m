@@ -85,7 +85,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     [self updateBounds];
     
     if(unfold) {
-        [self.scrollView setContentOffset:[self offsetForPosition:position]
+        [self.scrollView setContentOffset:[self maximumInsetForPosition:position]
                        withTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
                                  duration:(animated ? kDefaultAnimationDuration : 0.0f)
                                completion:completion];
@@ -188,16 +188,16 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         
         switch (controllerPosition) {
             case SCStackViewControllerPositionTop:
-                offset.y = (isReversed ? ([self offsetForPosition:controllerPosition].y - CGRectGetMaxY(finalFrame)) : CGRectGetMinY(finalFrame));
+                offset.y = (isReversed ? ([self maximumInsetForPosition:controllerPosition].y - CGRectGetMaxY(finalFrame)) : CGRectGetMinY(finalFrame));
                 break;
             case SCStackViewControllerPositionLeft:
-                offset.x = (isReversed ? ([self offsetForPosition:controllerPosition].x - CGRectGetMaxX(finalFrame)) : CGRectGetMinX(finalFrame));
+                offset.x = (isReversed ? ([self maximumInsetForPosition:controllerPosition].x - CGRectGetMaxX(finalFrame)) : CGRectGetMinX(finalFrame));
                 break;
             case SCStackViewControllerPositionBottom:
-                offset.y = (isReversed ? ([self offsetForPosition:controllerPosition].y - CGRectGetMinY(finalFrame) + CGRectGetHeight(self.view.bounds)) : CGRectGetMaxY(finalFrame) - CGRectGetHeight(self.view.bounds));
+                offset.y = (isReversed ? ([self maximumInsetForPosition:controllerPosition].y - CGRectGetMinY(finalFrame) + CGRectGetHeight(self.view.bounds)) : CGRectGetMaxY(finalFrame) - CGRectGetHeight(self.view.bounds));
                 break;
             case SCStackViewControllerPositionRight:
-                offset.x = (isReversed ? ([self offsetForPosition:controllerPosition].x - CGRectGetMinX(finalFrame) + CGRectGetWidth(self.view.bounds)) : CGRectGetMaxX(finalFrame) - CGRectGetWidth(self.view.bounds));
+                offset.x = (isReversed ? ([self maximumInsetForPosition:controllerPosition].x - CGRectGetMinX(finalFrame) + CGRectGetWidth(self.view.bounds)) : CGRectGetMaxX(finalFrame) - CGRectGetWidth(self.view.bounds));
                 break;
             default:
                 break;
@@ -433,28 +433,28 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                     {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
-                        adjustedFrame.origin.y = [self offsetForPosition:position].y + totalSize;
+                        adjustedFrame.origin.y = [self maximumInsetForPosition:position].y + totalSize;
                         break;
                     }
                     case SCStackViewControllerPositionLeft:
                     {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-                        adjustedFrame.origin.x = [self offsetForPosition:position].x + totalSize;
+                        adjustedFrame.origin.x = [self maximumInsetForPosition:position].x + totalSize;
                         break;
                     }
                     case SCStackViewControllerPositionBottom:
                     {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
-                        adjustedFrame.origin.y = self.rootViewController.view.bounds.size.height + [self offsetForPosition:position].y - totalSize;
+                        adjustedFrame.origin.y = self.rootViewController.view.bounds.size.height + [self maximumInsetForPosition:position].y - totalSize;
                         break;
                     }
                     case SCStackViewControllerPositionRight:
                     {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-                        adjustedFrame.origin.x = self.rootViewController.view.bounds.size.width + [self offsetForPosition:position].x - totalSize;
+                        adjustedFrame.origin.x = self.rootViewController.view.bounds.size.width + [self maximumInsetForPosition:position].x - totalSize;
                         break;
                     }
                     default:
@@ -521,16 +521,16 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         
         if(isReversed) {
             if(position == SCStackViewControllerPositionLeft && targetContentOffset->x < 0.0f) {
-                adjustedOffset.x = [self offsetForPosition:position].x - targetContentOffset->x;
+                adjustedOffset.x = [self maximumInsetForPosition:position].x - targetContentOffset->x;
             }
             else if(position == SCStackViewControllerPositionRight && targetContentOffset->x >= 0.0f) {
-                adjustedOffset.x = [self offsetForPosition:position].x - targetContentOffset->x;
+                adjustedOffset.x = [self maximumInsetForPosition:position].x - targetContentOffset->x;
             }
             else if(position == SCStackViewControllerPositionTop && targetContentOffset->y < 0.0f) {
-                adjustedOffset.y = [self offsetForPosition:position].y - targetContentOffset->y;
+                adjustedOffset.y = [self maximumInsetForPosition:position].y - targetContentOffset->y;
             }
             else if(position == SCStackViewControllerPositionBottom && targetContentOffset->y >= 0.0f) {
-                adjustedOffset.y = [self offsetForPosition:position].y - targetContentOffset->y;
+                adjustedOffset.y = [self maximumInsetForPosition:position].y - targetContentOffset->y;
             }
         }
         
@@ -552,27 +552,45 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                 
                 CGPoint adjustedVelocity = velocity;
                 if(CGPointEqualToPoint(CGPointZero, adjustedVelocity)) {
-                    CGFloat verticalPercentageShown = ABS((ABS(frame.origin.y) - ABS(adjustedOffset.y))) / frame.size.height;
-                    CGFloat horizontalPercentageShown = ABS((ABS(frame.origin.x) - ABS(adjustedOffset.x))) / frame.size.width;
-                    
-                    if(horizontalPercentageShown != 0.0f) {
-                        adjustedVelocity.x = horizontalPercentageShown > 0.5f ? 1.0f : -1.0f;
-                    } else {
-                        adjustedVelocity.y = verticalPercentageShown > 0.5f ? 1.0f : -1.0f;
+                    switch (position) {
+                        case SCStackViewControllerPositionTop:
+                        case SCStackViewControllerPositionBottom:
+                        {
+                            CGFloat verticalPercentageShown = ABS((ABS(frame.origin.y) - ABS(adjustedOffset.y))) / frame.size.height;
+                            if(isReversed) {
+                                verticalPercentageShown = 1.0f - verticalPercentageShown;
+                            }
+                            adjustedVelocity.y = verticalPercentageShown > 0.5f ? 1.0f : -1.0f;
+                            
+                            break;
+                        }
+                        case SCStackViewControllerPositionLeft:
+                        case SCStackViewControllerPositionRight:
+                        {
+                            CGFloat horizontalPercentageShown = ABS((ABS(frame.origin.x) - ABS(adjustedOffset.x))) / frame.size.width;
+                            if(isReversed) {
+                                horizontalPercentageShown = 1.0f - horizontalPercentageShown;
+                            }
+                            adjustedVelocity.x = horizontalPercentageShown > 0.5f ? 1.0f : -1.0f;
+                            
+                            break;
+                        }
+                        default:
+                            break;
                     }
                 }
                 
                 if(adjustedVelocity.x) {
                     if (adjustedVelocity.x >= 0.0f) {
                         if(isReversed) {
-                            targetContentOffset->x = [self offsetForPosition:position].x - CGRectGetMinX(finalFrame) - iOS5Adjustment;
+                            targetContentOffset->x = [self maximumInsetForPosition:position].x - CGRectGetMinX(finalFrame) - iOS5Adjustment;
                         } else {
                             targetContentOffset->x = CGRectGetMaxX(finalFrame) - iOS5Adjustment;
                         }
                     }
                     else if (adjustedVelocity.x < 0.0f) {
                         if(isReversed) {
-                            targetContentOffset->x = [self offsetForPosition:position].x - CGRectGetMaxX(finalFrame) + iOS5Adjustment;
+                            targetContentOffset->x = [self maximumInsetForPosition:position].x - CGRectGetMaxX(finalFrame) + iOS5Adjustment;
                         } else {
                             targetContentOffset->x = CGRectGetMinX(finalFrame) + iOS5Adjustment;
                         }
@@ -580,14 +598,14 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                 } else if(adjustedVelocity.y) {
                     if (adjustedVelocity.y > 0.0f) {
                         if(isReversed) {
-                            targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMinY(finalFrame) - iOS5Adjustment;
+                            targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMinY(finalFrame) - iOS5Adjustment;
                         } else {
                             targetContentOffset->y = CGRectGetMaxY(finalFrame) - iOS5Adjustment;
                         }
                     }
                     else if (adjustedVelocity.y < 0.0f) {
                         if(isReversed) {
-                            targetContentOffset->y = [self offsetForPosition:position].y - CGRectGetMaxY(finalFrame) + iOS5Adjustment;
+                            targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + iOS5Adjustment;
                         } else {
                             targetContentOffset->y = CGRectGetMinY(finalFrame) + iOS5Adjustment;
                         }
@@ -684,17 +702,17 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 #pragma mark - Helpers
 
-- (CGPoint)offsetForPosition:(SCStackViewControllerPosition)position
+- (CGPoint)maximumInsetForPosition:(SCStackViewControllerPosition)position
 {
     switch (position) {
         case SCStackViewControllerPositionTop:
-            return CGPointMake(0, -self.scrollView.contentInset.top);
+            return CGPointMake(0, -[[self.viewControllers[@(position)] valueForKeyPath:@"@sum.viewHeight"] floatValue]);
         case SCStackViewControllerPositionLeft:
-            return CGPointMake(-self.scrollView.contentInset.left, 0);
+            return CGPointMake(-[[self.viewControllers[@(position)] valueForKeyPath:@"@sum.viewWidth"] floatValue], 0);
         case SCStackViewControllerPositionBottom:
-            return CGPointMake(0, self.scrollView.contentInset.bottom);
+            return CGPointMake(0, [[self.viewControllers[@(position)] valueForKeyPath:@"@sum.viewHeight"] floatValue]);
         case SCStackViewControllerPositionRight:
-            return CGPointMake(self.scrollView.contentInset.right, 0);
+            return CGPointMake([[self.viewControllers[@(position)] valueForKeyPath:@"@sum.viewWidth"] floatValue], 0);
         default:
             return CGPointZero;
     }
