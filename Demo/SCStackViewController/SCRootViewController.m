@@ -40,6 +40,7 @@
     self.stackViewController = [[SCStackViewController alloc] initWithRootViewController:mainViewController];
     [self.stackViewController.view setFrame:self.view.bounds];
     //[self.stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]];
+    [self.stackViewController setShowsScrollIndicators:NO];
     
     [self addChildViewController:self.stackViewController];
     [self.view addSubview:self.stackViewController.view];

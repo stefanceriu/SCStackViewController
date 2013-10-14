@@ -31,6 +31,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 @implementation SCStackViewController
 @dynamic bounces;
 @dynamic touchRefusalArea;
+@dynamic showsScrollIndicators;
 
 #pragma mark - Constructors
 
@@ -231,7 +232,6 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     self.scrollView = [[MOScrollView alloc] initWithFrame:self.view.bounds];
     [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.scrollView setDirectionalLockEnabled:YES];
-    [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
     [self.scrollView setDelegate:self];
     
@@ -698,6 +698,17 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 - (void)setTouchRefusalArea:(UIBezierPath *)path
 {
     [self.scrollView setTouchRefusalArea:path];
+}
+
+- (BOOL)showsScrollIndicators
+{
+    return [self.scrollView showsHorizontalScrollIndicator] && [self.scrollView showsVerticalScrollIndicator];
+}
+
+- (void)setShowsScrollIndicators:(BOOL)showsScrollIndicators
+{
+    [self.scrollView setShowsHorizontalScrollIndicator:showsScrollIndicators];
+    [self.scrollView setShowsVerticalScrollIndicator:showsScrollIndicators];
 }
 
 #pragma mark - Helpers

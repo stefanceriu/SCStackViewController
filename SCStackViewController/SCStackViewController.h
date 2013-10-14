@@ -30,6 +30,8 @@ typedef enum {
 @property (nonatomic, assign) BOOL pagingEnabled;
 @property (nonatomic, assign) BOOL continuousNavigationEnabled;
 
+@property (nonatomic, assign) BOOL showsScrollIndicators;
+
 @property (nonatomic, weak) id<SCStackViewControllerDelegate> delegate;
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController;
