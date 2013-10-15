@@ -10,6 +10,14 @@
 #import "SCStackLayouterProtocol.h"
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+typedef enum ScrollDirection {
+    ScrollDirectionNone,
+    ScrollDirectionRight,
+    ScrollDirectionLeft,
+    ScrollDirectionUp,
+    ScrollDirectionDown,
+    ScrollDirectionCrazy,
+} ScrollDirection;
 
 static const CGFloat kDefaultAnimationDuration = 0.25f;
 
@@ -39,6 +47,8 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 @property (nonatomic, strong) UIViewController *rootViewController;
 
 @property (nonatomic, strong) SCStackScrollView *scrollView;
+@property (nonatomic, assign) NSInteger lastContentOffset;
+@property (nonatomic) ScrollDirection currentDirection;
 
 @property (nonatomic, strong) NSMutableDictionary *layouters;
 @property (nonatomic, strong) NSMutableDictionary *finalFrames;
@@ -219,7 +229,14 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          [self.scrollView setContentOffset:offset animated:animated];
-                     } completion:completion];
+                     } completion:^(BOOL finished) {
+                         float pageWidth = self.rootViewController.view.frame.size.width;
+                         _currentPage =  (int)roundf(offset.x/pageWidth);
+                         if(completion) {
+                             completion(finished);
+                         }
+                     }];
+    
 }
 
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position
@@ -317,8 +334,16 @@ int lastIndex = 0;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     
+    // get scroll direction
+    if (self.lastContentOffset > scrollView.contentOffset.x)
+        _currentDirection = ScrollDirectionRight;
+    else if (self.lastContentOffset < scrollView.contentOffset.x)
+        _currentDirection = ScrollDirectionLeft;
+    self.lastContentOffset = scrollView.contentOffset.x;
+    
+    
     // Mimic lifecycle on rootView
-    int index = (int)roundf(self.scrollView.contentOffset.x/320);
+    int index = (int)roundf(self.scrollView.contentOffset.x/self.rootViewController.view.frame.size.width);
     if(index != lastIndex){
         if(index == 0){
             [self.rootViewController viewWillAppear:YES];
@@ -388,13 +413,12 @@ int lastIndex = 0;
     }
 }
 
-
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
     
     CGFloat pageWidth = self.scrollView.frame.size.width;
     CGFloat pageHeight= self.scrollView.frame.size.height;
-    int newPage ;
+    int newPage = _currentPage;
     
     // Horizontal paging
     if(targetContentOffset->x != 0){
@@ -403,9 +427,16 @@ int lastIndex = 0;
             _currentPage =  (int)roundf(self.scrollView.contentOffset.x/pageWidth);
         }
         
-        newPage = _currentPage;
-        
         if (velocity.x == 0) {
+            
+            //            float offset = (targetContentOffset->x - pageWidth) / pageWidth;
+            //            float percentScrolled;
+            //            if(_currentDirection == ScrollDirectionLeft){
+            //                percentScrolled = offset-floor(offset);
+            //            }else{
+            //                percentScrolled =  1-(offset-floor(offset));
+            //            }
+            
             newPage = floor((targetContentOffset->x - pageWidth / 2) / pageWidth) + 1;
         }else{
             newPage = velocity.x > 0 ? _currentPage + 1 : _currentPage - 1;
@@ -419,8 +450,6 @@ int lastIndex = 0;
         if(self.allowScrollMultiplePages){
             _currentPage =  (int)roundf(self.scrollView.contentOffset.y/pageHeight);
         }
-        
-        newPage = _currentPage;
         
         if (velocity.y == 0) {
             newPage = floor((targetContentOffset->x - pageHeight / 2) / pageHeight) + 1;
