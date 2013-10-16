@@ -175,12 +175,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         
         finalFrame = [[self.finalFrames objectForKey:@(viewController.hash)] CGRectValue];
         
-        SCStackViewControllerPosition controllerPosition = -1;
-        for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
-            if([self.viewControllers[@(position)] containsObject:viewController]) {
-                controllerPosition = position;
-            }
-        }
+        SCStackViewControllerPosition controllerPosition = [self positionForViewController:viewController];
         
         BOOL isReversed = NO;
         if([self.layouters[@(controllerPosition)] respondsToSelector:@selector(isReversed)]) {
@@ -320,79 +315,82 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         return;
     }
     
-    UIViewController *lastVisibleViewController = [self.visibleViewControllers lastObject];
-    
     UIEdgeInsets insets = UIEdgeInsetsZero;
+    UIViewController *lastVisibleViewController = [self.visibleViewControllers lastObject];
     
     if(CGPointEqualToPoint(self.scrollView.contentOffset, CGPointZero) || lastVisibleViewController == nil) {
         for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
             NSArray *viewControllers = self.viewControllers[@(position)];
-            if(viewControllers.count) {
-                switch (position) {
-                    case SCStackViewControllerPositionTop:
-                        insets.top = [viewControllers[0] view].frame.size.height;
-                        break;
-                    case SCStackViewControllerPositionLeft:
-                        insets.left = [viewControllers[0] view].frame.size.width;
-                        break;
-                    case SCStackViewControllerPositionBottom:
-                        insets.bottom = [viewControllers[0] view].frame.size.height;
-                        break;
-                    case SCStackViewControllerPositionRight:
-                        insets.right = [viewControllers[0] view].frame.size.width;
-                        break;
-                    default:
-                        break;
-                }
+            
+            if(viewControllers.count == 0) {
+                continue;
+            }
+            
+            switch (position) {
+                case SCStackViewControllerPositionTop:
+                    insets.top = [viewControllers[0] view].frame.size.height;
+                    break;
+                case SCStackViewControllerPositionLeft:
+                    insets.left = [viewControllers[0] view].frame.size.width;
+                    break;
+                case SCStackViewControllerPositionBottom:
+                    insets.bottom = [viewControllers[0] view].frame.size.height;
+                    break;
+                case SCStackViewControllerPositionRight:
+                    insets.right = [viewControllers[0] view].frame.size.width;
+                    break;
+                default:
+                    break;
             }
         }
+        
+        [self.scrollView setContentInset:insets];
+        return;
+    }
+
+    SCStackViewControllerPosition lastVisibleControllerPosition = [self positionForViewController:lastVisibleViewController];
+    NSArray *viewControllersArray = self.viewControllers[@(lastVisibleControllerPosition)];
+    
+    lastVisibleViewController = [[self.visibleViewControllers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [@([viewControllersArray indexOfObject:obj1]) compare:@([viewControllersArray indexOfObject:obj2])];
+    }] lastObject];
+    
+    NSUInteger visibleControllerIndex = [viewControllersArray indexOfObject:lastVisibleViewController];
+    NSArray *remainingViewControllers;
+    
+    if(visibleControllerIndex >= viewControllersArray.count - 1) {
+        remainingViewControllers = viewControllersArray;
     } else {
-        SCStackViewControllerPosition lastVisibleControllerPosition = -1;
-        NSArray *viewControllersArray;
-        for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
-            if([self.viewControllers[@(position)] containsObject:lastVisibleViewController]) {
-                lastVisibleControllerPosition = position;
-                viewControllersArray = self.viewControllers[@(position)];
-            }
+        remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(0, visibleControllerIndex + 2)];
+    }
+    
+    switch (lastVisibleControllerPosition) {
+        case SCStackViewControllerPositionTop:
+        {
+            CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            insets.top = totalSize;
+            break;
         }
-        
-        NSUInteger visibleControllerIndex = [viewControllersArray indexOfObject:lastVisibleViewController];
-        NSArray *remainingViewControllers;
-        
-        if(visibleControllerIndex >= viewControllersArray.count - 1) {
-            remainingViewControllers = viewControllersArray;
-        } else {
-            remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(0, visibleControllerIndex + 2)];
+        case SCStackViewControllerPositionLeft:
+        {
+            CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            insets.left = totalSize;
+            break;
         }
-        
-        switch (lastVisibleControllerPosition) {
-            case SCStackViewControllerPositionTop:
-            {
-                CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
-                insets.top = totalSize;
-                break;
-            }
-            case SCStackViewControllerPositionLeft:
-            {
-                CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-                insets.left = totalSize;
-                break;
-            }
-            case SCStackViewControllerPositionBottom:
-            {
-                CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
-                insets.bottom = totalSize;
-                break;
-            }
-            case SCStackViewControllerPositionRight:
-            {
-                CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-                insets.right = totalSize;
-                break;
-            }
-            default:
-                break;
+        case SCStackViewControllerPositionBottom:
+        {
+            CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            insets.bottom = totalSize;
+            break;
         }
+        case SCStackViewControllerPositionRight:
+        {
+            CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            insets.right = totalSize;
+            break;
+        }
+        default:
+            break;
     }
     
     [self.scrollView setContentInset:insets];
@@ -727,6 +725,17 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         default:
             return CGPointZero;
     }
+}
+
+- (SCStackViewControllerPosition)positionForViewController:(UIViewController *)viewController
+{
+    for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
+        if([self.viewControllers[@(position)] containsObject:viewController]) {
+            return position;
+        }
+    }
+    
+    return -1;
 }
 
 - (CGRectEdge)edgeFromOffset:(CGPoint)offset
