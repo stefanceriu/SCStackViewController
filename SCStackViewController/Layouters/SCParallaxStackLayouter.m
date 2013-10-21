@@ -18,30 +18,26 @@
                           contentOffset:(CGPoint)contentOffset
                       inStackController:(SCStackViewController *)stackController
 {
-    if(index == 0) {
-        return finalFrame;
-    }
-    
     CGRect frame = viewController.view.frame;
     
     switch (position) {
         case SCStackViewControllerPositionTop: {
-            CGFloat ratio = contentOffset.y / CGRectGetMinY(finalFrame);
+            CGFloat ratio = (contentOffset.y - CGRectGetHeight(finalFrame) / 2) / (CGRectGetMinY(finalFrame) - CGRectGetHeight(finalFrame) / 2);
             frame.origin.y = CGRectGetMaxY(finalFrame) - CGRectGetHeight(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
             break;
         }
         case SCStackViewControllerPositionLeft: {
-            CGFloat ratio = contentOffset.x / CGRectGetMinX(finalFrame);
+            CGFloat ratio = (contentOffset.x - CGRectGetWidth(finalFrame) / 2) / (CGRectGetMinX(finalFrame) - CGRectGetWidth(finalFrame) / 2);
             frame.origin.x = CGRectGetMaxX(finalFrame) - CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
             break;
         }
         case SCStackViewControllerPositionBottom: {
-            CGFloat ratio = contentOffset.y / (CGRectGetMaxY(finalFrame) - CGRectGetHeight(stackController.view.bounds));
+            CGFloat ratio = (contentOffset.y + CGRectGetHeight(finalFrame) / 2) / ((CGRectGetMaxY(finalFrame) - CGRectGetHeight(stackController.view.bounds)) + CGRectGetHeight(finalFrame) / 2);
             frame.origin.y = (CGRectGetMinY(finalFrame) - CGRectGetHeight(finalFrame)) + CGRectGetHeight(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
             break;
         }
         case SCStackViewControllerPositionRight: {
-            CGFloat ratio = contentOffset.x / (CGRectGetMaxX(finalFrame) - CGRectGetWidth(stackController.view.bounds));
+            CGFloat ratio = (contentOffset.x + CGRectGetWidth(finalFrame) / 2) / ((CGRectGetMaxX(finalFrame) - CGRectGetWidth(stackController.view.bounds)) + CGRectGetWidth(finalFrame) / 2);
             frame.origin.x = (CGRectGetMinX(finalFrame) - CGRectGetWidth(finalFrame)) + CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
             break;
         }
