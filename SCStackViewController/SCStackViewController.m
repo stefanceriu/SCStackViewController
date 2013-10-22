@@ -44,8 +44,6 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 @interface SCStackViewController () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) UIViewController *rootViewController;
-
 @property (nonatomic, strong) SCStackScrollView *scrollView;
 @property (nonatomic, assign) NSInteger lastContentOffset;
 @property (nonatomic) ScrollDirection currentDirection;
@@ -53,7 +51,6 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 @property (nonatomic, strong) NSMutableDictionary *layouters;
 @property (nonatomic, strong) NSMutableDictionary *finalFrames;
 
-@property (nonatomic, strong) NSDictionary *viewControllers;
 @property (nonatomic, strong) NSMutableArray *visibleViewControllers;
 @property (nonatomic) int currentPageX;
 @property (nonatomic) int currentPageY;
