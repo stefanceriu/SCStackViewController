@@ -18,31 +18,52 @@
                           contentOffset:(CGPoint)contentOffset
                       inStackController:(SCStackViewController *)stackController
 {
-    if(index == 0) {
-        return finalFrame;
-    }
     
     CGRect frame = viewController.view.frame;
     
     switch (position) {
         case SCStackViewControllerPositionTop: {
-            CGFloat ratio = contentOffset.y / CGRectGetMinY(finalFrame);
-            frame.origin.y = CGRectGetMaxY(finalFrame) - CGRectGetHeight(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
+            
+            if(contentOffset.y >CGRectGetMinY(finalFrame)){
+                frame.origin.y = CGRectGetMinY(finalFrame)/2 + contentOffset.y/2;
+            }else{
+                CGFloat ratio = contentOffset.y / CGRectGetMinY(finalFrame);
+                frame.origin.y = CGRectGetMaxY(finalFrame) - CGRectGetHeight(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
+            }
+            
             break;
         }
         case SCStackViewControllerPositionLeft: {
-            CGFloat ratio = contentOffset.x / CGRectGetMinX(finalFrame);
-            frame.origin.x = CGRectGetMaxX(finalFrame) - CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
+            
+            if(contentOffset.x >CGRectGetMinX(finalFrame)){
+                frame.origin.x = CGRectGetMinX(finalFrame)/2 + contentOffset.x/2;
+            }else{
+                CGFloat ratio = contentOffset.x / CGRectGetMinX(finalFrame);
+                frame.origin.x = CGRectGetMaxX(finalFrame) - CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
+            }
+            
             break;
         }
         case SCStackViewControllerPositionBottom: {
-            CGFloat ratio = contentOffset.y / (CGRectGetMaxY(finalFrame) - CGRectGetHeight(stackController.view.bounds));
-            frame.origin.y = (CGRectGetMinY(finalFrame) - CGRectGetHeight(finalFrame)) + CGRectGetHeight(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
+            
+            if(contentOffset.y <CGRectGetMinY(finalFrame)){
+                frame.origin.y = CGRectGetMinY(finalFrame)/2 + contentOffset.y/2;
+            }else{
+                CGFloat ratio = contentOffset.y / (CGRectGetMaxY(finalFrame) - CGRectGetHeight(stackController.view.bounds));
+                frame.origin.y = (CGRectGetMinY(finalFrame) - CGRectGetHeight(finalFrame)) + CGRectGetHeight(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
+            }
+            
             break;
         }
         case SCStackViewControllerPositionRight: {
-            CGFloat ratio = contentOffset.x / (CGRectGetMaxX(finalFrame) - CGRectGetWidth(stackController.view.bounds));
-            frame.origin.x = (CGRectGetMinX(finalFrame) - CGRectGetWidth(finalFrame)) + CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
+            
+            if(contentOffset.x < CGRectGetMinX(finalFrame)){
+                frame.origin.x = CGRectGetMinX(finalFrame)/2 + contentOffset.x/2;
+            }else{
+                CGFloat ratio = contentOffset.x / (CGRectGetMaxX(finalFrame) - CGRectGetWidth(stackController.view.bounds));
+                frame.origin.x = (CGRectGetMinX(finalFrame) - CGRectGetWidth(finalFrame)) + CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
+            }
+            
             break;
         }
         default:

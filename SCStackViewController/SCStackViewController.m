@@ -10,12 +10,21 @@
 #import "SCStackLayouterProtocol.h"
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+typedef enum ScrollDirection {
+    ScrollDirectionNone,
+    ScrollDirectionRight,
+    ScrollDirectionLeft,
+    ScrollDirectionUp,
+    ScrollDirectionDown,
+    ScrollDirectionCrazy,
+} ScrollDirection;
 
 static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 @interface SCStackScrollView : UIScrollView <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
+
 
 @end
 
@@ -35,16 +44,16 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 @interface SCStackViewController () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) UIViewController *rootViewController;
-
 @property (nonatomic, strong) SCStackScrollView *scrollView;
+@property (nonatomic, assign) NSInteger lastContentOffset;
+@property (nonatomic) ScrollDirection currentDirection;
 
 @property (nonatomic, strong) NSMutableDictionary *layouters;
 @property (nonatomic, strong) NSMutableDictionary *finalFrames;
 
-@property (nonatomic, strong) NSDictionary *viewControllers;
 @property (nonatomic, strong) NSMutableArray *visibleViewControllers;
-
+@property (nonatomic) int currentPageX;
+@property (nonatomic) int currentPageY;
 @end
 
 @implementation SCStackViewController
@@ -218,7 +227,16 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          [self.scrollView setContentOffset:offset animated:animated];
-                     } completion:completion];
+                     } completion:^(BOOL finished) {
+                         float pageWidth = self.rootViewController.view.frame.size.width;
+                         float pageHeight = self.rootViewController.view.frame.size.height;
+                         _currentPageX =  (int)roundf(offset.x/pageWidth);
+                         _currentPageY =  (int)roundf(offset.y/pageHeight);
+                         if(completion) {
+                             completion(finished);
+                         }
+                     }];
+    
 }
 
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position
@@ -268,7 +286,6 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.scrollView setContentOffset:CGPointZero];
 }
 
 - (void)updateBounds
@@ -313,17 +330,50 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 }
 
 #pragma mark - UIScrollViewDelegate
-
+int lastIndex = 0;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    
+    // get scroll direction
+    if (self.lastContentOffset > scrollView.contentOffset.x)
+        _currentDirection = ScrollDirectionRight;
+    else if (self.lastContentOffset < scrollView.contentOffset.x)
+        _currentDirection = ScrollDirectionLeft;
+    self.lastContentOffset = scrollView.contentOffset.x;
+    
+    
+    // Mimic lifecycle on rootView
+    int index = (int)roundf(self.scrollView.contentOffset.x/self.rootViewController.view.frame.size.width);
+    if(index != lastIndex){
+        if(index == 0){
+            [self.rootViewController viewWillAppear:YES];
+        }else{
+            [self.rootViewController viewWillDisappear:YES];
+        }
+        lastIndex = index;
+    }
+    
+    if([self.rootViewController respondsToSelector:@selector(stackviewDidScrollInScrollView:)]){
+        [self.rootViewController performSelector:@selector(stackviewDidScrollInScrollView:) withObject:self.scrollView];
+    }
+    
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         
         NSArray *viewControllersArray = self.viewControllers[@(position)];
+        
         [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
+            
+            
+            if([viewController respondsToSelector:@selector(stackviewDidScrollInScrollView:)]){
+                [viewController performSelector:@selector(stackviewDidScrollInScrollView:) withObject:self.scrollView];
+            }
+            
+            
+            CGRect finalFrame = [self.finalFrames[@(viewController.hash)] CGRectValue];
             CGRect frame =  [self.layouters[@(position)] currentFrameForViewController:viewController
                                                                              withIndex:index
                                                                             atPosition:position
-                                                                            finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue]
+                                                                            finalFrame:finalFrame
                                                                          contentOffset:scrollView.contentOffset
                                                                      inStackController:self];
             
@@ -338,6 +388,12 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
             
             if(CGRectContainsRect(self.rootViewController.view.frame, intersection)) {
                 visible = NO;
+            }
+            
+            if(self.fadeViewsArrival){
+                // Fade views arrival
+                CGFloat alpha = 1-(ABS(finalFrame.origin.x) - ABS(scrollView.contentOffset.x))/(finalFrame.size.width);
+                viewController.view.alpha = alpha;
             }
             
             if(visible && ![self.visibleViewControllers containsObject:viewController]) {
@@ -359,40 +415,52 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    CGRect finalFrame = CGRectMake(targetContentOffset->x, targetContentOffset->y, 0, 0);
-    for(NSValue *frameValue in self.finalFrames.allValues) {
+    
+    CGFloat pageWidth = self.scrollView.frame.size.width;
+    CGFloat pageHeight= self.scrollView.frame.size.height;
+    int newPageX = _currentPageX;
+    int newPageY = _currentPageY;
+    
+    // Horizontal paging
+    if(targetContentOffset->x != 0){
         
-        CGRect frame = [frameValue CGRectValue];
-        frame.origin.x = frame.origin.x > 0 ? CGRectGetMinX(frame) - CGRectGetWidth(self.view.bounds) : CGRectGetMinX(frame);
-        frame.origin.y = frame.origin.y > 0 ? CGRectGetMinY(frame) - CGRectGetHeight(self.view.bounds) : CGRectGetMinY(frame);
-        
-        if(CGRectContainsPoint(frame, *targetContentOffset)) {
-            finalFrame = frame;
-            break;
+        if(self.allowScrollMultiplePages){
+            _currentPageX =  (int)roundf(self.scrollView.contentOffset.x/pageWidth);
         }
+        
+        if(velocity.x > 0 && _currentPageX != [self.viewControllers[@(SCStackViewControllerPositionRight)] count]){
+            newPageX = _currentPageX + 1;
+        }else if(velocity.x<0 && _currentPageX != -[self.viewControllers[@(SCStackViewControllerPositionLeft)] count]){
+            newPageX = _currentPageX - 1;
+        }else{
+            newPageX = floor((targetContentOffset->x - pageWidth / 2) / pageWidth) + 1;
+        }
+        
+        *targetContentOffset = CGPointMake(newPageX * pageWidth, targetContentOffset->y);
+        
+        // Vertical paging
+    }else if(targetContentOffset->y != 0){
+        
+        if(self.allowScrollMultiplePages){
+            _currentPageY =  (int)roundf(self.scrollView.contentOffset.y/pageHeight);
+        }
+        
+        if(velocity.y > 0 && _currentPageY != [self.viewControllers[@(SCStackViewControllerPositionTop)] count]){
+            newPageY = _currentPageY + 1;
+        }else if(velocity.y<0 && _currentPageY != -[self.viewControllers[@(SCStackViewControllerPositionBottom)] count]){
+            newPageY = _currentPageY - 1;
+        }else{
+            newPageY = floor((targetContentOffset->y - pageHeight / 2) / pageHeight) + 1;
+        }
+        
+        *targetContentOffset = CGPointMake(targetContentOffset->y, newPageY * pageHeight);
     }
     
-    CGFloat iOS5Adjustment = 0.0f;
-    if(SYSTEM_VERSION_LESS_THAN(@"6.0")) {
-        iOS5Adjustment = 0.1f;
-    }
-    
-    if(velocity.x || velocity.y == 0) {
-        if (velocity.x >= 0.0) {
-            targetContentOffset->x = CGRectGetMaxX(finalFrame) - iOS5Adjustment;
-        }
-        else if (velocity.x < -0.1) {
-            targetContentOffset->x = CGRectGetMinX(finalFrame) + iOS5Adjustment;
-        }
-    } else {
-        if (velocity.y >= 0.0) {
-            targetContentOffset->y = CGRectGetMaxY(finalFrame) - iOS5Adjustment;
-        }
-        else if (velocity.y < -0.1) {
-            targetContentOffset->y = CGRectGetMinY(finalFrame) + iOS5Adjustment;
-        }
-    }
+    _currentPageX = newPageX;
+    _currentPageY = newPageY;
 }
+
+
 
 #pragma mark - Rotation Handling
 
@@ -457,11 +525,11 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
 {
     if(_viewControllers == nil) {
         _viewControllers = (@{
-                            @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
-                            @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
-                            @(SCStackViewControllerPositionBottom): [NSMutableArray array],
-                            @(SCStackViewControllerPositionRight) : [NSMutableArray array]
-                            });
+                              @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
+                              @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
+                              @(SCStackViewControllerPositionBottom): [NSMutableArray array],
+                              @(SCStackViewControllerPositionRight) : [NSMutableArray array]
+                              });
     }
     
     return _viewControllers;

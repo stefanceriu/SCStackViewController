@@ -72,6 +72,7 @@
 		18FEAAED17B3ED2F00788EF0 /* SCStackViewController-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SCStackViewController-Info.plist"; sourceTree = "<group>"; };
 		18FEAAF117B3ED2F00788EF0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		18FEAAF317B3ED2F00788EF0 /* SCStackViewController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SCStackViewController-Prefix.pch"; sourceTree = "<group>"; };
+		6E9EE6F21815572B00CF1F00 /* SCStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStack.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +109,7 @@
 				18C4D6A817F0C82A0046FACD /* SCStackViewController.m */,
 				18C4D6A917F0C82A0046FACD /* UIViewController+SCStackViewController.h */,
 				18C4D6AA17F0C82A0046FACD /* UIViewController+SCStackViewController.m */,
+				6E9EE6F21815572B00CF1F00 /* SCStack.h */,
 			);
 			name = SCStackViewController;
 			path = ../../SCStackViewController;

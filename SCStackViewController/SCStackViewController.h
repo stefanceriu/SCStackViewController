@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
+
+
 typedef enum {
     SCStackViewControllerPositionTop,
     SCStackViewControllerPositionLeft,
@@ -15,10 +17,19 @@ typedef enum {
 
 @protocol SCStackLayouterProtocol;
 
+@protocol SCStackViewControllerProtocol
+- (void) stackviewDidScrollInScrollView:(UIScrollView *) scrollview;
+@end
+
+
 @interface SCStackViewController : UIViewController
 
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
+@property (nonatomic, strong) UIViewController *rootViewController;
+@property (nonatomic, strong) NSDictionary *viewControllers;
 @property (nonatomic, assign) BOOL bounces;
+@property (nonatomic, assign) BOOL fadeViewsArrival;
+@property (nonatomic, assign) BOOL allowScrollMultiplePages;
 
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController;
