@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
+#import <QuartzCore/CAMediaTimingFunction.h>
+
 typedef enum {
     SCStackViewControllerPositionTop,
     SCStackViewControllerPositionLeft,
