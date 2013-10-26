@@ -49,9 +49,6 @@
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
 
 - (void)setContentOffset:(CGPoint)contentOffset
-      withTimingFunction:(CAMediaTimingFunction *)timingFunction;
-
-- (void)setContentOffset:(CGPoint)contentOffset
       withTimingFunction:(CAMediaTimingFunction *)timingFunction
                 duration:(CFTimeInterval)duration
               completion:(void(^)())completion;

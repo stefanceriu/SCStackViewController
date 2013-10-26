@@ -76,7 +76,7 @@
     [leftViewController setDelegate:self];
     
     [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionLeft
-                                                         animated:NO
+                                                         animated:YES
                                                        completion:^{
                                                            
                                                            [self.stackViewController pushViewController:leftViewController
@@ -92,7 +92,7 @@
     [rightViewController setDelegate:self];
     
     [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionRight
-                                                         animated:NO
+                                                         animated:YES
                                                        completion:^{
                                                            
                                                            [self.stackViewController pushViewController:rightViewController

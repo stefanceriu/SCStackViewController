@@ -12,8 +12,6 @@
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
-static const CGFloat kDefaultAnimationDuration = 0.25f;
-
 @interface SCStackViewController () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIViewController *rootViewController;
@@ -51,6 +49,9 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         
         self.layouters = [NSMutableDictionary dictionary];
         self.finalFrames = [NSMutableDictionary dictionary];
+        
+        self.animationDuration = 0.25f;
+        self.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     }
     
     return self;
@@ -87,8 +88,8 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     
     if(unfold) {
         [self.scrollView setContentOffset:[self maximumInsetForPosition:position]
-                       withTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
-                                 duration:(animated ? kDefaultAnimationDuration : 0.0f)
+                       withTimingFunction:self.timingFunction
+                                 duration:(animated ? self.animationDuration : 0.0f)
                                completion:completion];
     } else if(completion) {
         completion(YES);
@@ -201,8 +202,8 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
     }
     
     [self.scrollView setContentOffset:offset
-                   withTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
-                             duration:(animated ? kDefaultAnimationDuration : 0.0f)
+                   withTimingFunction:self.timingFunction
+                             duration:(animated ? self.animationDuration : 0.0f)
                            completion:completion];
 }
 
@@ -670,7 +671,7 @@ static const CGFloat kDefaultAnimationDuration = 0.25f;
         [self updateFinalFramesForPosition:position];
     }
     
-    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+    [UIView animateWithDuration:self.animationDuration animations:^{
         [self scrollViewDidScroll:self.scrollView];
         [self updateBounds];
     }];

@@ -1,14 +1,12 @@
 Pod::Spec.new do |s|
   s.name     = 'SCStackViewController'
-  s.version  = '1.0.1'
+  s.version  = '2.0.0'
   s.platform = :ios
   s.ios.deployment_target = '5.0'
 
   s.summary  = 'SCStackViewController is a container controller which allows you to stack other view controllers and build custom transitions between them.'
   s.description = <<-DESC
-                  SCStackViewController is a container view controller which allows you to stack other view controllers on the top/left/bottom/right of the root and build custom transitions between them while providing correct physics and appearance calls.
-
-                  SCStackViewController is a little bit from the all the other stack implementations available. It was build with the following points in mind:
+                  SCStackViewController is a container view controller which allows you to stack other view controllers on the top/left/bottom/right of the root and build custom transitions between them while providing correct physics and appearance calls. It was build with the following points in mind:
 
                   * Simple to understand and modify
                   * Left/right and top/bottom stacking
