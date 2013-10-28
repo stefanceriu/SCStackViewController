@@ -92,7 +92,7 @@
                                  duration:(animated ? self.animationDuration : 0.0f)
                                completion:completion];
     } else if(completion) {
-        completion(YES);
+        completion();
     }
 }
 
@@ -235,9 +235,7 @@
     
     [self addChildViewController:self.rootViewController];
     [self.rootViewController.view setFrame:self.scrollView.bounds];
-    [self.rootViewController beginAppearanceTransition:YES animated:NO];
     [self.scrollView addSubview:self.rootViewController.view];
-    [self.rootViewController endAppearanceTransition];
     [self.rootViewController didMoveToParentViewController:self];
     
     [self.view addSubview:self.scrollView];
@@ -247,6 +245,24 @@
 {
     [super viewWillAppear:animated];
     [self scrollViewDidEndDecelerating:self.scrollView];
+    [self.rootViewController beginAppearanceTransition:YES animated:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.rootViewController endAppearanceTransition];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.rootViewController beginAppearanceTransition:NO animated:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self.rootViewController endAppearanceTransition];
 }
 
 #pragma mark - Stack Management
