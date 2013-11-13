@@ -40,7 +40,8 @@
                         @(SCStackLayouterTypeParallax)           : @"Parallax",
                         @(SCStackLayouterTypeGoogleMaps)         : @"Google Maps",
                         @(SCStackLayouterTypeMerryGoRound)       : @"Merry Go Round",
-                        @(SCStackLayouterTypeReversed)           : @"Reversed"
+                        @(SCStackLayouterTypeReversed)           : @"Reversed",
+                        @(SCStackLayouterTypeTwitter)            : @"Twitter"
                         });
     });
     

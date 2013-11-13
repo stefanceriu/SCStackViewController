@@ -17,6 +17,7 @@
 #import "SCGoogleMapsStackLayouter.h"
 #import "SCMerryGoRoundStackLayouter.h"
 #import "SCReversedStackLayouter.h"
+#import "SCTwitterStackLayouter.h"
 
 #import "SCMenuViewController.h"
 #import "UIViewController+Shadows.h"
@@ -46,6 +47,8 @@
     [self.view addSubview:self.stackViewController.view];
     [self.stackViewController didMoveToParentViewController:self];
     
+    [mainViewController.view castShadowWithPosition:SCShadowEdgeNone];
+    
     [self mainViewController:mainViewController didSelectLayouterType:SCStackLayouterTypeParallax];
 }
 
@@ -62,7 +65,8 @@
                           @(SCStackLayouterTypeParallax)           : [SCParallaxStackLayouter class],
                           @(SCStackLayouterTypeGoogleMaps)         : [SCGoogleMapsStackLayouter class],
                           @(SCStackLayouterTypeMerryGoRound)       : [SCMerryGoRoundStackLayouter class],
-                          @(SCStackLayouterTypeReversed)           : [SCReversedStackLayouter class]
+                          @(SCStackLayouterTypeReversed)           : [SCReversedStackLayouter class],
+                          @(SCStackLayouterTypeTwitter)            : [SCTwitterStackLayouter class]
                           });
     });
     
@@ -72,6 +76,8 @@
     [self.stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionRight];
     
     SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionLeft];
+    
+    
     [leftViewController.view castShadowWithPosition:SCShadowEdgeLeft];
     [leftViewController setDelegate:self];
     

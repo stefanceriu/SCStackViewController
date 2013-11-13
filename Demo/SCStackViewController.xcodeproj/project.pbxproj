@@ -29,6 +29,7 @@
 		18FEAAE817B3ED2F00788EF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE717B3ED2F00788EF0 /* Foundation.framework */; };
 		18FEAAEA17B3ED2F00788EF0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */; };
 		18FEAAF217B3ED2F00788EF0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FEAAF117B3ED2F00788EF0 /* main.m */; };
+		742FD50318340CA800A54F26 /* SCTwitterStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 742FD50218340CA800A54F26 /* SCTwitterStackLayouter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,8 @@
 		18FEAAED17B3ED2F00788EF0 /* SCStackViewController-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SCStackViewController-Info.plist"; sourceTree = "<group>"; };
 		18FEAAF117B3ED2F00788EF0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		18FEAAF317B3ED2F00788EF0 /* SCStackViewController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SCStackViewController-Prefix.pch"; sourceTree = "<group>"; };
+		742FD50118340CA800A54F26 /* SCTwitterStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCTwitterStackLayouter.h; path = Behind/SCTwitterStackLayouter.h; sourceTree = "<group>"; };
+		742FD50218340CA800A54F26 /* SCTwitterStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCTwitterStackLayouter.m; path = Behind/SCTwitterStackLayouter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +119,7 @@
 		18C4D69817F0C82A0046FACD /* Layouters */ = {
 			isa = PBXGroup;
 			children = (
+				742FD50018340C8600A54F26 /* Behind */,
 				18C4D69917F0C82A0046FACD /* Reversed */,
 				18C4D69C17F0C82A0046FACD /* SCGoogleMapsStackLayouter.h */,
 				18C4D69D17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m */,
@@ -201,6 +205,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		742FD50018340C8600A54F26 /* Behind */ = {
+			isa = PBXGroup;
+			children = (
+				742FD50118340CA800A54F26 /* SCTwitterStackLayouter.h */,
+				742FD50218340CA800A54F26 /* SCTwitterStackLayouter.m */,
+			);
+			name = Behind;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -273,6 +286,7 @@
 				18C4D6AD17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m in Sources */,
 				1823A8E117BEAC7500D58582 /* UIColor+RandomColors.m in Sources */,
 				1823A8E217BEAC7500D58582 /* UIViewController+Shadows.m in Sources */,
+				742FD50318340CA800A54F26 /* SCTwitterStackLayouter.m in Sources */,
 				18C4D6B117F0C82A0046FACD /* SCStackViewController.m in Sources */,
 				1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */,
 				1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */,
