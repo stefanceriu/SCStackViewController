@@ -715,6 +715,11 @@
     [self.scrollView setTouchRefusalArea:path];
 }
 
+- (void)setEnableMultipleTouch:(BOOL)enableMultipleTouch {
+    _enableMultipleTouch = enableMultipleTouch;
+    [self.scrollView setEnableMultipleTouch:enableMultipleTouch];
+}
+
 - (BOOL)showsScrollIndicators
 {
     return [self.scrollView showsHorizontalScrollIndicator] && [self.scrollView showsVerticalScrollIndicator];

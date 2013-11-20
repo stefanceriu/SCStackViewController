@@ -53,5 +53,9 @@
                 duration:(CFTimeInterval)duration
               completion:(void(^)())completion;
 
+/*
+ * BOOL value to enable/disable multiple touch.
+ */
+@property (nonatomic, assign) BOOL enableMultipleTouch;
 
 @end
