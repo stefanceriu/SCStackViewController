@@ -49,6 +49,10 @@ typedef enum {
  */
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
 
+/** BOOL value to enable/disable multiple touch. Default is NO;
+ *events
+ */
+@property (nonatomic, assign) BOOL enableMultipleTouch;
 
 /** Boolean value that controls whether the Stack's scrollView bounces past the
  *  edge of content and back again
