@@ -53,7 +53,25 @@
                           contentOffset:(CGPoint)contentOffset
                       inStackController:(SCStackViewController *)stackController;
 
+
 @optional
+
+
+
+/** Returns the rootViewController's intermediate frame for
+ * the given offset
+ *
+ * @param rootViewController the stack's root view controller
+ * @param contentOffset current offset in the Stack's scrollView
+ * @param stackController The calling StackViewController
+ *
+ * @return The frame for the rootViewController's view
+ *
+ */
+- (CGRect)currentFrameForRootViewController:(UIViewController *)rootViewController
+                              contentOffset:(CGPoint)contentOffset
+                          inStackController:(SCStackViewController *)stackController;
+
 
 /**
  * @return BOOL value that controls whether this layouter reverses the
@@ -63,10 +81,11 @@
 @property (nonatomic, assign) BOOL isReversed;
 
 
+/**
+ * @return BOOL value that controls whether this layouter requires the
+ * controllers to be stacked on top of the root view controller
+ */
 @property (nonatomic, assign) BOOL shouldStackControllersAboveRoot;
 
-- (CGRect)currentFrameForRootViewController:(UIViewController *)rootViewController
-                              contentOffset:(CGPoint)contentOffset
-                          inStackController:(SCStackViewController *)stackController;
 
 @end
