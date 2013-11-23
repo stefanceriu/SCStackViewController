@@ -16,6 +16,8 @@
 		1823A8E917BEAC7500D58582 /* SCRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1823A8E017BEAC7500D58582 /* SCRootViewController.xib */; };
 		18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18364B4617BFB6450066F67A /* SCMainViewController.m */; };
 		18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18364B4717BFB6450066F67A /* SCMainViewController.xib */; };
+		18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B601771840F0F500E3A0DD /* SCOverlayView.m */; };
+		18B6017A1840F10700E3A0DD /* SCOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B601791840F10700E3A0DD /* SCOverlayView.xib */; };
 		18C4D6AB17F0C82A0046FACD /* SCReversedStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D69B17F0C82A0046FACD /* SCReversedStackLayouter.m */; };
 		18C4D6AC17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D69D17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m */; };
 		18C4D6AD17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D69F17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m */; };
@@ -47,6 +49,9 @@
 		18364B4517BFB6450066F67A /* SCMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMainViewController.h; sourceTree = "<group>"; };
 		18364B4617BFB6450066F67A /* SCMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMainViewController.m; sourceTree = "<group>"; };
 		18364B4717BFB6450066F67A /* SCMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCMainViewController.xib; sourceTree = "<group>"; };
+		18B601761840F0F500E3A0DD /* SCOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCOverlayView.h; sourceTree = "<group>"; };
+		18B601771840F0F500E3A0DD /* SCOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCOverlayView.m; sourceTree = "<group>"; };
+		18B601791840F10700E3A0DD /* SCOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCOverlayView.xib; sourceTree = "<group>"; };
 		18C4D69A17F0C82A0046FACD /* SCReversedStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCReversedStackLayouter.h; sourceTree = "<group>"; };
 		18C4D69B17F0C82A0046FACD /* SCReversedStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCReversedStackLayouter.m; sourceTree = "<group>"; };
 		18C4D69C17F0C82A0046FACD /* SCGoogleMapsStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGoogleMapsStackLayouter.h; sourceTree = "<group>"; };
@@ -116,18 +121,18 @@
 		18C4D69817F0C82A0046FACD /* Layouters */ = {
 			isa = PBXGroup;
 			children = (
-				18C4D69917F0C82A0046FACD /* Reversed */,
+				18C4D6A617F0C82A0046FACD /* SCStackLayouterProtocol.h */,
+				18C4D6A417F0C82A0046FACD /* SCStackLayouter.h */,
+				18C4D6A517F0C82A0046FACD /* SCStackLayouter.m */,
+				18C4D6A217F0C82A0046FACD /* SCSlidingStackLayouter.h */,
+				18C4D6A317F0C82A0046FACD /* SCSlidingStackLayouter.m */,
+				18C4D6A017F0C82A0046FACD /* SCParallaxStackLayouter.h */,
+				18C4D6A117F0C82A0046FACD /* SCParallaxStackLayouter.m */,
 				18C4D69C17F0C82A0046FACD /* SCGoogleMapsStackLayouter.h */,
 				18C4D69D17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m */,
 				18C4D69E17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.h */,
 				18C4D69F17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m */,
-				18C4D6A017F0C82A0046FACD /* SCParallaxStackLayouter.h */,
-				18C4D6A117F0C82A0046FACD /* SCParallaxStackLayouter.m */,
-				18C4D6A217F0C82A0046FACD /* SCSlidingStackLayouter.h */,
-				18C4D6A317F0C82A0046FACD /* SCSlidingStackLayouter.m */,
-				18C4D6A417F0C82A0046FACD /* SCStackLayouter.h */,
-				18C4D6A517F0C82A0046FACD /* SCStackLayouter.m */,
-				18C4D6A617F0C82A0046FACD /* SCStackLayouterProtocol.h */,
+				18C4D69917F0C82A0046FACD /* Reversed */,
 			);
 			path = Layouters;
 			sourceTree = "<group>";
@@ -184,6 +189,9 @@
 				1823A8D517BEAC7500D58582 /* SCMenuViewController.h */,
 				1823A8D617BEAC7500D58582 /* SCMenuViewController.m */,
 				1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */,
+				18B601761840F0F500E3A0DD /* SCOverlayView.h */,
+				18B601771840F0F500E3A0DD /* SCOverlayView.m */,
+				18B601791840F10700E3A0DD /* SCOverlayView.xib */,
 				1823A8CE17BEAC7500D58582 /* Helpers */,
 				18FEAAEC17B3ED2F00788EF0 /* Supporting Files */,
 			);
@@ -254,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1823A8E517BEAC7500D58582 /* SCMenuViewController.xib in Resources */,
+				18B6017A1840F10700E3A0DD /* SCOverlayView.xib in Resources */,
 				1823A8E917BEAC7500D58582 /* SCRootViewController.xib in Resources */,
 				18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */,
 			);
@@ -279,6 +288,7 @@
 				18C4D6AB17F0C82A0046FACD /* SCReversedStackLayouter.m in Sources */,
 				1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */,
 				18C4D6AF17F0C82A0046FACD /* SCSlidingStackLayouter.m in Sources */,
+				18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */,
 				18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */,
 				18DBB2D317F5B2CB0006CBFB /* MOScrollView.m in Sources */,
 			);

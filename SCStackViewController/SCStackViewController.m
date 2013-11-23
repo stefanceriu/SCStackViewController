@@ -30,6 +30,8 @@
 @dynamic bounces;
 @dynamic touchRefusalArea;
 @dynamic showsScrollIndicators;
+@dynamic minimumNumberOfTouches;
+@dynamic maximumNumberOfTouches;
 
 #pragma mark - Constructors
 
@@ -79,9 +81,23 @@
     
     [self updateFinalFramesForPosition:position];
     
+    
+    id<SCStackLayouterProtocol> layouter = self.layouters[@(position)];
+    
     [self addChildViewController:viewController];
     viewController.view.frame = [self.finalFrames[@(viewController.hash)] CGRectValue];
-    [self.scrollView insertSubview:viewController.view atIndex:0];
+    
+    BOOL shouldStackAboveRoot = NO;
+    if([layouter respondsToSelector:@selector(shouldStackControllersAboveRoot)]) {
+        shouldStackAboveRoot = [layouter shouldStackControllersAboveRoot];
+    }
+    
+    if(shouldStackAboveRoot) {
+        [self.scrollView insertSubview:viewController.view aboveSubview:self.rootViewController.view];
+    } else {
+        [self.scrollView insertSubview:viewController.view atIndex:0];
+    }
+    
     [viewController didMoveToParentViewController:self];
     
     [self updateBounds];
@@ -234,7 +250,7 @@
     [self setPagingEnabled:YES];
     
     [self addChildViewController:self.rootViewController];
-    [self.rootViewController.view setFrame:self.scrollView.bounds];
+    [self.rootViewController.view setFrame:self.view.bounds];
     [self.scrollView addSubview:self.rootViewController.view];
     [self.rootViewController didMoveToParentViewController:self];
     
@@ -420,26 +436,61 @@
 
 - (void)updateFramesAndTriggerAppearanceCallbacks
 {
+    CGPoint offset = self.scrollView.contentOffset;
+    
+    id<SCStackLayouterProtocol> activeLayouter;
+    if(offset.y < 0.0f) {
+        activeLayouter = self.layouters[@(SCStackViewControllerPositionTop)];
+    } else if(offset.x < 0.0f) {
+        activeLayouter = self.layouters[@(SCStackViewControllerPositionLeft)];
+    } else if(offset.y > 0.0f){
+        activeLayouter = self.layouters[@(SCStackViewControllerPositionBottom)];
+    } else if(offset.x > 0.0f) {
+        activeLayouter = self.layouters[@(SCStackViewControllerPositionRight)];
+    }
+    
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
+
+        id<SCStackLayouterProtocol> layouter = self.layouters[@(position)];
         
-        CGRectEdge edge = [self edgeFromOffset:self.scrollView.contentOffset];
-        
-        BOOL isReversed = NO;
-        if([self.layouters[@(position)] respondsToSelector:@selector(isReversed)]) {
-            isReversed = [self.layouters[@(position)] isReversed];
+        if([layouter isEqual:activeLayouter]) {
+            if([layouter respondsToSelector:@selector(currentFrameForRootViewController:contentOffset:inStackController:)]) {
+                CGRect frame = [layouter currentFrameForRootViewController:self.rootViewController
+                                                             contentOffset:offset
+                                                         inStackController:self];
+                [self.rootViewController.view setFrame:frame];
+            } else {
+                [self.rootViewController.view setFrame:self.view.bounds];
+            }
         }
         
-        __block CGRect remainder = CGRectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame), edge);
+        BOOL shouldStackAboveRoot = NO;
+        if([layouter respondsToSelector:@selector(shouldStackControllersAboveRoot)]) {
+            shouldStackAboveRoot = [layouter shouldStackControllersAboveRoot];
+        }
+        
+        CGRectEdge edge = [self edgeFromOffset:offset];
+        __block CGRect remainder;
+        if(shouldStackAboveRoot) {
+            remainder = self.scrollView.bounds;
+        } else {
+            remainder = CGRectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame), edge);
+        }
+        
+        BOOL isReversed = NO;
+        if([layouter respondsToSelector:@selector(isReversed)]) {
+            isReversed = [layouter isReversed];
+        }
         
         NSArray *viewControllersArray = self.viewControllers[@(position)];
         [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
             
-            CGRect nextFrame =  [self.layouters[@(position)] currentFrameForViewController:viewController
-                                                                                 withIndex:index
-                                                                                atPosition:position
-                                                                                finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue]
-                                                                             contentOffset:self.scrollView.contentOffset
-                                                                         inStackController:self];
+            CGRect nextFrame =  [layouter currentFrameForViewController:viewController
+                                                              withIndex:index
+                                                             atPosition:position
+                                                             finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue]
+                                                          contentOffset:offset
+                                                      inStackController:self];
             
             CGRect adjustedFrame = nextFrame;
             if(isReversed && index > 0) {
@@ -462,14 +513,14 @@
                     {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
-                        adjustedFrame.origin.y = self.rootViewController.view.bounds.size.height + [self maximumInsetForPosition:position].y - totalSize;
+                        adjustedFrame.origin.y = self.view.bounds.size.height + [self maximumInsetForPosition:position].y - totalSize;
                         break;
                     }
                     case SCStackViewControllerPositionRight:
                     {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-                        adjustedFrame.origin.x = self.rootViewController.view.bounds.size.width + [self maximumInsetForPosition:position].x - totalSize;
+                        adjustedFrame.origin.x = self.view.bounds.size.width + [self maximumInsetForPosition:position].x - totalSize;
                         break;
                     }
                     default:
@@ -724,6 +775,26 @@
 {
     [self.scrollView setShowsHorizontalScrollIndicator:showsScrollIndicators];
     [self.scrollView setShowsVerticalScrollIndicator:showsScrollIndicators];
+}
+
+- (NSUInteger)minimumNumberOfTouches
+{
+    return self.scrollView.panGestureRecognizer.minimumNumberOfTouches;
+}
+
+- (void)setMinimumNumberOfTouches:(NSUInteger)minimumNumberOfTouches
+{
+    [self.scrollView.panGestureRecognizer setMinimumNumberOfTouches:minimumNumberOfTouches];
+}
+
+- (NSUInteger)maximumNumberOfTouches
+{
+    return self.scrollView.panGestureRecognizer.maximumNumberOfTouches;
+}
+
+- (void)setMaximumNumberOfTouches:(NSUInteger)maximumNumberOfTouches
+{
+    [self.scrollView.panGestureRecognizer setMaximumNumberOfTouches:maximumNumberOfTouches];
 }
 
 #pragma mark - Helpers

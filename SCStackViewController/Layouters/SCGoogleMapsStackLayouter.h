@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
-#import "SCSlidingStackLayouter.h"
+#import "SCStackLayouter.h"
 
-@interface SCGoogleMapsStackLayouter : SCSlidingStackLayouter
+@interface SCGoogleMapsStackLayouter : SCStackLayouter
 
 @end

@@ -99,6 +99,20 @@ typedef enum {
 @property (nonatomic, assign) NSTimeInterval animationDuration;
 
 
+/** The minimum number of fingers that can be touching the view for this gesture to be recognized.
+ *
+ * Default value is set to 1
+ */
+@property (nonatomic, assign) NSUInteger minimumNumberOfTouches;
+
+
+/** The maximum number of fingers that can be touching the view for this gesture to be recognized.
+ *
+ * Default value is set to NSUIntegerMax
+ */
+@property (nonatomic, assign) NSUInteger maximumNumberOfTouches;
+
+
 /**-----------------------------------------------------------------------------
  * @name Initializing the Stack
  * -----------------------------------------------------------------------------

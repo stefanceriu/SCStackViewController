@@ -19,19 +19,23 @@
                       inStackController:(SCStackViewController *)stackController
 {
     CGRect frame = finalFrame;
-    
+ 
+    if(self.shouldStackControllersAboveRoot && index == 0) {
+        return frame;
+    }
+
     switch (position) {
         case SCStackViewControllerPositionTop:
-            frame.origin.y =  MIN(0, MAX(CGRectGetMinY(finalFrame), contentOffset.y));
+            frame.origin.y =  MIN(finalFrame.origin.y + finalFrame.size.height, MAX(CGRectGetMinY(finalFrame), contentOffset.y));
             break;
         case SCStackViewControllerPositionLeft:
-            frame.origin.x =  MIN(0, MAX(CGRectGetMinX(finalFrame), contentOffset.x));
+            frame.origin.x =  MIN(finalFrame.origin.x + finalFrame.size.width, MAX(CGRectGetMinX(finalFrame), contentOffset.x));
             break;
         case SCStackViewControllerPositionBottom:
-            frame.origin.y = MAX(0, MIN(CGRectGetMaxY(finalFrame) - CGRectGetHeight(finalFrame), CGRectGetHeight(stackController.view.bounds) - CGRectGetHeight(finalFrame) + contentOffset.y));
+            frame.origin.y = MAX(finalFrame.origin.y - finalFrame.size.height, MIN(CGRectGetMaxY(finalFrame) - CGRectGetHeight(finalFrame), CGRectGetHeight(stackController.view.bounds) - CGRectGetHeight(finalFrame) + contentOffset.y));
             break;
         case SCStackViewControllerPositionRight:
-            frame.origin.x = MAX(0, MIN(CGRectGetMaxX(finalFrame) - CGRectGetWidth(finalFrame), CGRectGetWidth(stackController.view.bounds) - CGRectGetWidth(finalFrame) + contentOffset.x));
+            frame.origin.x = MAX(finalFrame.origin.x - finalFrame.size.width, MIN(CGRectGetMaxX(finalFrame) - CGRectGetWidth(finalFrame), CGRectGetWidth(stackController.view.bounds) - CGRectGetWidth(finalFrame) + contentOffset.x));
             break;
         default:
             break;

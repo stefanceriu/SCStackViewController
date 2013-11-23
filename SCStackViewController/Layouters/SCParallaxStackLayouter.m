@@ -18,6 +18,10 @@
                           contentOffset:(CGPoint)contentOffset
                       inStackController:(SCStackViewController *)stackController
 {
+    if(self.shouldStackControllersAboveRoot && index == 0) {
+        return finalFrame;
+    }
+    
     CGRect frame = viewController.view.frame;
     
     switch (position) {

@@ -21,9 +21,12 @@
 #import "SCMenuViewController.h"
 #import "UIViewController+Shadows.h"
 
-@interface SCRootViewController () <SCMenuViewControllerDelegate, SCMainViewControllerDelegate>
+#import "SCOverlayView.h"
+
+@interface SCRootViewController () <SCStackViewControllerDelegate, SCOverlayViewDelegate, SCMenuViewControllerDelegate, SCMainViewControllerDelegate>
 
 @property (nonatomic, strong) SCStackViewController *stackViewController;
+@property (nonatomic, strong) SCOverlayView *overlayView;
 
 @end
 
@@ -37,10 +40,16 @@
     [mainViewController setDelegate:self];
     [mainViewController.view castShadowWithPosition:SCShadowEdgeAll];
     
+    self.overlayView = [SCOverlayView overlayView];
+    [self.overlayView setDelegate:self];
+    [self.overlayView setAlpha:0.0f];
+    [mainViewController.view addSubview:self.overlayView];
+    
     self.stackViewController = [[SCStackViewController alloc] initWithRootViewController:mainViewController];
     [self.stackViewController.view setFrame:self.view.bounds];
     //[self.stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]];
     [self.stackViewController setShowsScrollIndicators:NO];
+    [self.stackViewController setDelegate:self];
     
     [self addChildViewController:self.stackViewController];
     [self.view addSubview:self.stackViewController.view];
@@ -66,10 +75,12 @@
                           });
     });
     
-    id<SCStackLayouterProtocol> layouter = [[typeToLayouter[@(type)] alloc] init];
+    id<SCStackLayouterProtocol> aboveRootLayouter = [[typeToLayouter[@(type)] alloc] init];
+    [aboveRootLayouter setShouldStackControllersAboveRoot:YES];
+    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:SCStackViewControllerPositionLeft];
     
-    [self.stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionLeft];
-    [self.stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionRight];
+    id<SCStackLayouterProtocol> belowRootLayouter = [[typeToLayouter[@(type)] alloc] init];
+    [self.stackViewController registerLayouter:belowRootLayouter forPosition:SCStackViewControllerPositionRight];
     
     SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionLeft];
     [leftViewController.view castShadowWithPosition:SCShadowEdgeLeft];
@@ -101,6 +112,20 @@
                                                                                                animated:NO
                                                                                              completion:nil];
                                                        }];
+}
+
+#pragma mark - SCStackViewControllerDelegate
+
+- (void)stackViewController:(SCStackViewController *)stackViewController didNavigateToOffset:(CGPoint)offset
+{
+    [self.overlayView setAlpha:ABS(offset.x/300.0f)];
+}
+
+#pragma mark - SCOverlayViewDelegate
+
+- (void)overlayViewDidReceiveTap:(SCOverlayView *)overlayView
+{
+    [self.stackViewController navigateToViewController:self.stackViewController.rootViewController animated:YES completion:nil];
 }
 
 #pragma mark - SCMenuViewControllerDelegate
@@ -135,7 +160,6 @@
                                                  animated:YES
                                                completion:nil];
 }
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {

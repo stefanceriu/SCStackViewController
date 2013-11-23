@@ -60,6 +60,13 @@
  * arrangement the children (from the bounds of the screen towards the rootView
  * and not the other way around)
  */
-- (BOOL)isReversed;
+@property (nonatomic, assign) BOOL isReversed;
+
+
+@property (nonatomic, assign) BOOL shouldStackControllersAboveRoot;
+
+- (CGRect)currentFrameForRootViewController:(UIViewController *)rootViewController
+                              contentOffset:(CGPoint)contentOffset
+                          inStackController:(SCStackViewController *)stackController;
 
 @end

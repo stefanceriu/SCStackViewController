@@ -9,6 +9,8 @@
 #import "SCReversedStackLayouter.h"
 
 @implementation SCReversedStackLayouter
+@synthesize isReversed;
+@synthesize shouldStackControllersAboveRoot;
 
 - (CGRect)finalFrameForViewController:(UIViewController *)viewController
                             withIndex:(NSUInteger)index
@@ -99,6 +101,17 @@
 - (BOOL)isReversed
 {
     return YES;
+}
+
+- (CGRect)currentFrameForRootViewController:(UIViewController *)rootViewController
+                              contentOffset:(CGPoint)contentOffset
+                          inStackController:(SCStackViewController *)stackController
+{
+    if(self.shouldStackControllersAboveRoot) {
+        return CGRectMake(contentOffset.x, contentOffset.y, rootViewController.view.bounds.size.width, rootViewController.view.bounds.size.height);
+    } else {
+        return stackController.view.bounds;
+    }
 }
 
 @end
