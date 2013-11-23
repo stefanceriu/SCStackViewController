@@ -13,6 +13,7 @@ typedef enum {
     SCStackLayouterTypeGoogleMaps,
     SCStackLayouterTypeMerryGoRound,
     SCStackLayouterTypeReversed,
+    SCStackLayouterTypeTwitter,
     SCStackLayouterTypeCount
 } SCStackLayouterType;
 

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "SCStackViewController.h"
 #import "SCStackLayouterProtocol.h"
 #import "MOScrollView.h"
@@ -81,6 +83,7 @@
     
     [self addChildViewController:viewController];
     viewController.view.frame = [self.finalFrames[@(viewController.hash)] CGRectValue];
+    
     [self.scrollView insertSubview:viewController.view atIndex:0];
     [viewController didMoveToParentViewController:self];
     
@@ -271,7 +274,15 @@
 {
     NSMutableArray *viewControllers = self.viewControllers[@(position)];
     [viewControllers enumerateObjectsUsingBlock:^(UIViewController *controller, NSUInteger idx, BOOL *stop) {
-        CGRect finalFrame = [self.layouters[@(position)] finalFrameForViewController:controller
+        
+        
+        id<SCStackLayouterProtocol> layouter = self.layouters[@(position)];
+        
+        if ([layouter respondsToSelector:@selector(isBehind)] && ![layouter isBehind] ){
+            controller.view.layer.zPosition = 1 + idx;
+        }
+        
+        CGRect finalFrame = [layouter finalFrameForViewController:controller
                                                                            withIndex:idx
                                                                           atPosition:position
                                                                          withinGroup:viewControllers

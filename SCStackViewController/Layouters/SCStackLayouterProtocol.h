@@ -62,4 +62,10 @@
  */
 - (BOOL)isReversed;
 
+/**
+ * @return BOOL value that controls whether this layouter stacks
+ * the children underneath the view controller
+ */
+- (BOOL)isBehind;
+
 @end
