@@ -69,6 +69,10 @@ const static int maximumSteps = 10;
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
+    if(gestureRecognizer.numberOfTouches < self.minimumNumberOfTouches || gestureRecognizer.numberOfTouches > self.maximumNumberOfTouches) {
+        return NO;
+    }
+    
     if([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
         CGPoint touchPoint = [gestureRecognizer locationInView:self];
         return ![self.touchRefusalArea containsPoint:touchPoint];
