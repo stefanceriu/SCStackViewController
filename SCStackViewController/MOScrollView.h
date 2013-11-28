@@ -48,7 +48,6 @@
 
 @property (nonatomic, strong) UIBezierPath *touchRefusalArea;
 
-@property (nonatomic, assign) NSUInteger minimumNumberOfTouches;
 @property (nonatomic, assign) NSUInteger maximumNumberOfTouches;
 
 - (void)setContentOffset:(CGPoint)contentOffset

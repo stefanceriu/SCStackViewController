@@ -55,6 +55,9 @@
     [self.view addSubview:self.stackViewController.view];
     [self.stackViewController didMoveToParentViewController:self];
     
+    //[self.stackViewController setMinimumNumberOfTouches:2];
+    //[self.stackViewController setMaximumNumberOfTouches:2];
+    
     [self mainViewController:mainViewController didSelectLayouterType:SCStackLayouterTypeParallax];
 }
 

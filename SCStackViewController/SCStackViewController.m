@@ -779,12 +779,12 @@
 
 - (NSUInteger)minimumNumberOfTouches
 {
-    return self.scrollView.minimumNumberOfTouches;
+    return self.scrollView.panGestureRecognizer.minimumNumberOfTouches;
 }
 
 - (void)setMinimumNumberOfTouches:(NSUInteger)minimumNumberOfTouches
 {
-    [self.scrollView setMinimumNumberOfTouches:minimumNumberOfTouches];
+    [self.scrollView.panGestureRecognizer setMinimumNumberOfTouches:minimumNumberOfTouches];
 }
 
 - (NSUInteger)maximumNumberOfTouches

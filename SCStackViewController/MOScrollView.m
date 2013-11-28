@@ -67,13 +67,23 @@ const static int maximumSteps = 10;
 
 @implementation MOScrollView
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+- (id)initWithFrame:(CGRect)frame
 {
-    if(gestureRecognizer.numberOfTouches < self.minimumNumberOfTouches || gestureRecognizer.numberOfTouches > self.maximumNumberOfTouches) {
-        return NO;
+    if(self = [super initWithFrame:frame]) {
+        self.maximumNumberOfTouches = NSUIntegerMax;
     }
     
+    return self;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
     if([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        
+        if(gestureRecognizer.numberOfTouches > self.maximumNumberOfTouches) {
+            return NO;
+        }
+        
         CGPoint touchPoint = [gestureRecognizer locationInView:self];
         return ![self.touchRefusalArea containsPoint:touchPoint];
     }
