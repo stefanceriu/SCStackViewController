@@ -132,7 +132,7 @@ const static int maximumSteps = 10;
                             selector:@selector(updateContentOffset:)];
         self.displayLink.frameInterval = 1;
         [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop]
-                               forMode:NSDefaultRunLoopMode];
+                               forMode:NSRunLoopCommonModes];
     } else {
         self.displayLink.paused = NO;
     }

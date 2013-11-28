@@ -459,9 +459,9 @@
                                                              contentOffset:offset
                                                          inStackController:self];
                 [self.rootViewController.view setFrame:frame];
-            } else {
-                [self.rootViewController.view setFrame:self.view.bounds];
             }
+        } else if(activeLayouter == nil) {
+            [self.rootViewController.view setFrame:self.view.bounds];
         }
         
         BOOL shouldStackAboveRoot = NO;
