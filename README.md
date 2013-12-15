@@ -11,12 +11,16 @@ SCStackViewController is a container view controller which allows you to stack o
 7. Customizable interaction area
 8. Completion blocks for everything
 
-### Change Log v2.0
+### Change Log v2.1.0
 
+* Added ability to stack view controllers either on top or below the root view controller
+* Exposed minimum and maximum number of touches properties
+* Switched run loop modes for better integration with other scroll views
+
+
+### Change Log v2.0.0
 
 * Integrated MOScrollView for better control over scroll animation and duration
-
-
 * Added pagedNavigation (exposed continuousNavigation property. Defaults to false). Swiping will bounce at every page and multiple swipes will be required to navigate through more than 1 page
 * Added delegate for callbacks when a view controller was shown or hidded and when the Stack's scroll content offset was changed
 * Fixed pop animation which now goes through the layouters
@@ -24,10 +28,7 @@ SCStackViewController is a container view controller which allows you to stack o
 * Proper reversed stacking implementation
 * Fixed parallax layouter to work for the first view controllers
 * Added iOS 5.x support
-
 * Added documentation
-
-
 * Exposed animation duration (defaults to 0.25f)
 * Exposed timing function (defaults to kCAMediaTimingFunctionEaseInEaseOut)
 * Exposed scroll view bounces property (defaults to YES)
@@ -46,32 +47,32 @@ The stack itself relies on layouters to know where to place the stacked controll
 ##### Plain Stack Layouter
 It places the view controllers to their final position and doesn't modify them while dragging.
 
-![PlainStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/Plain.gif)
+![PlainStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/Plain.gif)
 
 ##### Reversed Stack Layouter
 Reverses the direction used in the plain layouter
 
-![ReversedStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/Reversed.gif)
+![ReversedStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/Reversed.gif)
 
 ##### Sliding Stack Layouter
 It reveals every new controller from beneath the previous one through sliding
 
-![SlidingStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/Sliding.gif)
+![SlidingStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/Sliding.gif)
 
 ##### Parallax Stack Layouter
 Add a nice parallax effect while revealing the stacked controllers
 
-![ParallaxStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/Parallax.gif)
+![ParallaxStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/Parallax.gif)
 
 ##### GoogleMaps Stack Layouter
 The effect seen in the Google Maps app when opening the drawer
 
-![GoogleMapsStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/GoogleMaps.gif)
+![GoogleMapsStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/GoogleMaps.gif)
 
 ##### MerryGoRound Stack Layouter
 Just something I was playing with.. :)
 
-![MerryGoRoundStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/MerryGoRound.gif)
+![MerryGoRoundStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/MerryGoRound.gif)
 
 ## Usage
 
