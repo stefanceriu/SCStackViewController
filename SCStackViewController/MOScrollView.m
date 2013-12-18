@@ -93,6 +93,16 @@ const static int maximumSteps = 10;
 
 #pragma mark - Set ContentOffset with Custom Animation
 
+- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated
+{
+    //Ignoring calls from any textView contained by this scroll
+    if([[self performSelector:@selector(firstResponder)] isKindOfClass:[UITextField class]]) {
+        return;
+    }
+    
+    [super scrollRectToVisible:rect animated:animated];
+}
+
 - (void)setContentOffset:(CGPoint)contentOffset
       withTimingFunction:(CAMediaTimingFunction *)timingFunction
                 duration:(CFTimeInterval)duration
