@@ -23,6 +23,8 @@
 
 #import "SCOverlayView.h"
 
+#import "SCStackNavigationStep.h"
+
 @interface SCRootViewController () <SCStackViewControllerDelegate, SCOverlayViewDelegate, SCMenuViewControllerDelegate, SCMainViewControllerDelegate>
 
 @property (nonatomic, strong) SCStackViewController *stackViewController;
@@ -80,37 +82,44 @@
     
     id<SCStackLayouterProtocol> aboveRootLayouter = [[typeToLayouter[@(type)] alloc] init];
     [aboveRootLayouter setShouldStackControllersAboveRoot:YES];
-    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:SCStackViewControllerPositionLeft];
+    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:SCStackViewControllerPositionTop];
     
     id<SCStackLayouterProtocol> belowRootLayouter = [[typeToLayouter[@(type)] alloc] init];
-    [self.stackViewController registerLayouter:belowRootLayouter forPosition:SCStackViewControllerPositionRight];
+    [self.stackViewController registerLayouter:belowRootLayouter forPosition:SCStackViewControllerPositionBottom];
     
-    SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionLeft];
-    [leftViewController.view castShadowWithPosition:SCShadowEdgeLeft];
+    SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionTop];
+    [leftViewController.view castShadowWithPosition:SCShadowEdgeTop];
     [leftViewController setDelegate:self];
     
-    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionLeft
+    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionTop
                                                          animated:YES
                                                        completion:^{
                                                            
+                                                           [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.25f],[SCStackNavigationStep navigationStepWithPercentage:0.5f]]
+                                                                                           forViewController:leftViewController];
+                                                           
                                                            [self.stackViewController pushViewController:leftViewController
-                                                                                             atPosition:SCStackViewControllerPositionLeft
+                                                                                             atPosition:SCStackViewControllerPositionTop
                                                                                                  unfold:NO
                                                                                                animated:NO
                                                                                              completion:nil];
                                                        }];
     
     
-    SCMenuViewController *rightViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionRight];
-    [rightViewController.view castShadowWithPosition:SCShadowEdgeRight];
+    SCMenuViewController *rightViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionBottom];
+    [rightViewController.view castShadowWithPosition:SCShadowEdgeBottom];
     [rightViewController setDelegate:self];
     
-    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionRight
+    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionBottom
                                                          animated:YES
                                                        completion:^{
                                                            
+                                                           [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.5f],
+                                                                                                               [SCStackNavigationStep navigationStepWithPercentage:0.25f]]
+                                                                                           forViewController:rightViewController];
+                                                           
                                                            [self.stackViewController pushViewController:rightViewController
-                                                                                             atPosition:SCStackViewControllerPositionRight
+                                                                                             atPosition:SCStackViewControllerPositionBottom
                                                                                                  unfold:NO
                                                                                                animated:NO
                                                                                              completion:nil];

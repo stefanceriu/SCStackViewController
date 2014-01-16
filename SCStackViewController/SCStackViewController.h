@@ -36,7 +36,7 @@ typedef enum {
  * -----------------------------------------------------------------------------
  */
 
-/** Returns the absolute path of the Homebrew executable. */
+/** The stack's root view controller. */
 @property (nonatomic, strong, readonly) UIViewController *rootViewController;
 
 
@@ -161,6 +161,9 @@ typedef enum {
                     unfold:(BOOL)unfold
                   animated:(BOOL)animated
                 completion:(void(^)())completion;
+
+
+- (void)registerNavigationSteps:(NSArray *)navigationSteps forViewController:(UIViewController *)viewController;
 
 
 /** Pops the last pushed view controller from the given position

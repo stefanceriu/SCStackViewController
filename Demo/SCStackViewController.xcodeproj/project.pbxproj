@@ -14,6 +14,7 @@
 		1823A8E517BEAC7500D58582 /* SCMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */; };
 		1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8DF17BEAC7500D58582 /* SCRootViewController.m */; };
 		1823A8E917BEAC7500D58582 /* SCRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1823A8E017BEAC7500D58582 /* SCRootViewController.xib */; };
+		1830BFDE1886C060004ED34D /* SCStackNavigationStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830BFDD1886C060004ED34D /* SCStackNavigationStep.m */; };
 		18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18364B4617BFB6450066F67A /* SCMainViewController.m */; };
 		18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18364B4717BFB6450066F67A /* SCMainViewController.xib */; };
 		18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B601771840F0F500E3A0DD /* SCOverlayView.m */; };
@@ -46,6 +47,8 @@
 		1823A8DE17BEAC7500D58582 /* SCRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRootViewController.h; sourceTree = "<group>"; };
 		1823A8DF17BEAC7500D58582 /* SCRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRootViewController.m; sourceTree = "<group>"; };
 		1823A8E017BEAC7500D58582 /* SCRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCRootViewController.xib; sourceTree = "<group>"; };
+		1830BFDC1886C060004ED34D /* SCStackNavigationStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStackNavigationStep.h; sourceTree = "<group>"; };
+		1830BFDD1886C060004ED34D /* SCStackNavigationStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStackNavigationStep.m; sourceTree = "<group>"; };
 		18364B4517BFB6450066F67A /* SCMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMainViewController.h; sourceTree = "<group>"; };
 		18364B4617BFB6450066F67A /* SCMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMainViewController.m; sourceTree = "<group>"; };
 		18364B4717BFB6450066F67A /* SCMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCMainViewController.xib; sourceTree = "<group>"; };
@@ -113,6 +116,8 @@
 				18C4D6A817F0C82A0046FACD /* SCStackViewController.m */,
 				18DBB2D117F5B2CB0006CBFB /* MOScrollView.h */,
 				18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */,
+				1830BFDC1886C060004ED34D /* SCStackNavigationStep.h */,
+				1830BFDD1886C060004ED34D /* SCStackNavigationStep.m */,
 			);
 			name = SCStackViewController;
 			path = ../../SCStackViewController;
@@ -280,6 +285,7 @@
 				18C4D6AE17F0C82A0046FACD /* SCParallaxStackLayouter.m in Sources */,
 				18C4D6B017F0C82A0046FACD /* SCStackLayouter.m in Sources */,
 				18C4D6AD17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m in Sources */,
+				1830BFDE1886C060004ED34D /* SCStackNavigationStep.m in Sources */,
 				1823A8E117BEAC7500D58582 /* UIColor+RandomColors.m in Sources */,
 				1823A8E217BEAC7500D58582 /* UIViewController+Shadows.m in Sources */,
 				18C4D6B117F0C82A0046FACD /* SCStackViewController.m in Sources */,
