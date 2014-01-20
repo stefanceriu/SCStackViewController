@@ -56,11 +56,10 @@
         
         self.layouters = [NSMutableDictionary dictionary];
         self.finalFrames = [NSMutableDictionary dictionary];
+        self.navigationSteps = [NSMutableDictionary dictionary];
         
         self.animationDuration = 0.25f;
         self.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        
-        self.navigationSteps = [NSMutableDictionary dictionary];
     }
     
     return self;
@@ -91,13 +90,22 @@
                 completion:(void(^)())completion
 {
     NSAssert(viewController != nil, @"Trying to push nil view controller");
-    NSAssert(![[self.viewControllers.allValues valueForKeyPath:@"@unionOfArrays.self"] containsObject:viewController], @"Trying to push an already pushed view controller");
+    
+    if([[self.viewControllers.allValues valueForKeyPath:@"@unionOfArrays.self"] containsObject:viewController]) {
+        NSLog(@"Trying to push an already pushed view controller");
+        
+        if(unfold) {
+            [self navigateToViewController:viewController animated:animated completion:completion];
+        } else if(completion) {
+            completion();
+        }
+        return;
+    }
     
     NSMutableArray *viewControllers = self.viewControllers[@(position)];
     [viewControllers addObject:viewController];
     
     [self updateFinalFramesForPosition:position];
-    
     
     id<SCStackLayouterProtocol> layouter = self.layouters[@(position)];
     
@@ -117,7 +125,7 @@
     
     [viewController didMoveToParentViewController:self];
     
-    [self updateBounds];
+    [self updateContentSizeIgnoringNavigationContraints];
     
     if(unfold) {
         [self.scrollView setContentOffset:[self maximumInsetForPosition:position]
@@ -146,7 +154,7 @@
         [self.viewControllers[@(position)] removeObject:lastViewController];
         [self.finalFrames removeObjectForKey:@([lastViewController hash])];
         [self updateFinalFramesForPosition:position];
-        [self updateBounds];
+        [self updateContentSizeIgnoringNavigationContraints];
         
         if([self.visibleViewControllers containsObject:lastViewController]) {
             [lastViewController beginAppearanceTransition:NO animated:animated];
@@ -203,7 +211,7 @@
     CGPoint offset = CGPointZero;
     CGRect finalFrame = CGRectZero;
     
-    [self updateBounds];
+    [self updateContentSizeIgnoringNavigationContraints];
     
     if(![viewController isEqual:self.rootViewController]) {
         
@@ -277,7 +285,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self scrollViewDidEndDecelerating:self.scrollView];
     [self.rootViewController beginAppearanceTransition:YES animated:animated];
 }
 
@@ -285,6 +292,8 @@
 {
     [super viewDidAppear:animated];
     [self.rootViewController endAppearanceTransition];
+
+    [self updateBoundsUsingNavigationContraints];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -314,11 +323,14 @@
     }];
 }
 
-- (void)updateBounds
+#pragma mark Navigation Contraints
+
+// Sets the insets to the summed up sizes of all the participating view controllers (used before pushing and popping)
+- (void)updateContentSizeIgnoringNavigationContraints
 {
     UIEdgeInsets insets = UIEdgeInsetsZero;
     
-    for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
+    for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
         
         NSArray *viewControllerHashes = [self.viewControllers[@(position)] valueForKeyPath:@"@distinctUnionOfObjects.hash"];
         NSArray *finalFrameKeys = [self.finalFrames.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSNumber *hash, NSDictionary *bindings) {
@@ -347,10 +359,9 @@
     }
     
     [self.scrollView setDelegate:nil];
-    
-    CGPoint offset = self.scrollView.contentOffset;
     [self.scrollView setContentInset:insets];
     
+    CGPoint offset = self.scrollView.contentOffset;
     if((self.scrollView.contentInset.left <= insets.left) || (self.scrollView.contentInset.top <= insets.top)) {
         [self.scrollView setContentOffset:offset];
     }
@@ -359,87 +370,121 @@
     [self.scrollView setDelegate:self];
 }
 
-- (void)updateNavigationContraints
+// Sets the insets to the first encountered navigation steps in all directions (used when stack is centred on the root)
+- (void)updateContentSizeUsingDefaultNavigationContraints
+{
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    
+    for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
+        NSArray *viewControllers = self.viewControllers[@(position)];
+        
+        if(viewControllers.count == 0) {
+            continue;
+        }
+        
+        BOOL isReversed = NO;
+        if([self.layouters[@(position)] respondsToSelector:@selector(isReversed)]) {
+            isReversed = [self.layouters[@(position)] isReversed];
+        }
+        
+        switch (position) {
+            case SCStackViewControllerPositionTop:
+                insets.top = ABS([self nextStepOffsetForViewController:viewControllers[0] position:position velocity:CGPointMake(0.0f, -1.0f) reversed:isReversed contentOffset:CGPointZero].y);
+                break;
+            case SCStackViewControllerPositionLeft:
+                insets.left = ABS([self nextStepOffsetForViewController:viewControllers[0] position:position velocity:CGPointMake(-1.0f, 0.0f) reversed:isReversed contentOffset:CGPointZero].x);
+                break;
+            case SCStackViewControllerPositionBottom:
+                insets.bottom = ABS([self nextStepOffsetForViewController:viewControllers[0] position:position velocity:CGPointMake(0.0f, 1.0f) reversed:isReversed contentOffset:CGPointZero].y);
+                break;
+            case SCStackViewControllerPositionRight:
+                insets.right = ABS([self nextStepOffsetForViewController:viewControllers[0] position:position velocity:CGPointMake(1.0f, 0.0f) reversed:isReversed contentOffset:CGPointZero].x);
+                break;
+            default:
+                break;
+        }
+    }
+    
+    [self.scrollView setContentInset:insets];
+}
+
+// Sets the insets to the next navigation steps based on the current state
+- (void)updateBoundsUsingNavigationContraints
 {
     if(self.continuousNavigationEnabled) {
         return;
     }
     
     UIEdgeInsets insets = UIEdgeInsetsZero;
-    UIViewController *lastVisibleViewController = [self.visibleViewControllers lastObject];
+    UIViewController *lastVisibleController = [self.visibleViewControllers lastObject];
     
-    if(CGPointEqualToPoint(self.scrollView.contentOffset, CGPointZero) || lastVisibleViewController == nil) {
-        for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
-            NSArray *viewControllers = self.viewControllers[@(position)];
-            
-            if(viewControllers.count == 0) {
-                continue;
-            }
-            
-            
-            UIViewController *viewController = viewControllers[0];
-            
-            switch (position) {
-                case SCStackViewControllerPositionTop:
-                    insets.top = CGRectGetHeight(viewController.view.frame);
-                    break;
-                case SCStackViewControllerPositionLeft:
-                    insets.left = CGRectGetWidth(viewController.view.frame);
-                    break;
-                case SCStackViewControllerPositionBottom:
-                    insets.bottom = CGRectGetHeight(viewController.view.frame);
-                    break;
-                case SCStackViewControllerPositionRight:
-                    insets.right = CGRectGetWidth(viewController.view.frame);
-                    break;
-                default:
-                    break;
-            }
-        }
-        
-        [self.scrollView setContentInset:insets];
+    if(CGPointEqualToPoint(self.scrollView.contentOffset, CGPointZero) || lastVisibleController == nil) {
+        [self updateContentSizeUsingDefaultNavigationContraints];
         return;
     }
-
-    SCStackViewControllerPosition lastVisibleControllerPosition = [self positionForViewController:lastVisibleViewController];
+    
+    SCStackViewControllerPosition lastVisibleControllerPosition = [self positionForViewController:lastVisibleController];
+    
     NSArray *viewControllersArray = self.viewControllers[@(lastVisibleControllerPosition)];
     
-    lastVisibleViewController = [[self.visibleViewControllers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    lastVisibleController = [[self.visibleViewControllers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         return [@([viewControllersArray indexOfObject:obj1]) compare:@([viewControllersArray indexOfObject:obj2])];
     }] lastObject];
     
-    NSUInteger visibleControllerIndex = [viewControllersArray indexOfObject:lastVisibleViewController];
-    NSArray *remainingViewControllers;
     
-    if(visibleControllerIndex >= viewControllersArray.count - 1) {
-        remainingViewControllers = viewControllersArray;
-    } else {
-        remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(0, visibleControllerIndex + 2)];
+    NSUInteger visibleControllerIndex = [viewControllersArray indexOfObject:lastVisibleController];
+    
+    BOOL isReversed = NO;
+    if([self.layouters[@(lastVisibleControllerPosition)] respondsToSelector:@selector(isReversed)]) {
+        isReversed = [self.layouters[@(lastVisibleControllerPosition)] isReversed];
     }
     
     switch (lastVisibleControllerPosition) {
-        case SCStackViewControllerPositionTop:
-        {
-            CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
-            insets.top = totalSize;
+        case SCStackViewControllerPositionTop: {
+            // Fetch the next step and set it as the current inset
+            insets.top = ABS([self nextStepOffsetForViewController:lastVisibleController position:lastVisibleControllerPosition velocity:CGPointMake(0.0f, -1.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].y);
+            
+            // If the next step is the upper bound of the current view controller and there are more view controllers on the stack, fetch the following view controller's first navigation step and use that
+            if(ABS(self.scrollView.contentOffset.y) == insets.top && visibleControllerIndex < viewControllersArray.count - 1) {
+                insets.top = ABS([self nextStepOffsetForViewController:viewControllersArray[visibleControllerIndex + 1] position:lastVisibleControllerPosition velocity:CGPointMake(0.0f, -1.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].y);
+            }
+            
+            // Reverse the velocity, fetch the previous navigation step and use it as the inset for the opposite direction so that the navigation contraint works coming back as well
+            insets.bottom = [self nextStepOffsetForViewController:lastVisibleController position:lastVisibleControllerPosition velocity:CGPointMake(0.0f, 1.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].y;
+            
             break;
         }
-        case SCStackViewControllerPositionLeft:
-        {
-            CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-            insets.left = totalSize;
+        case SCStackViewControllerPositionLeft: {
+            insets.left = ABS([self nextStepOffsetForViewController:lastVisibleController position:lastVisibleControllerPosition velocity:CGPointMake(-1.0f, 0.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].x);
+            
+            if(ABS(self.scrollView.contentOffset.x) == insets.left && visibleControllerIndex < viewControllersArray.count - 1) {
+                insets.left = ABS([self nextStepOffsetForViewController:viewControllersArray[visibleControllerIndex + 1] position:lastVisibleControllerPosition velocity:CGPointMake(-1.0f, 0.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].x);
+            }
+            
+            insets.right = [self nextStepOffsetForViewController:lastVisibleController position:lastVisibleControllerPosition velocity:CGPointMake(1.0f, 0.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].x;
+            
             break;
         }
-        case SCStackViewControllerPositionBottom:
-        {
-            CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
-            insets.bottom = totalSize;
+        case SCStackViewControllerPositionBottom: {
+            insets.bottom = ABS([self nextStepOffsetForViewController:lastVisibleController position:lastVisibleControllerPosition velocity:CGPointMake(0.0f, 1.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].y);
+            
+            if(ABS(self.scrollView.contentOffset.y) == insets.bottom && visibleControllerIndex < viewControllersArray.count - 1) {
+                insets.bottom = ABS([self nextStepOffsetForViewController:viewControllersArray[visibleControllerIndex + 1] position:lastVisibleControllerPosition velocity:CGPointMake(0.0f, 1.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].y);
+            }
+            
+            insets.top = - [self nextStepOffsetForViewController:lastVisibleController position:lastVisibleControllerPosition velocity:CGPointMake(0.0f, -1.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].y;
+            
             break;
         }
-        case SCStackViewControllerPositionRight:
-        {
-            CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-            insets.right = totalSize;
+        case SCStackViewControllerPositionRight: {
+            insets.right = ABS([self nextStepOffsetForViewController:lastVisibleController position:lastVisibleControllerPosition velocity:CGPointMake(1.0f, 0.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].x);
+            
+            if(ABS(self.scrollView.contentOffset.x) == insets.right && visibleControllerIndex < viewControllersArray.count - 1) {
+                insets.right = ABS([self nextStepOffsetForViewController:viewControllersArray[visibleControllerIndex + 1] position:lastVisibleControllerPosition velocity:CGPointMake(1.0f, 0.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].x);
+            }
+            
+            insets.left = - [self nextStepOffsetForViewController:lastVisibleController position:lastVisibleControllerPosition velocity:CGPointMake(-1.0f, 0.0f) reversed:isReversed contentOffset:self.scrollView.contentOffset].x;
+            
             break;
         }
         default:
@@ -448,6 +493,8 @@
     
     [self.scrollView setContentInset:insets];
 }
+
+#pragma mark Appearance callbacks and framesetting
 
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods
 {
@@ -470,7 +517,7 @@
     }
     
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
-
+        
         id<SCStackLayouterProtocol> layouter = self.layouters[@(position)];
         
         if([layouter isEqual:activeLayouter]) {
@@ -484,15 +531,17 @@
             [self.rootViewController.view setFrame:self.view.bounds];
         }
         
-        BOOL shouldStackAboveRoot = NO;
+        BOOL shouldStackControllersAboveRoot = NO;
         if([layouter respondsToSelector:@selector(shouldStackControllersAboveRoot)]) {
-            shouldStackAboveRoot = [layouter shouldStackControllersAboveRoot];
+            shouldStackControllersAboveRoot = [layouter shouldStackControllersAboveRoot];
         }
         
         CGRectEdge edge = [self edgeFromOffset:offset];
         __block CGRect remainder;
-        if(shouldStackAboveRoot) {
-            remainder = self.scrollView.bounds;
+        
+        // Determine the amount of unobstructed space the stacked view controllers might be seen through
+        if(shouldStackControllersAboveRoot) {
+            remainder = CGRectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.view.bounds), edge);
         } else {
             remainder = CGRectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame), edge);
         }
@@ -513,34 +562,32 @@
                                                       inStackController:self];
             
             CGRect adjustedFrame = nextFrame;
+            
+            // If using a reversed layouter adjust the frame to normal
             if(isReversed && index > 0) {
                 switch (position) {
-                    case SCStackViewControllerPositionTop:
-                    {
+                    case SCStackViewControllerPositionTop: {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
                         adjustedFrame.origin.y = [self maximumInsetForPosition:position].y + totalSize;
                         break;
                     }
-                    case SCStackViewControllerPositionLeft:
-                    {
+                    case SCStackViewControllerPositionLeft: {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
                         adjustedFrame.origin.x = [self maximumInsetForPosition:position].x + totalSize;
                         break;
                     }
-                    case SCStackViewControllerPositionBottom:
-                    {
+                    case SCStackViewControllerPositionBottom: {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
-                        adjustedFrame.origin.y = self.view.bounds.size.height + [self maximumInsetForPosition:position].y - totalSize;
+                        adjustedFrame.origin.y = CGRectGetHeight(self.view.bounds) + [self maximumInsetForPosition:position].y - totalSize;
                         break;
                     }
-                    case SCStackViewControllerPositionRight:
-                    {
+                    case SCStackViewControllerPositionRight: {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
                         CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
-                        adjustedFrame.origin.x = self.view.bounds.size.width + [self maximumInsetForPosition:position].x - totalSize;
+                        adjustedFrame.origin.x = CGRectGetWidth(self.view.bounds) + [self maximumInsetForPosition:position].x - totalSize;
                         break;
                     }
                     default:
@@ -548,14 +595,19 @@
                 }
             }
             
+            
             CGRect intersection = CGRectIntersection(remainder, adjustedFrame);
-            BOOL visible = ((position == SCStackViewControllerPositionLeft || position == SCStackViewControllerPositionRight) && intersection.size.width > 0.0f);
-            visible = visible || ((position == SCStackViewControllerPositionTop || position == SCStackViewControllerPositionBottom) && intersection.size.height > 0.0f);
+            
+            // If a view controller's frame does intersect the remainder then it's visible
+            BOOL visible = ((position == SCStackViewControllerPositionLeft || position == SCStackViewControllerPositionRight) && CGRectGetWidth(intersection) > 0.0f);
+            visible = visible || ((position == SCStackViewControllerPositionTop || position == SCStackViewControllerPositionBottom) && CGRectGetHeight(intersection) > 0.0f);
             
             if(visible) {
+                // And if it's visible then we prepare for the next view controller by reducing the remainder some more
                 remainder = CGRectSubtract(remainder, CGRectIntersection(remainder, adjustedFrame), edge);
             }
             
+            // Finally, trigger appearance callbacks and new frame
             if(visible && ![self.visibleViewControllers containsObject:viewController]) {
                 [self.visibleViewControllers addObject:viewController];
                 [viewController beginAppearanceTransition:YES animated:NO];
@@ -583,15 +635,12 @@
     }
 }
 
+#pragma mark Pagination
+
 - (void)adjustTargetContentOffset:(inout CGPoint *)targetContentOffset withVelocity:(CGPoint)velocity
 {
     if(!self.pagingEnabled && self.continuousNavigationEnabled) {
         return;
-    }
-    
-    CGFloat iOS5Adjustment = 0.0f;
-    if(SYSTEM_VERSION_LESS_THAN(@"6.0")) {
-        iOS5Adjustment = 0.1f;
     }
     
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
@@ -625,25 +674,22 @@
         [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
             
             CGRect frame = [self.finalFrames[@(viewController.hash)] CGRectValue];
-            frame.origin.x = frame.origin.x > 0 ? CGRectGetMinX(frame) - CGRectGetWidth(self.view.bounds) : CGRectGetMinX(frame);
-            frame.origin.y = frame.origin.y > 0 ? CGRectGetMinY(frame) - CGRectGetHeight(self.view.bounds) : CGRectGetMinY(frame);
-            
-            CGRect finalFrame = CGRectZero;
+            frame.origin.x = frame.origin.x > 0.0f ? CGRectGetMinX(frame) - CGRectGetWidth(self.view.bounds) : CGRectGetMinX(frame);
+            frame.origin.y = frame.origin.y > 0.0f ? CGRectGetMinY(frame) - CGRectGetHeight(self.view.bounds) : CGRectGetMinY(frame);
             
             if(CGRectContainsPoint(frame, adjustedOffset)) {
                 
                 keepGoing = NO;
                 
-                finalFrame = frame;
-                
                 CGPoint adjustedVelocity = velocity;
-
+                
+                // If the velocity is zero then adjust it based on which half of the view controller is visible
                 if(CGPointEqualToPoint(CGPointZero, adjustedVelocity)) {
                     switch (position) {
                         case SCStackViewControllerPositionTop:
                         case SCStackViewControllerPositionBottom:
                         {
-                            CGFloat verticalPercentageShown = ABS((ABS(frame.origin.y) - ABS(adjustedOffset.y))) / frame.size.height;
+                            CGFloat verticalPercentageShown = ABS((ABS(frame.origin.y) - ABS(adjustedOffset.y))) / CGRectGetHeight(frame);
                             if(isReversed) {
                                 verticalPercentageShown = 1.0f - verticalPercentageShown;
                             }
@@ -653,7 +699,7 @@
                         case SCStackViewControllerPositionLeft:
                         case SCStackViewControllerPositionRight:
                         {
-                            CGFloat horizontalPercentageShown = ABS((ABS(frame.origin.x) - ABS(adjustedOffset.x))) / frame.size.width;
+                            CGFloat horizontalPercentageShown = ABS((ABS(frame.origin.x) - ABS(adjustedOffset.x))) / CGRectGetWidth(frame);
                             if(isReversed) {
                                 horizontalPercentageShown = 1.0f - horizontalPercentageShown;
                             }
@@ -665,86 +711,14 @@
                     }
                 }
                 
-                SCStackNavigationStep *nextStep = [self nextStepForViewController:viewController position:position velocity:adjustedVelocity reversed:isReversed];
+                // Calculate the next step of the pagination (either a navigationStep or a controller edge)
+                CGPoint nextStepOffset = [self nextStepOffsetForViewController:viewController
+                                                                      position:position
+                                                                      velocity:adjustedVelocity
+                                                                      reversed:isReversed
+                                                                 contentOffset:*targetContentOffset];
                 
-                if(adjustedVelocity.x) {
-                    if (adjustedVelocity.x > 0.0f) {
-                        if(isReversed) {
-                            targetContentOffset->x = [self maximumInsetForPosition:position].x - CGRectGetMinX(finalFrame) - iOS5Adjustment;
-                        } else {
-                            targetContentOffset->x = CGRectGetMaxX(finalFrame) - iOS5Adjustment;
-                        }
-                    }
-                    else if (adjustedVelocity.x < 0.0f) {
-                        if(isReversed) {
-                            targetContentOffset->x = [self maximumInsetForPosition:position].x - CGRectGetMaxX(finalFrame) + iOS5Adjustment;
-                        } else {
-                            targetContentOffset->x = CGRectGetMinX(finalFrame) + iOS5Adjustment;
-                        }
-                    }
-                } else if(adjustedVelocity.y) {
-                    if (adjustedVelocity.y > 0.0f) {
-                        if(position == SCStackViewControllerPositionTop) {
-                            if(isReversed) {
-                                
-                                
-                                if(nextStep) {
-                                    targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + finalFrame.size.height * (1.0f - nextStep.percentage) + iOS5Adjustment;
-                                } else {
-                                    targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMinY(finalFrame) - iOS5Adjustment;
-                                }
-                                
-                            } else {
-                                targetContentOffset->y = nextStep == nil ? CGRectGetMaxY(finalFrame) - iOS5Adjustment : CGRectGetMaxY(finalFrame) - finalFrame.size.height * nextStep.percentage + iOS5Adjustment;
-                            }
-                            
-                        } else {
-                            if(isReversed) {
-                                
-                                if(nextStep) {
-                                    targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + finalFrame.size.height * nextStep.percentage - iOS5Adjustment;
-                                } else {
-                                    targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMinY(finalFrame) - iOS5Adjustment;
-                                }
-                                
-                                
-                            } else {
-                                targetContentOffset->y = nextStep == nil ? CGRectGetMaxY(finalFrame) - iOS5Adjustment : CGRectGetMinY(finalFrame) + finalFrame.size.height * nextStep.percentage + iOS5Adjustment;
-                            }
-                        }
-                    }
-                    else if (adjustedVelocity.y < 0.0f) {
-                        if(position == SCStackViewControllerPositionTop) {
-                            if(isReversed) {
-                                
-                                if(nextStep) {
-                                    targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + finalFrame.size.height * (1.0f - nextStep.percentage) + iOS5Adjustment;
-                                } else {
-                                    targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame);
-                                }
-                                
-                            } else {
-                                targetContentOffset->y = nextStep == nil ? CGRectGetMinY(finalFrame) + iOS5Adjustment : CGRectGetMaxY(finalFrame) - finalFrame.size.height * nextStep.percentage + iOS5Adjustment;
-                            }
-                        } else {
-                            if(isReversed) {
-                                
-                                
-                                if(nextStep) {
-                                    
-                                    targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + finalFrame.size.height * nextStep.percentage - iOS5Adjustment;
-                                } else {
-                                    targetContentOffset->y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame);
-                                }
-                                
-                                
-                                
-                            } else {
-                                targetContentOffset->y = nextStep == nil ? CGRectGetMinY(finalFrame) + iOS5Adjustment : CGRectGetMinY(finalFrame) + finalFrame.size.height * nextStep.percentage + iOS5Adjustment;
-                            }
-                        }
-                    }
-                }
+                *targetContentOffset = nextStepOffset;
                 
                 *stop = YES;
             }
@@ -754,65 +728,104 @@
             break;
         }
     }
+    
+    // Fix for iOS 5.x pagination
+    if(SYSTEM_VERSION_LESS_THAN(@"6.0")) {
+        targetContentOffset->y += 0.1f;
+        targetContentOffset->x += 0.1f;
+    }
 }
 
-- (SCStackNavigationStep *)nextStepForViewController:(UIViewController *)viewController
-                                            position:(SCStackViewControllerPosition)position
-                                            velocity:(CGPoint)velocity
-                                            reversed:(BOOL)isReversed
+#pragma mark Shared
+
+- (CGPoint)nextStepOffsetForViewController:(UIViewController *)viewController
+                                  position:(SCStackViewControllerPosition)position
+                                  velocity:(CGPoint)velocity
+                                  reversed:(BOOL)isReversed
+                             contentOffset:(CGPoint)contentOffset
 
 {
-    NSArray *navigationSteps = self.navigationSteps[@([viewController hash])];
     
-    if(navigationSteps.count == 0) {
-        return nil;
-    }
+    CGPoint nextStepOffset = CGPointZero;
+    
+    NSArray *navigationSteps = self.navigationSteps[@([viewController hash])];
     
     CGRect finalFrame = [self.finalFrames[@(viewController.hash)] CGRectValue];
     
-    SCStackNavigationStep *nextStep = nil;
+    if((velocity.y > 0.0f && position == SCStackViewControllerPositionTop)    || (velocity.x > 0.0f && position == SCStackViewControllerPositionLeft) ||
+       (velocity.y < 0.0f && position == SCStackViewControllerPositionBottom) || (velocity.x < 0.0f && position == SCStackViewControllerPositionRight)) {
+        navigationSteps = [[navigationSteps reverseObjectEnumerator] allObjects];
+    }
     
-    if(velocity.y > 0.0f) {
+    for(SCStackNavigationStep *nextStep in navigationSteps) {
         
         if(position == SCStackViewControllerPositionTop) {
-            for(SCStackNavigationStep *step in [navigationSteps reverseObjectEnumerator]) {
-                CGFloat stepOffset = (isReversed ? [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + finalFrame.size.height * (1.0f - step.percentage) : CGRectGetMaxY(finalFrame) - finalFrame.size.height * step.percentage);
-                if(stepOffset > self.scrollView.contentOffset.y) {
-                    nextStep = step;
-                    break;
-                }
+            if(isReversed) {
+                nextStepOffset.y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + CGRectGetHeight(finalFrame) * (1.0f - nextStep.percentage);
+            } else {
+                nextStepOffset.y = CGRectGetMaxY(finalFrame) - CGRectGetHeight(finalFrame) * nextStep.percentage;
             }
-        } else {
-            for(SCStackNavigationStep *step in navigationSteps) {
-                CGFloat stepOffset = (isReversed ? [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + CGRectGetHeight(self.rootViewController.view.frame) + finalFrame.size.height * step.percentage : CGRectGetMinY(finalFrame) - CGRectGetHeight(self.rootViewController.view.frame) + finalFrame.size.height * step.percentage);
-                if(self.scrollView.contentOffset.y < stepOffset) {
-                    nextStep = step;
-                    break;
-                }
+        } else if(position == SCStackViewControllerPositionLeft) {
+            if(isReversed) {
+                nextStepOffset.x = [self maximumInsetForPosition:position].x - CGRectGetMaxX(finalFrame) + CGRectGetWidth(finalFrame) * (1.0f - nextStep.percentage);
+            } else {
+                nextStepOffset.x = CGRectGetMaxX(finalFrame) - CGRectGetWidth(finalFrame) * nextStep.percentage;
+            }
+        } else if(position == SCStackViewControllerPositionBottom) {
+            if(isReversed) {
+                nextStepOffset.y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + CGRectGetHeight(finalFrame) * nextStep.percentage + CGRectGetHeight(self.view.bounds);
+            } else {
+                nextStepOffset.y = CGRectGetMinY(finalFrame) + CGRectGetHeight(finalFrame) * nextStep.percentage - CGRectGetHeight(self.view.bounds);
+            }
+        } else if(position == SCStackViewControllerPositionRight) {
+            if(isReversed) {
+                nextStepOffset.x = [self maximumInsetForPosition:position].x - CGRectGetMaxX(finalFrame) + CGRectGetWidth(finalFrame) * nextStep.percentage + CGRectGetWidth(self.view.bounds);
+            } else {
+                nextStepOffset.x = CGRectGetMinX(finalFrame) + CGRectGetWidth(finalFrame) * nextStep.percentage - CGRectGetWidth(self.view.bounds);
             }
         }
-    } else if(velocity.y < 0.0f) {
         
-        if(position == SCStackViewControllerPositionTop) {
-            for(SCStackNavigationStep *step in navigationSteps) {
-                CGFloat stepOffset = (isReversed ? [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + finalFrame.size.height * (1.0f - step.percentage) : CGRectGetMaxY(finalFrame) - finalFrame.size.height * step.percentage);
-                if(stepOffset < self.scrollView.contentOffset.y) {
-                    nextStep = step;
-                    break;
-                }
-            }
-        } else {
-            for(SCStackNavigationStep *step in [navigationSteps reverseObjectEnumerator]) {
-                CGFloat stepOffset = (isReversed ? [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + CGRectGetHeight(self.rootViewController.view.frame) + finalFrame.size.height * step.percentage : CGRectGetMinY(finalFrame) - CGRectGetHeight(self.rootViewController.view.frame) + finalFrame.size.height * step.percentage);
-                if(stepOffset < self.scrollView.contentOffset.y) {
-                    nextStep = step;
-                    break;
-                }
-            }
+        if((velocity.y > 0.0f && nextStepOffset.y > contentOffset.y) || (velocity.y < 0.0f && nextStepOffset.y < contentOffset.y) ||
+           (velocity.x > 0.0f && nextStepOffset.x > contentOffset.x) || (velocity.x < 0.0f && nextStepOffset.x < contentOffset.x)) {
+            return nextStepOffset;
         }
     }
     
-    return nextStep;
+    // If no navigation step is found use the view controller's bounds
+    if(velocity.y > 0.0f && isReversed) {
+        nextStepOffset.y = [self maximumInsetForPosition:position].y - CGRectGetMinY(finalFrame);
+    } else if(velocity.x > 0.0f && isReversed) {
+        nextStepOffset.x = [self maximumInsetForPosition:position].x - CGRectGetMinX(finalFrame);
+    }
+    
+    else if(velocity.y < 0.0f && isReversed) {
+        nextStepOffset.y = [self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame);
+    } else if(velocity.x < 0.0f && isReversed) {
+        nextStepOffset.x = [self maximumInsetForPosition:position].x - CGRectGetMaxX(finalFrame);
+    }
+    
+    else if(velocity.y > 0.0f && !isReversed) {
+        nextStepOffset.y = CGRectGetMaxY(finalFrame);
+    } else if(velocity.x > 0.0f && !isReversed) {
+        nextStepOffset.x = CGRectGetMaxX(finalFrame);
+    }
+    
+    else if(velocity.y < 0.0f && !isReversed) {
+        nextStepOffset.y = CGRectGetMinY(finalFrame);
+    }
+    else if(velocity.x < 0.0f && !isReversed) {
+        nextStepOffset.x = CGRectGetMinX(finalFrame);
+    }
+    
+    if(position == SCStackViewControllerPositionBottom) {
+        nextStepOffset.y = nextStepOffset.y + (isReversed ? CGRectGetHeight(self.view.bounds) : -CGRectGetHeight(self.view.bounds));
+    }
+    
+    if(position == SCStackViewControllerPositionRight) {
+        nextStepOffset.x = nextStepOffset.x + (isReversed ? CGRectGetWidth(self.view.bounds) : -CGRectGetWidth(self.view.bounds));
+    }
+    
+    return nextStepOffset;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -828,22 +841,18 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    if(self.scrollView.isTracking) {
-        return;
-    }
-    
-    [self updateNavigationContraints];
+    [self updateBoundsUsingNavigationContraints];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    [self updateNavigationContraints];
+    [self updateBoundsUsingNavigationContraints];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if(decelerate == NO) {
-        [self updateNavigationContraints];
+        [self updateBoundsUsingNavigationContraints];
     }
 }
 
@@ -867,7 +876,7 @@
     
     [UIView animateWithDuration:self.animationDuration animations:^{
         [self scrollViewDidScroll:self.scrollView];
-        [self updateBounds];
+        [self updateContentSizeIgnoringNavigationContraints];
     }];
 }
 
@@ -977,7 +986,7 @@ CGRect CGRectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
         return r1;
     }
     
-    float chopAmount = (edge == CGRectMinXEdge || edge == CGRectMaxXEdge) ? intersection.size.width : intersection.size.height;
+    float chopAmount = (edge == CGRectMinXEdge || edge == CGRectMaxXEdge) ? CGRectGetWidth(intersection) : CGRectGetHeight(intersection);
     
     CGRect remainder, throwaway;
     CGRectDivide(r1, &throwaway, &remainder, chopAmount, edge);
@@ -1002,12 +1011,12 @@ CGRect CGRectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
 
 - (CGFloat)viewWidth
 {
-    return self.view.bounds.size.width;
+    return CGRectGetWidth(self.view.bounds);
 }
 
 - (CGFloat)viewHeight
 {
-    return self.view.bounds.size.height;
+    return CGRectGetHeight(self.view.bounds);
 }
 
 @end

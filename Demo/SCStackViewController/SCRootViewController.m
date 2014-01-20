@@ -49,7 +49,7 @@
     
     self.stackViewController = [[SCStackViewController alloc] initWithRootViewController:mainViewController];
     [self.stackViewController.view setFrame:self.view.bounds];
-    //[self.stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]];
+    
     [self.stackViewController setShowsScrollIndicators:NO];
     [self.stackViewController setDelegate:self];
     
@@ -57,8 +57,12 @@
     [self.view addSubview:self.stackViewController.view];
     [self.stackViewController didMoveToParentViewController:self];
     
+    //[self.stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]];
+    
     //[self.stackViewController setMinimumNumberOfTouches:2];
     //[self.stackViewController setMaximumNumberOfTouches:2];
+    
+    //[self.stackViewController setContinuousNavigationEnabled:YES];
     
     [self mainViewController:mainViewController didSelectLayouterType:SCStackLayouterTypeParallax];
 }
@@ -71,55 +75,54 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         typeToLayouter = (@{
-                          @(SCStackLayouterTypePlain)              : [SCStackLayouter class],
-                          @(SCStackLayouterTypeSliding)            : [SCSlidingStackLayouter class],
-                          @(SCStackLayouterTypeParallax)           : [SCParallaxStackLayouter class],
-                          @(SCStackLayouterTypeGoogleMaps)         : [SCGoogleMapsStackLayouter class],
-                          @(SCStackLayouterTypeMerryGoRound)       : [SCMerryGoRoundStackLayouter class],
-                          @(SCStackLayouterTypeReversed)           : [SCReversedStackLayouter class]
-                          });
+                            @(SCStackLayouterTypePlain)              : [SCStackLayouter class],
+                            @(SCStackLayouterTypeSliding)            : [SCSlidingStackLayouter class],
+                            @(SCStackLayouterTypeParallax)           : [SCParallaxStackLayouter class],
+                            @(SCStackLayouterTypeGoogleMaps)         : [SCGoogleMapsStackLayouter class],
+                            @(SCStackLayouterTypeMerryGoRound)       : [SCMerryGoRoundStackLayouter class],
+                            @(SCStackLayouterTypeReversed)           : [SCReversedStackLayouter class]
+                            });
     });
     
     id<SCStackLayouterProtocol> aboveRootLayouter = [[typeToLayouter[@(type)] alloc] init];
     [aboveRootLayouter setShouldStackControllersAboveRoot:YES];
-    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:SCStackViewControllerPositionTop];
+    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:SCStackViewControllerPositionLeft];
     
     id<SCStackLayouterProtocol> belowRootLayouter = [[typeToLayouter[@(type)] alloc] init];
-    [self.stackViewController registerLayouter:belowRootLayouter forPosition:SCStackViewControllerPositionBottom];
+    [self.stackViewController registerLayouter:belowRootLayouter forPosition:SCStackViewControllerPositionRight];
     
-    SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionTop];
+    SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionLeft];
     [leftViewController.view castShadowWithPosition:SCShadowEdgeTop];
     [leftViewController setDelegate:self];
     
-    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionTop
+    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionLeft
                                                          animated:YES
                                                        completion:^{
                                                            
-                                                           [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.25f],[SCStackNavigationStep navigationStepWithPercentage:0.5f]]
+                                                           [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.5f]]
                                                                                            forViewController:leftViewController];
                                                            
                                                            [self.stackViewController pushViewController:leftViewController
-                                                                                             atPosition:SCStackViewControllerPositionTop
+                                                                                             atPosition:SCStackViewControllerPositionLeft
                                                                                                  unfold:NO
                                                                                                animated:NO
                                                                                              completion:nil];
                                                        }];
     
     
-    SCMenuViewController *rightViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionBottom];
+    SCMenuViewController *rightViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionRight];
     [rightViewController.view castShadowWithPosition:SCShadowEdgeBottom];
     [rightViewController setDelegate:self];
     
-    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionBottom
+    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionRight
                                                          animated:YES
                                                        completion:^{
                                                            
-                                                           [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.5f],
-                                                                                                               [SCStackNavigationStep navigationStepWithPercentage:0.25f]]
+                                                           [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.5f]]
                                                                                            forViewController:rightViewController];
                                                            
                                                            [self.stackViewController pushViewController:rightViewController
-                                                                                             atPosition:SCStackViewControllerPositionBottom
+                                                                                             atPosition:SCStackViewControllerPositionRight
                                                                                                  unfold:NO
                                                                                                animated:NO
                                                                                              completion:nil];
@@ -151,14 +154,18 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         positionToShadowEdge = (@{
-                                @(SCStackViewControllerPositionTop)    : @(SCShadowEdgeTop),
-                                @(SCStackViewControllerPositionLeft)   : @(SCShadowEdgeLeft),
-                                @(SCStackViewControllerPositionBottom) : @(SCShadowEdgeBottom),
-                                @(SCStackViewControllerPositionRight)  : @(SCShadowEdgeRight)
-                                });
+                                  @(SCStackViewControllerPositionTop)    : @(SCShadowEdgeTop),
+                                  @(SCStackViewControllerPositionLeft)   : @(SCShadowEdgeLeft),
+                                  @(SCStackViewControllerPositionBottom) : @(SCShadowEdgeBottom),
+                                  @(SCStackViewControllerPositionRight)  : @(SCShadowEdgeRight)
+                                  });
     });
     
     [newMenuViewController.view castShadowWithPosition:[positionToShadowEdge[@(menuViewController.position)] intValue]];
+    
+    [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.5f]]
+                                    forViewController:newMenuViewController];
+    
     [self.stackViewController pushViewController:newMenuViewController
                                       atPosition:menuViewController.position
                                           unfold:YES
