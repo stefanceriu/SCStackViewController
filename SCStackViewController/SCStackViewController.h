@@ -8,6 +8,7 @@
 
 #import <QuartzCore/CAMediaTimingFunction.h>
 
+/** Sides on which view controllers may be stacked */
 typedef enum {
     SCStackViewControllerPositionTop,
     SCStackViewControllerPositionLeft,
@@ -16,8 +17,19 @@ typedef enum {
 } SCStackViewControllerPosition;
 
 
+/** Navigation contraint types that can be used used when continuous
+ * navigation is disabled
+ */
+typedef enum {
+    SCStackViewControllerNavigationContraintTypeForward = 1 << 0, /** Scroll view bounces on steps only when unfolding the stack*/
+    SCStackViewControllerNavigationContraintTypeReverse = 1 << 1  /** Scroll view bounces on steps only when folding the stack*/
+} SCStackViewControllerNavigationContraintType;
+
+
 @protocol SCStackLayouterProtocol;
 @protocol SCStackViewControllerDelegate;
+
+@class SCStackNavigationStep;
 
 
 /** SCStackViewController is a container view controller which allows you to 
@@ -75,6 +87,16 @@ typedef enum {
  * Default value is set to true
  */
 @property (nonatomic, assign) BOOL continuousNavigationEnabled;
+
+
+/** A bitmask determining whether the stack's scroll bounces when folding and
+ * unfolding view controllers
+ *
+ * Only used when continuous navigation is disabled
+ *
+ * Defaults to Forward and Reverse
+ */
+@property (nonatomic, assign) SCStackViewControllerNavigationContraintType navigationContaintType;
 
 
 /** A Boolean value that controls whether the Stack's scrollView indicators are 
@@ -205,6 +227,22 @@ typedef enum {
                         animated:(BOOL)animated
                       completion:(void(^)())completion;
 
+
+/** Unfolds to the given step
+ *
+ * The root view controller may be passed in order to hide all the side views.
+ * During the animation the layouters will be called and effects will be used
+ *
+ * @param step The step to be displayed
+ * @param viewController The view controller owning the step
+ * @param animated Controls whether the navigation will be animated
+ * @param completion Completion block called when the action is finished
+ */
+- (void)navigateToStep:(SCStackNavigationStep *)step
+      inViewController:(UIViewController *)viewController
+              animated:(BOOL)animated
+            completion:(void(^)())completion;
+
 /**-----------------------------------------------------------------------------
  * @name Querying the Stack state
  * -----------------------------------------------------------------------------
@@ -278,6 +316,17 @@ typedef enum {
  */
 - (void)stackViewController:(SCStackViewController *)stackViewController
         didNavigateToOffset:(CGPoint)offset;
+
+
+/** Delegate method that the Stack calls when its scrollView rests on a predefined step
+ * @param stackViewController The calling StackViewController
+ * @param step The step it stopped on
+ * @param controller The view controller that own the step
+ *
+ */
+- (void)stackViewController:(SCStackViewController *)stackViewController
+          didNavigateToStep:(SCStackNavigationStep *)step
+           inViewController:(UIViewController *)controller;
 
 @end
 
