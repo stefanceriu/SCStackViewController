@@ -13,6 +13,9 @@
 
 @property (nonatomic, assign) SCStackViewControllerPosition position;
 
+@property (nonatomic, weak) IBOutlet UIView *controlsContainer;
+@property (nonatomic, weak) IBOutlet UILabel *visiblePercentageLabel;
+
 @end
 
 @implementation SCMenuViewController
@@ -30,6 +33,31 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor randomColor]];
+    
+    switch (self.position) {
+        case SCStackViewControllerPositionTop:
+            self.visiblePercentageLabel.center = CGPointMake(self.view.center.x, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.visiblePercentageLabel.bounds));
+            self.controlsContainer.center = CGPointMake(self.view.center.x, CGRectGetHeight(self.controlsContainer.bounds));
+            break;
+        case SCStackViewControllerPositionBottom:
+            self.visiblePercentageLabel.center = CGPointMake(self.view.center.x, CGRectGetHeight(self.visiblePercentageLabel.bounds));
+            self.controlsContainer.center = CGPointMake(self.view.center.x, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.controlsContainer.bounds));
+            break;
+        case SCStackViewControllerPositionLeft:
+            self.visiblePercentageLabel.transform = CGAffineTransformMakeRotation(-M_PI/2);
+            self.visiblePercentageLabel.center = CGPointMake(CGRectGetWidth(self.visiblePercentageLabel.bounds), 100.0f);
+            break;
+        case SCStackViewControllerPositionRight:
+            self.visiblePercentageLabel.transform = CGAffineTransformMakeRotation(M_PI/2);
+            self.visiblePercentageLabel.center = CGPointMake(CGRectGetWidth(self.view.bounds) - CGRectGetWidth(self.visiblePercentageLabel.bounds), 100.0f);
+            break;
+    }
+    
+}
+
+- (void)setVisiblePercentage:(CGFloat)percentage
+{
+    [self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.2f%%", percentage]];
 }
 
 - (IBAction)onPushButtonTap:(id)sender

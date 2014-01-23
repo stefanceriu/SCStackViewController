@@ -40,11 +40,14 @@
                         @(SCStackLayouterTypeParallax)           : @"Parallax",
                         @(SCStackLayouterTypeGoogleMaps)         : @"Google Maps",
                         @(SCStackLayouterTypeMerryGoRound)       : @"Merry Go Round",
-                        @(SCStackLayouterTypeReversed)           : @"Reversed"
+                        @(SCStackLayouterTypeReversed)           : @"Reversed",
+                        @(SCStacklayouterTypePlainResizing)      : @"Resizing"
                         });
     });
     
     [cell.textLabel setText:typeToString[@(indexPath.row)]];
+    
+    [cell setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.15f]];
     
     return cell;
 }

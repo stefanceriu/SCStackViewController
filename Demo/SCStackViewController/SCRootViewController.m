@@ -17,6 +17,7 @@
 #import "SCGoogleMapsStackLayouter.h"
 #import "SCMerryGoRoundStackLayouter.h"
 #import "SCReversedStackLayouter.h"
+#import "SCPlainResizingLayouter.h"
 
 #import "SCMenuViewController.h"
 #import "UIViewController+Shadows.h"
@@ -82,22 +83,27 @@
                             @(SCStackLayouterTypeParallax)           : [SCParallaxStackLayouter class],
                             @(SCStackLayouterTypeGoogleMaps)         : [SCGoogleMapsStackLayouter class],
                             @(SCStackLayouterTypeMerryGoRound)       : [SCMerryGoRoundStackLayouter class],
-                            @(SCStackLayouterTypeReversed)           : [SCReversedStackLayouter class]
+                            @(SCStackLayouterTypeReversed)           : [SCReversedStackLayouter class],
+                            @(SCStacklayouterTypePlainResizing)      : [SCPlainResizingLayouter class]
                             });
     });
     
+    SCStackViewControllerPosition firstPosition = SCStackViewControllerPositionLeft;//SCStackViewControllerPositionTop;
+    SCStackViewControllerPosition secondPosition = SCStackViewControllerPositionRight;//SCStackViewControllerPositionBottom;
+    
     id<SCStackLayouterProtocol> aboveRootLayouter = [[typeToLayouter[@(type)] alloc] init];
     [aboveRootLayouter setShouldStackControllersAboveRoot:YES];
-    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:SCStackViewControllerPositionTop];
+    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:firstPosition];
     
     id<SCStackLayouterProtocol> belowRootLayouter = [[typeToLayouter[@(type)] alloc] init];
-    [self.stackViewController registerLayouter:belowRootLayouter forPosition:SCStackViewControllerPositionBottom];
+    [self.stackViewController registerLayouter:belowRootLayouter forPosition:secondPosition];
     
-    SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionTop];
+    SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:firstPosition];
     [leftViewController.view castShadowWithPosition:SCShadowEdgeTop];
     [leftViewController setDelegate:self];
     
-    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionTop
+    
+    [self.stackViewController popToRootViewControllerFromPosition:firstPosition
                                                          animated:YES
                                                        completion:^{
                                                            
@@ -105,18 +111,18 @@
                                                                                            forViewController:leftViewController];
                                                            
                                                            [self.stackViewController pushViewController:leftViewController
-                                                                                             atPosition:SCStackViewControllerPositionTop
+                                                                                             atPosition:firstPosition
                                                                                                  unfold:NO
                                                                                                animated:NO
                                                                                              completion:nil];
                                                        }];
     
     
-    SCMenuViewController *rightViewController = [[SCMenuViewController alloc] initWithPosition:SCStackViewControllerPositionBottom];
+    SCMenuViewController *rightViewController = [[SCMenuViewController alloc] initWithPosition:secondPosition];
     [rightViewController.view castShadowWithPosition:SCShadowEdgeBottom];
     [rightViewController setDelegate:self];
     
-    [self.stackViewController popToRootViewControllerFromPosition:SCStackViewControllerPositionBottom
+    [self.stackViewController popToRootViewControllerFromPosition:secondPosition
                                                          animated:YES
                                                        completion:^{
                                                            
@@ -124,7 +130,7 @@
                                                                                            forViewController:rightViewController];
                                                            
                                                            [self.stackViewController pushViewController:rightViewController
-                                                                                             atPosition:SCStackViewControllerPositionBottom
+                                                                                             atPosition:secondPosition
                                                                                                  unfold:NO
                                                                                                animated:NO
                                                                                              completion:nil];
@@ -135,7 +141,46 @@
 
 - (void)stackViewController:(SCStackViewController *)stackViewController didNavigateToOffset:(CGPoint)offset
 {
-    [self.overlayView setAlpha:ABS(offset.x/300.0f)];
+    //[self.overlayView setAlpha:ABS(offset.x/300.0f)];
+    [self.stackViewController.rootViewController.view castShadowWithPosition:SCShadowEdgeAll];
+    
+    // One shouldn't rely on this code, it's hardly accurate.
+    for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
+        
+        for(SCMenuViewController *viewController in [self.stackViewController viewControllersForPosition:position]) {
+            
+            if(![self.stackViewController isViewControllerVisible:viewController]) {
+                continue;
+            }
+            
+            CGFloat percentage = 0.0f;
+            
+            switch (position) {
+                case SCStackViewControllerPositionTop: {
+                    CGFloat remainder = ABS(CGRectGetMinY(viewController.view.frame)) - ABS(offset.y);
+                    percentage = MIN(100.0f, (1.0f - remainder / CGRectGetHeight(viewController.view.frame)) * 100.0f);
+                    break;
+                }
+                case SCStackViewControllerPositionLeft: {
+                    CGFloat remainder = ABS(CGRectGetMinX(viewController.view.frame)) - ABS(offset.x);
+                    percentage = MIN(100.0f, (1.0f - remainder / CGRectGetWidth(viewController.view.frame)) * 100.0f);
+                    break;
+                }
+                case SCStackViewControllerPositionBottom: {
+                    CGFloat remainder = CGRectGetMaxY(viewController.view.frame) - (offset.y + CGRectGetHeight(self.stackViewController.view.bounds));
+                    percentage = MIN(100.0f, (1.0f - remainder / CGRectGetHeight(viewController.view.frame)) * 100.0f);
+                    break;
+                }
+                case SCStackViewControllerPositionRight: {
+                    CGFloat remainder = CGRectGetMaxX(viewController.view.frame) - (offset.x + CGRectGetWidth(self.stackViewController.view.bounds));
+                    percentage = MIN(100.0f, (1.0f - remainder / CGRectGetWidth(viewController.view.frame)) * 100.0f);
+                    break;
+                }
+            }
+            
+            [viewController setVisiblePercentage:percentage];
+        }
+    }
 }
 
 #pragma mark - SCOverlayViewDelegate

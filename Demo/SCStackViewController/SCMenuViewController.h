@@ -12,13 +12,13 @@
 
 @interface SCMenuViewController : UIViewController
 
-- (instancetype)initWithPosition:(SCStackViewControllerPosition)position;
-
 @property (nonatomic, weak) id<SCMenuViewControllerDelegate> delegate;
-
 @property (nonatomic, readonly) SCStackViewControllerPosition position;
 
-- (IBAction)onScrollToMeButtonTapped:(id)sender;
+- (instancetype)initWithPosition:(SCStackViewControllerPosition)position;
+
+- (void)setVisiblePercentage:(CGFloat)percentage;
+
 @end
 
 @protocol SCMenuViewControllerDelegate <NSObject>

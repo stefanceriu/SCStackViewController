@@ -17,6 +17,8 @@
 		1830BFDE1886C060004ED34D /* SCStackNavigationStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830BFDD1886C060004ED34D /* SCStackNavigationStep.m */; };
 		18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18364B4617BFB6450066F67A /* SCMainViewController.m */; };
 		18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18364B4717BFB6450066F67A /* SCMainViewController.xib */; };
+		18439FB518912EB10094674E /* SCPlainResizingLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18439FB418912EB10094674E /* SCPlainResizingLayouter.m */; };
+		18439FB7189130210094674E /* colorful_umbrellas.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18439FB6189130210094674E /* colorful_umbrellas.jpg */; };
 		18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B601771840F0F500E3A0DD /* SCOverlayView.m */; };
 		18B6017A1840F10700E3A0DD /* SCOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B601791840F10700E3A0DD /* SCOverlayView.xib */; };
 		18C4D6AB17F0C82A0046FACD /* SCReversedStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D69B17F0C82A0046FACD /* SCReversedStackLayouter.m */; };
@@ -52,6 +54,9 @@
 		18364B4517BFB6450066F67A /* SCMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMainViewController.h; sourceTree = "<group>"; };
 		18364B4617BFB6450066F67A /* SCMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMainViewController.m; sourceTree = "<group>"; };
 		18364B4717BFB6450066F67A /* SCMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCMainViewController.xib; sourceTree = "<group>"; };
+		18439FB318912EB10094674E /* SCPlainResizingLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCPlainResizingLayouter.h; sourceTree = "<group>"; };
+		18439FB418912EB10094674E /* SCPlainResizingLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPlainResizingLayouter.m; sourceTree = "<group>"; };
+		18439FB6189130210094674E /* colorful_umbrellas.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorful_umbrellas.jpg; sourceTree = "<group>"; };
 		18B601761840F0F500E3A0DD /* SCOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCOverlayView.h; sourceTree = "<group>"; };
 		18B601771840F0F500E3A0DD /* SCOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCOverlayView.m; sourceTree = "<group>"; };
 		18B601791840F10700E3A0DD /* SCOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCOverlayView.xib; sourceTree = "<group>"; };
@@ -137,6 +142,8 @@
 				18C4D69D17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m */,
 				18C4D69E17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.h */,
 				18C4D69F17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m */,
+				18439FB318912EB10094674E /* SCPlainResizingLayouter.h */,
+				18439FB418912EB10094674E /* SCPlainResizingLayouter.m */,
 				18C4D69917F0C82A0046FACD /* Reversed */,
 			);
 			path = Layouters;
@@ -207,6 +214,7 @@
 		18FEAAEC17B3ED2F00788EF0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				18439FB6189130210094674E /* colorful_umbrellas.jpg */,
 				18FEAAED17B3ED2F00788EF0 /* SCStackViewController-Info.plist */,
 				18FEAAF117B3ED2F00788EF0 /* main.m */,
 				18FEAAF317B3ED2F00788EF0 /* SCStackViewController-Prefix.pch */,
@@ -266,6 +274,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18439FB7189130210094674E /* colorful_umbrellas.jpg in Resources */,
 				1823A8E517BEAC7500D58582 /* SCMenuViewController.xib in Resources */,
 				18B6017A1840F10700E3A0DD /* SCOverlayView.xib in Resources */,
 				1823A8E917BEAC7500D58582 /* SCRootViewController.xib in Resources */,
@@ -292,6 +301,7 @@
 				1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */,
 				1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */,
 				18C4D6AB17F0C82A0046FACD /* SCReversedStackLayouter.m in Sources */,
+				18439FB518912EB10094674E /* SCPlainResizingLayouter.m in Sources */,
 				1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */,
 				18C4D6AF17F0C82A0046FACD /* SCSlidingStackLayouter.m in Sources */,
 				18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */,
