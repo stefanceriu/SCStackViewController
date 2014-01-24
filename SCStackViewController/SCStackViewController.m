@@ -270,7 +270,7 @@
                 break;
             case SCStackViewControllerPositionLeft:
                 offset.x = (isReversed ? ([self maximumInsetForPosition:position].x - CGRectGetMinX(finalFrame)) : CGRectGetMaxX(finalFrame));
-                offset = [self nextStepOffsetForViewController:viewController position:position velocity:CGPointMake(0.0f, 1.0f) reversed:isReversed contentOffset:offset];
+                offset = [self nextStepOffsetForViewController:viewController position:position velocity:CGPointMake(-1.0f, 0.0f) reversed:isReversed contentOffset:offset];
                 break;
             case SCStackViewControllerPositionBottom:
                 offset.y = (isReversed ? ([self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + CGRectGetHeight(self.view.bounds)) : CGRectGetMinY(finalFrame) - CGRectGetHeight(self.view.bounds));
