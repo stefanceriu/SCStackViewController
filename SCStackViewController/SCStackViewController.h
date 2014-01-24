@@ -53,7 +53,7 @@ typedef enum {
 
 
 /** Stack Delegate */
-@property (nonatomic, weak) id<SCStackViewControllerDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id<SCStackViewControllerDelegate> delegate;
 
 
 /** UIBezierPath inside which the stack's scrollView doesn't respond to touch 

@@ -16,7 +16,7 @@
 
 @interface SCStackViewController () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) UIViewController *rootViewController;
+@property (nonatomic, strong) IBOutlet UIViewController *rootViewController;
 
 @property (nonatomic, strong) MOScrollView *scrollView;
 
@@ -26,8 +26,7 @@
 @property (nonatomic, strong) NSMutableDictionary *layouters;
 @property (nonatomic, strong) NSMutableDictionary *finalFrames;
 @property (nonatomic, strong) NSMutableDictionary *navigationSteps;
-
-@property (nonatomic, strong) NSMutableDictionary *stepsForOffsets;//Caching the offsets for each steps makes calling delegates easier
+@property (nonatomic, strong) NSMutableDictionary *stepsForOffsets;
 
 @end
 
@@ -44,28 +43,38 @@
 {
     if(self = [super init]) {
         self.rootViewController = rootViewController;
-        
-        self.viewControllers = (@{
-                                  @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
-                                  @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
-                                  @(SCStackViewControllerPositionBottom): [NSMutableArray array],
-                                  @(SCStackViewControllerPositionRight) : [NSMutableArray array]
-                                  });
-        
-        self.visibleViewControllers = [NSMutableArray array];
-        
-        self.layouters = [NSMutableDictionary dictionary];
-        self.finalFrames = [NSMutableDictionary dictionary];
-        self.navigationSteps = [NSMutableDictionary dictionary];
-        self.stepsForOffsets = [NSMutableDictionary dictionary];
-        
-        self.animationDuration = 0.25f;
-        self.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        
-        self.navigationContaintType = SCStackViewControllerNavigationContraintTypeForward | SCStackViewControllerNavigationContraintTypeReverse;
+        [self setup];
     }
     
     return self;
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self setup];
+}
+
+- (void)setup
+{
+    self.viewControllers = (@{
+                              @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
+                              @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
+                              @(SCStackViewControllerPositionBottom): [NSMutableArray array],
+                              @(SCStackViewControllerPositionRight) : [NSMutableArray array]
+                              });
+    
+    self.visibleViewControllers = [NSMutableArray array];
+    
+    self.layouters = [NSMutableDictionary dictionary];
+    self.finalFrames = [NSMutableDictionary dictionary];
+    self.navigationSteps = [NSMutableDictionary dictionary];
+    self.stepsForOffsets = [NSMutableDictionary dictionary];
+    
+    self.animationDuration = 0.25f;
+    self.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    self.navigationContaintType = SCStackViewControllerNavigationContraintTypeForward | SCStackViewControllerNavigationContraintTypeReverse;
 }
 
 #pragma mark - Public Methods
@@ -117,7 +126,6 @@
     
     id<SCStackLayouterProtocol> layouter = self.layouters[@(position)];
     
-    [self addChildViewController:viewController];
     viewController.view.frame = [self.finalFrames[@(viewController.hash)] CGRectValue];
     
     BOOL shouldStackAboveRoot = NO;
@@ -125,20 +133,32 @@
         shouldStackAboveRoot = [layouter shouldStackControllersAboveRoot];
     }
     
+    [viewController willMoveToParentViewController:self];
     if(shouldStackAboveRoot) {
         [self.scrollView insertSubview:viewController.view aboveSubview:self.rootViewController.view];
     } else {
         [self.scrollView insertSubview:viewController.view atIndex:0];
     }
     
+    [self addChildViewController:viewController];
     [viewController didMoveToParentViewController:self];
     
     [self updateContentSizeIgnoringNavigationContraints];
     
+    __weak typeof(self) weakSelf = self;
     if(unfold) {
-        [self.scrollView setContentOffset:[self maximumInsetForPosition:position] withTimingFunction:self.timingFunction duration:(animated ? self.animationDuration : 0.0f) completion:completion];
-    } else if(completion) {
-        completion();
+        [self.scrollView setContentOffset:[self maximumInsetForPosition:position] withTimingFunction:self.timingFunction duration:(animated ? self.animationDuration : 0.0f) completion:^{
+            [weakSelf updateBoundsUsingNavigationContraints];
+            if(completion) {
+                completion();
+            }
+        }];
+    } else {
+     
+        [self updateBoundsUsingNavigationContraints];
+        if(completion) {
+            completion();
+        }
     }
 }
 
@@ -173,6 +193,8 @@
             [lastViewController endAppearanceTransition];
             [self.visibleViewControllers removeObject:lastViewController];
         }
+        
+        [self updateBoundsUsingNavigationContraints];
         
         if(completion) {
             completion();
@@ -304,12 +326,31 @@
     
     [self setPagingEnabled:YES];
     
-    [self addChildViewController:self.rootViewController];
+    
     [self.rootViewController.view setFrame:self.view.bounds];
+    [self.rootViewController willMoveToParentViewController:self];
     [self.scrollView addSubview:self.rootViewController.view];
+    [self addChildViewController:self.rootViewController];
     [self.rootViewController didMoveToParentViewController:self];
     
     [self.view addSubview:self.scrollView];
+}
+
+- (void)adjustForNewInterfaceOrientation
+{
+    for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
+        [self updateFinalFramesForPosition:position];
+    }
+    
+    [self updateContentSizeIgnoringNavigationContraints];
+    [self updateBoundsUsingNavigationContraints];
+    
+    [self scrollViewDidScroll:self.scrollView];
+    
+    CGPoint offset = self.scrollView.contentOffset;
+    [self adjustTargetContentOffset:&offset withVelocity:CGPointZero];
+    
+    [self.scrollView setContentOffset:offset];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -322,8 +363,8 @@
 {
     [super viewDidAppear:animated];
     [self.rootViewController endAppearanceTransition];
-
-    [self updateBoundsUsingNavigationContraints];
+    
+    [self adjustForNewInterfaceOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -929,21 +970,9 @@
 
 #pragma mark - Rotation Handling
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
-    [self.scrollView setContentOffset:CGPointZero];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
-        [self updateFinalFramesForPosition:position];
-    }
-    
-    [UIView animateWithDuration:self.animationDuration animations:^{
-        [self scrollViewDidScroll:self.scrollView];
-        [self updateContentSizeIgnoringNavigationContraints];
-    }];
+    [self adjustForNewInterfaceOrientation];
 }
 
 #pragma mark - Properties and fowarding

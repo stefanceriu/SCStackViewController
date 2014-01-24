@@ -20,7 +20,6 @@
 #import "SCPlainResizingLayouter.h"
 
 #import "SCMenuViewController.h"
-#import "UIViewController+Shadows.h"
 
 #import "SCOverlayView.h"
 
@@ -28,8 +27,10 @@
 
 @interface SCRootViewController () <SCStackViewControllerDelegate, SCOverlayViewDelegate, SCMenuViewControllerDelegate, SCMainViewControllerDelegate>
 
-@property (nonatomic, strong) SCStackViewController *stackViewController;
+@property (nonatomic, strong) IBOutlet SCStackViewController *stackViewController;
 @property (nonatomic, strong) SCOverlayView *overlayView;
+
+@property (nonatomic, strong) IBOutlet SCMainViewController *mainViewController;
 
 @end
 
@@ -39,35 +40,41 @@
 {
     [super viewDidLoad];
     
-    SCMainViewController *mainViewController = [[SCMainViewController alloc] init];
-    [mainViewController setDelegate:self];
-    [mainViewController.view castShadowWithPosition:SCShadowEdgeAll];
+    // Set from nib
+    //SCMainViewController *mainViewController = [[SCMainViewController alloc] init];
+    //[mainViewController setDelegate:self];
     
     self.overlayView = [SCOverlayView overlayView];
     [self.overlayView setDelegate:self];
     [self.overlayView setAlpha:0.0f];
-    [mainViewController.view addSubview:self.overlayView];
+    [self.mainViewController.view addSubview:self.overlayView];
     
-    self.stackViewController = [[SCStackViewController alloc] initWithRootViewController:mainViewController];
+    // Set from nib
+    //self.stackViewController = [[SCStackViewController alloc] initWithRootViewController:self.mainViewController];
+    //[self.stackViewController setDelegate:self];
+    
+    [self.stackViewController willMoveToParentViewController:self];
+    
+    [self.view addSubview:self.stackViewController.view];
     [self.stackViewController.view setFrame:self.view.bounds];
     
-    [self.stackViewController setShowsScrollIndicators:NO];
-    [self.stackViewController setDelegate:self];
-    
     [self addChildViewController:self.stackViewController];
-    [self.view addSubview:self.stackViewController.view];
     [self.stackViewController didMoveToParentViewController:self];
     
-    //[self.stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]];
     
+    // Optional properties
+    [self.stackViewController setShowsScrollIndicators:NO];
+    //[self.stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]];
     //[self.stackViewController setMinimumNumberOfTouches:2];
     //[self.stackViewController setMaximumNumberOfTouches:2];
-    
     //[self.stackViewController setContinuousNavigationEnabled:YES];
-    
     //[self.stackViewController setNavigationContaintType:SCStackViewControllerNavigationContraintTypeForward | SCStackViewControllerNavigationContraintTypeReverse];
-    
-    [self mainViewController:mainViewController didSelectLayouterType:SCStackLayouterTypeParallax];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self mainViewController:self.mainViewController didSelectLayouterType:SCStackLayouterTypePlain];
 }
 
 #pragma mark - SCMainViewControllerDelegate
@@ -88,8 +95,8 @@
                             });
     });
     
-    SCStackViewControllerPosition firstPosition = SCStackViewControllerPositionLeft;//SCStackViewControllerPositionTop;
-    SCStackViewControllerPosition secondPosition = SCStackViewControllerPositionRight;//SCStackViewControllerPositionBottom;
+    SCStackViewControllerPosition firstPosition = SCStackViewControllerPositionTop;
+    SCStackViewControllerPosition secondPosition = SCStackViewControllerPositionBottom;
     
     id<SCStackLayouterProtocol> aboveRootLayouter = [[typeToLayouter[@(type)] alloc] init];
     [aboveRootLayouter setShouldStackControllersAboveRoot:YES];
@@ -99,7 +106,6 @@
     [self.stackViewController registerLayouter:belowRootLayouter forPosition:secondPosition];
     
     SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:firstPosition];
-    [leftViewController.view castShadowWithPosition:SCShadowEdgeTop];
     [leftViewController setDelegate:self];
     
     
@@ -119,7 +125,6 @@
     
     
     SCMenuViewController *rightViewController = [[SCMenuViewController alloc] initWithPosition:secondPosition];
-    [rightViewController.view castShadowWithPosition:SCShadowEdgeBottom];
     [rightViewController setDelegate:self];
     
     [self.stackViewController popToRootViewControllerFromPosition:secondPosition
@@ -141,8 +146,7 @@
 
 - (void)stackViewController:(SCStackViewController *)stackViewController didNavigateToOffset:(CGPoint)offset
 {
-    //[self.overlayView setAlpha:ABS(offset.x/300.0f)];
-    [self.stackViewController.rootViewController.view castShadowWithPosition:SCShadowEdgeAll];
+    [self.overlayView setAlpha:ABS(offset.x/300.0f)];
     
     // One shouldn't rely on this code, it's hardly accurate.
     for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
@@ -196,19 +200,6 @@
 {
     SCMenuViewController *newMenuViewController = [[SCMenuViewController alloc] initWithPosition:menuViewController.position];
     [newMenuViewController setDelegate:self];
-    
-    static NSDictionary *positionToShadowEdge;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        positionToShadowEdge = (@{
-                                  @(SCStackViewControllerPositionTop)    : @(SCShadowEdgeTop),
-                                  @(SCStackViewControllerPositionLeft)   : @(SCShadowEdgeLeft),
-                                  @(SCStackViewControllerPositionBottom) : @(SCShadowEdgeBottom),
-                                  @(SCStackViewControllerPositionRight)  : @(SCShadowEdgeRight)
-                                  });
-    });
-    
-    [newMenuViewController.view castShadowWithPosition:[positionToShadowEdge[@(menuViewController.position)] intValue]];
     
     [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.5f]]
                                     forViewController:newMenuViewController];

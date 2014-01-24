@@ -52,6 +52,23 @@
                           contentOffset:(CGPoint)contentOffset
                       inStackController:(SCStackViewController *)stackController
 {
+    switch (position) {
+        case SCStackViewControllerPositionTop:
+            finalFrame.size.width = CGRectGetWidth(stackController.view.bounds);
+            break;
+        case SCStackViewControllerPositionLeft:
+            finalFrame.size.height = CGRectGetHeight(stackController.view.bounds);
+            break;
+        case SCStackViewControllerPositionBottom:
+            finalFrame.size.width = CGRectGetWidth(stackController.view.bounds);
+            break;
+        case SCStackViewControllerPositionRight:
+            finalFrame.size.height = CGRectGetHeight(stackController.view.bounds);
+            break;
+        default:
+            break;
+    }
+    
     return finalFrame;
 }
 

@@ -6,6 +6,15 @@
 //  Copyright (c) 2014 Stefan Ceriu. All rights reserved.
 //
 
+/** A stack navigation step defines a relative position in a view 
+ * controller at which the scrolling should stop when reached.
+ * I works as both a pagination point and a navigation contraint (the 
+ * scroll view bounces on it)
+ *
+ * It is initialized with a percentage which will be transform into an
+ * actual offset based on the view controller's frame.
+ */
+
 @interface SCStackNavigationStep : NSObject
 
 @property (nonatomic, readonly) CGFloat percentage;

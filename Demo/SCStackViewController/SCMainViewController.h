@@ -21,7 +21,7 @@ typedef enum {
 
 @interface SCMainViewController : UIViewController
 
-@property (nonatomic, weak) id<SCMainViewControllerDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id<SCMainViewControllerDelegate> delegate;
 
 @end
 

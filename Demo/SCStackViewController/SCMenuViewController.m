@@ -9,6 +9,8 @@
 #import "SCMenuViewController.h"
 #import "UIColor+RandomColors.h"
 
+#import "UIViewController+Shadows.h"
+
 @interface SCMenuViewController ()
 
 @property (nonatomic, assign) SCStackViewControllerPosition position;
@@ -24,6 +26,17 @@
 {
     if(self = [super init]) {
         self.position = position;
+        
+        static NSDictionary *positionToShadowEdge;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            positionToShadowEdge = (@{
+                                      @(SCStackViewControllerPositionTop)    : @(SCShadowEdgeTop),
+                                      @(SCStackViewControllerPositionLeft)   : @(SCShadowEdgeLeft),
+                                      @(SCStackViewControllerPositionBottom) : @(SCShadowEdgeBottom),
+                                      @(SCStackViewControllerPositionRight)  : @(SCShadowEdgeRight)
+                                      });
+        });
     }
     
     return self;
@@ -76,7 +89,9 @@
 
 - (IBAction)onScrollToMeButtonTapped:(id)sender
 {
-    [self.stackViewController navigateToViewController:self animated:YES completion:nil];
+    UIViewController *x = [[self.stackViewController viewControllersForPosition:SCStackViewControllerPositionBottom] lastObject];
+    
+    [self.stackViewController navigateToViewController:x animated:YES completion:nil];
 }
 
 @end
