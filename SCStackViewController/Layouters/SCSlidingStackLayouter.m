@@ -19,6 +19,23 @@
                       inStackController:(SCStackViewController *)stackController
 {
     CGRect frame = finalFrame;
+    
+    switch (position) {
+        case SCStackViewControllerPositionTop:
+            frame.size.width = CGRectGetWidth(stackController.view.bounds);
+            break;
+        case SCStackViewControllerPositionLeft:
+            frame.size.height = CGRectGetHeight(stackController.view.bounds);
+            break;
+        case SCStackViewControllerPositionBottom:
+            frame.size.width = CGRectGetWidth(stackController.view.bounds);
+            break;
+        case SCStackViewControllerPositionRight:
+            frame.size.height = CGRectGetHeight(stackController.view.bounds);
+            break;
+        default:
+            break;
+    }
  
     if(self.shouldStackControllersAboveRoot && index == 0) {
         return frame;

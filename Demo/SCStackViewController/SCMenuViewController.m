@@ -89,9 +89,7 @@
 
 - (IBAction)onScrollToMeButtonTapped:(id)sender
 {
-    UIViewController *x = [[self.stackViewController viewControllersForPosition:SCStackViewControllerPositionBottom] lastObject];
-    
-    [self.stackViewController navigateToViewController:x animated:YES completion:nil];
+    [self.stackViewController navigateToViewController:self animated:YES completion:nil];
 }
 
 @end
