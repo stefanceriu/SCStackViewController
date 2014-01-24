@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1823A8E117BEAC7500D58582 /* UIColor+RandomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D017BEAC7500D58582 /* UIColor+RandomColors.m */; };
-		1823A8E217BEAC7500D58582 /* UIViewController+Shadows.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D217BEAC7500D58582 /* UIViewController+Shadows.m */; };
+		1823A8E217BEAC7500D58582 /* UIView+Shadows.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D217BEAC7500D58582 /* UIView+Shadows.m */; };
 		1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D417BEAC7500D58582 /* SCAppDelegate.m */; };
 		1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D617BEAC7500D58582 /* SCMenuViewController.m */; };
 		1823A8E517BEAC7500D58582 /* SCMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */; };
@@ -39,8 +39,8 @@
 /* Begin PBXFileReference section */
 		1823A8CF17BEAC7500D58582 /* UIColor+RandomColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RandomColors.h"; sourceTree = "<group>"; };
 		1823A8D017BEAC7500D58582 /* UIColor+RandomColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RandomColors.m"; sourceTree = "<group>"; };
-		1823A8D117BEAC7500D58582 /* UIViewController+Shadows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Shadows.h"; sourceTree = "<group>"; };
-		1823A8D217BEAC7500D58582 /* UIViewController+Shadows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Shadows.m"; sourceTree = "<group>"; };
+		1823A8D117BEAC7500D58582 /* UIView+Shadows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Shadows.h"; sourceTree = "<group>"; };
+		1823A8D217BEAC7500D58582 /* UIView+Shadows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shadows.m"; sourceTree = "<group>"; };
 		1823A8D317BEAC7500D58582 /* SCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAppDelegate.h; sourceTree = "<group>"; };
 		1823A8D417BEAC7500D58582 /* SCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCAppDelegate.m; sourceTree = "<group>"; };
 		1823A8D517BEAC7500D58582 /* SCMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMenuViewController.h; sourceTree = "<group>"; };
@@ -107,8 +107,8 @@
 			children = (
 				1823A8CF17BEAC7500D58582 /* UIColor+RandomColors.h */,
 				1823A8D017BEAC7500D58582 /* UIColor+RandomColors.m */,
-				1823A8D117BEAC7500D58582 /* UIViewController+Shadows.h */,
-				1823A8D217BEAC7500D58582 /* UIViewController+Shadows.m */,
+				1823A8D117BEAC7500D58582 /* UIView+Shadows.h */,
+				1823A8D217BEAC7500D58582 /* UIView+Shadows.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -296,7 +296,7 @@
 				18C4D6AD17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m in Sources */,
 				1830BFDE1886C060004ED34D /* SCStackNavigationStep.m in Sources */,
 				1823A8E117BEAC7500D58582 /* UIColor+RandomColors.m in Sources */,
-				1823A8E217BEAC7500D58582 /* UIViewController+Shadows.m in Sources */,
+				1823A8E217BEAC7500D58582 /* UIView+Shadows.m in Sources */,
 				18C4D6B117F0C82A0046FACD /* SCStackViewController.m in Sources */,
 				1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */,
 				1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */,

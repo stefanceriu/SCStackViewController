@@ -52,7 +52,7 @@
         case SCStackViewControllerPositionLeft: {
             CGFloat ratio = (contentOffset.x - CGRectGetWidth(finalFrame) / 2) / (CGRectGetMinX(finalFrame) - CGRectGetWidth(finalFrame) / 2);
             frame.origin.x = CGRectGetMaxX(finalFrame) - CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
-            finalFrame.size.height = CGRectGetHeight(stackController.view.bounds);
+            frame.size.height = CGRectGetHeight(stackController.view.bounds);
             break;
         }
         case SCStackViewControllerPositionBottom: {
@@ -64,7 +64,7 @@
         case SCStackViewControllerPositionRight: {
             CGFloat ratio = (contentOffset.x + CGRectGetWidth(finalFrame) / 2) / ((CGRectGetMaxX(finalFrame) - CGRectGetWidth(stackController.view.bounds)) + CGRectGetWidth(finalFrame) / 2);
             frame.origin.x = (CGRectGetMinX(finalFrame) - CGRectGetWidth(finalFrame)) + CGRectGetWidth(finalFrame) * MAX(0.0f, MIN(1.0f, ratio));
-            finalFrame.size.height = CGRectGetHeight(stackController.view.bounds);
+            frame.size.height = CGRectGetHeight(stackController.view.bounds);
             break;
         }
         default:

@@ -1,12 +1,12 @@
 //
-//  UIViewController+Shadows.m
+//  UIView+Shadows.m
 //  SCStackViewController
 //
 //  Created by Stefan Ceriu on 16/08/2013.
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
-#import "UIViewController+Shadows.h"
+#import "UIView+Shadows.h"
 #import <QuartzCore/QuartzCore.h>
 
 static const CGFloat shadowSize = 10;

@@ -46,8 +46,8 @@
     });
     
     [cell.textLabel setText:typeToString[@(indexPath.row)]];
-    
-    [cell setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.15f]];
+    [cell.textLabel setFont:[UIFont fontWithName:@"Menlo" size:18.0f]];
+    [cell setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.20f]];
     
     return cell;
 }

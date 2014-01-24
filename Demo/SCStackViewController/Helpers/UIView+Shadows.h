@@ -1,5 +1,5 @@
 //
-//  UIViewController+Shadows.h
+//  UIView+Shadows.h
 //  SCStackViewController
 //
 //  Created by Stefan Ceriu on 16/08/2013.

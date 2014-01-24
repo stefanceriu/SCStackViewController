@@ -347,10 +347,11 @@
     
     [self scrollViewDidScroll:self.scrollView];
     
-    CGPoint offset = self.scrollView.contentOffset;
-    [self adjustTargetContentOffset:&offset withVelocity:CGPointZero];
+    //CGPoint offset = self.scrollView.contentOffset;
+    //[self adjustTargetContentOffset:&offset withVelocity:CGPointZero];
+    //[self.scrollView setContentOffset:offset animated:YES];
     
-    [self.scrollView setContentOffset:offset];
+    [self.scrollView setContentOffset:CGPointZero animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated

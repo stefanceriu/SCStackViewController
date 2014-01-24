@@ -28,9 +28,8 @@
 @interface SCRootViewController () <SCStackViewControllerDelegate, SCOverlayViewDelegate, SCMenuViewControllerDelegate, SCMainViewControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet SCStackViewController *stackViewController;
-@property (nonatomic, strong) SCOverlayView *overlayView;
-
 @property (nonatomic, strong) IBOutlet SCMainViewController *mainViewController;
+@property (nonatomic, strong) SCOverlayView *overlayView;
 
 @end
 
@@ -48,6 +47,7 @@
     [self.overlayView setDelegate:self];
     [self.overlayView setAlpha:0.0f];
     [self.mainViewController.view addSubview:self.overlayView];
+    [self.overlayView setFrame:self.mainViewController.view.bounds];
     
     // Set from nib
     //self.stackViewController = [[SCStackViewController alloc] initWithRootViewController:self.mainViewController];
@@ -74,7 +74,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self mainViewController:self.mainViewController didSelectLayouterType:SCStackLayouterTypePlain];
+    [self mainViewController:self.mainViewController didSelectLayouterType:SCStackLayouterTypeParallax];
 }
 
 #pragma mark - SCMainViewControllerDelegate
@@ -95,8 +95,8 @@
                             });
     });
     
-    SCStackViewControllerPosition firstPosition = SCStackViewControllerPositionTop;
-    SCStackViewControllerPosition secondPosition = SCStackViewControllerPositionBottom;
+    SCStackViewControllerPosition firstPosition = SCStackViewControllerPositionTop;//SCStackViewControllerPositionLeft;
+    SCStackViewControllerPosition secondPosition = SCStackViewControllerPositionBottom;//SCStackViewControllerPositionRight;
     
     id<SCStackLayouterProtocol> aboveRootLayouter = [[typeToLayouter[@(type)] alloc] init];
     [aboveRootLayouter setShouldStackControllersAboveRoot:YES];
@@ -142,11 +142,42 @@
                                                        }];
 }
 
+#pragma mark - SCOverlayViewDelegate
+
+- (void)overlayViewDidReceiveTap:(SCOverlayView *)overlayView
+{
+    [self.stackViewController navigateToViewController:self.stackViewController.rootViewController animated:YES completion:nil];
+}
+
+#pragma mark - SCMenuViewControllerDelegate
+
+- (void)menuViewControllerDidRequestPush:(SCMenuViewController *)menuViewController
+{
+    SCMenuViewController *newMenuViewController = [[SCMenuViewController alloc] initWithPosition:menuViewController.position];
+    [newMenuViewController setDelegate:self];
+    
+    [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.5f]]
+                                    forViewController:newMenuViewController];
+    
+    [self.stackViewController pushViewController:newMenuViewController
+                                      atPosition:menuViewController.position
+                                          unfold:YES
+                                        animated:YES
+                                      completion:nil];
+}
+
+- (void)menuViewControllerDidRequestPop:(SCMenuViewController *)menuViewController
+{
+    [self.stackViewController popViewControllerAtPosition:menuViewController.position
+                                                 animated:YES
+                                               completion:nil];
+}
+
 #pragma mark - SCStackViewControllerDelegate
 
 - (void)stackViewController:(SCStackViewController *)stackViewController didNavigateToOffset:(CGPoint)offset
 {
-    [self.overlayView setAlpha:ABS(offset.x/300.0f)];
+    [self.overlayView setAlpha:ABS((offset.x?:offset.y)/300.0f)];
     
     // One shouldn't rely on this code, it's hardly accurate.
     for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
@@ -187,36 +218,7 @@
     }
 }
 
-#pragma mark - SCOverlayViewDelegate
-
-- (void)overlayViewDidReceiveTap:(SCOverlayView *)overlayView
-{
-    [self.stackViewController navigateToViewController:self.stackViewController.rootViewController animated:YES completion:nil];
-}
-
-#pragma mark - SCMenuViewControllerDelegate
-
-- (void)menuViewControllerDidRequestPush:(SCMenuViewController *)menuViewController
-{
-    SCMenuViewController *newMenuViewController = [[SCMenuViewController alloc] initWithPosition:menuViewController.position];
-    [newMenuViewController setDelegate:self];
-    
-    [self.stackViewController registerNavigationSteps:@[[SCStackNavigationStep navigationStepWithPercentage:0.5f]]
-                                    forViewController:newMenuViewController];
-    
-    [self.stackViewController pushViewController:newMenuViewController
-                                      atPosition:menuViewController.position
-                                          unfold:YES
-                                        animated:YES
-                                      completion:nil];
-}
-
-- (void)menuViewControllerDidRequestPop:(SCMenuViewController *)menuViewController
-{
-    [self.stackViewController popViewControllerAtPosition:menuViewController.position
-                                                 animated:YES
-                                               completion:nil];
-}
+#pragma mark - Rotation Handling
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {

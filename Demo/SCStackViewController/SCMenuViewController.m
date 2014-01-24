@@ -9,7 +9,7 @@
 #import "SCMenuViewController.h"
 #import "UIColor+RandomColors.h"
 
-#import "UIViewController+Shadows.h"
+#import "UIView+Shadows.h"
 
 @interface SCMenuViewController ()
 
@@ -26,17 +26,6 @@
 {
     if(self = [super init]) {
         self.position = position;
-        
-        static NSDictionary *positionToShadowEdge;
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            positionToShadowEdge = (@{
-                                      @(SCStackViewControllerPositionTop)    : @(SCShadowEdgeTop),
-                                      @(SCStackViewControllerPositionLeft)   : @(SCShadowEdgeLeft),
-                                      @(SCStackViewControllerPositionBottom) : @(SCShadowEdgeBottom),
-                                      @(SCStackViewControllerPositionRight)  : @(SCShadowEdgeRight)
-                                      });
-        });
     }
     
     return self;
@@ -46,6 +35,7 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor randomColor]];
+    [self updateShadow];
     
     switch (self.position) {
         case SCStackViewControllerPositionTop:
@@ -66,6 +56,28 @@
             break;
     }
     
+}
+
+- (void)updateShadow
+{
+    static NSDictionary *positionToShadowEdge;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        positionToShadowEdge = (@{
+                                  @(SCStackViewControllerPositionTop)    : @(SCShadowEdgeTop),
+                                  @(SCStackViewControllerPositionLeft)   : @(SCShadowEdgeLeft),
+                                  @(SCStackViewControllerPositionBottom) : @(SCShadowEdgeBottom),
+                                  @(SCStackViewControllerPositionRight)  : @(SCShadowEdgeRight)
+                                  });
+    });
+    
+    [self.view castShadowWithPosition:[positionToShadowEdge[@(self.position)] intValue]];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    [self updateShadow];
 }
 
 - (void)setVisiblePercentage:(CGFloat)percentage
