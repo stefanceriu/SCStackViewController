@@ -11,6 +11,36 @@ SCStackViewController is a container view controller which allows you to stack o
 7. Customizable interaction area
 8. Completion blocks for everything
 
+### Change Log v3.0.0
+
+* Added a new feature called navigation steps whic represent a relative position in a view controller at which the stack will paginate/stop while scrolling. Useful for defining multiple steps when folding/unfolding a certain view controller. 
+
+- a navigation steps is created using the percentage at which the stack should bounce/paginate (ranges from 0.0 to 1.0) and is assigned on a per viewController basis.
+```
+SCStackNavigationStep *step = [SCStackNavigationStep navigationStepWithPercentage:0.5f];
+[self.stackViewController registerNavigationSteps:@[step] forViewController:leftViewController];
+```
+
+- the client can also navigate to any navigation step, registered or not, using:
+```
+-(void)navigateToStep:(SCStackNavigationStep *)step
+       inViewController:(UIViewController *)viewController
+               animated:(BOOL)animated
+             completion:(void(^)())completion;
+```    
+
+
+* Added option for specifying if the navigation steps are respected when folding, unfolding or both
+```
+[self.stackViewController setNavigationContaintType:SCStackViewControllerNavigationContraintTypeForward | SCStackViewControllerNavigationContraintTypeReverse];
+```
+
+* Interface builder support (used in the demo project)
+* Better rotation handling
+* Added new layouter which resizes the root view controller instead of offsetting it
+
+![ResizingStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/v3.0.0/Resizing.gif)
+
 ### Change Log v2.1.0
 
 * Added ability to stack view controllers either on top or below the root view controller
@@ -77,35 +107,30 @@ Just something I was playing with.. :)
 ## Usage
 
 - Import the stack into your project
-
 ```
 #import "SCStackViewController.h"
 ```
 
 - Create a new instance
-
 ```
 stackViewController = [[SCStackViewController alloc] initWithRootViewController:rootViewController];
 ```
  
 - Set a touch refusal area (optional)
-
 ```
 [stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]]
 ```
  
 - Register layouters
-
 ```
 id<SCStackLayouterProtocol> layouter = [[SCParallaxStackLayouter alloc] init];
 [stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionLeft];
 ```
 
 - Push view controllers
-
 ```
 [self.stackViewController pushViewController:leftViewController 
-								  atPosition:SCStackViewControllerPositionLeft 
+        						  atPosition:SCStackViewControllerPositionLeft 
 								  	  unfold:NO 
 								  	animated:NO 
 								  completion:nil];
