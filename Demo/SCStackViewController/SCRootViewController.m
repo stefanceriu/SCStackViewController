@@ -17,7 +17,7 @@
 #import "SCGoogleMapsStackLayouter.h"
 #import "SCMerryGoRoundStackLayouter.h"
 #import "SCReversedStackLayouter.h"
-#import "SCPlainResizingLayouter.h"
+#import "SCResizingStackLayouter.h"
 
 #import "SCMenuViewController.h"
 
@@ -91,7 +91,7 @@
                             @(SCStackLayouterTypeGoogleMaps)         : [SCGoogleMapsStackLayouter class],
                             @(SCStackLayouterTypeMerryGoRound)       : [SCMerryGoRoundStackLayouter class],
                             @(SCStackLayouterTypeReversed)           : [SCReversedStackLayouter class],
-                            @(SCStacklayouterTypePlainResizing)      : [SCPlainResizingLayouter class]
+                            @(SCStacklayouterTypePlainResizing)      : [SCResizingStackLayouter class]
                             });
     });
     

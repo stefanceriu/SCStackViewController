@@ -8,6 +8,6 @@
 
 #import "SCStackLayouter.h"
 
-@interface SCPlainResizingLayouter : SCStackLayouter
+@interface SCResizingStackLayouter : SCStackLayouter
 
 @end

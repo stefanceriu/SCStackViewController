@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Stefan Ceriu. All rights reserved.
 //
 
-#import "SCPlainResizingLayouter.h"
+#import "SCResizingStackLayouter.h"
 
-@implementation SCPlainResizingLayouter
+@implementation SCResizingStackLayouter
 
 - (id)init
 {

@@ -17,7 +17,7 @@
 		1830BFDE1886C060004ED34D /* SCStackNavigationStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830BFDD1886C060004ED34D /* SCStackNavigationStep.m */; };
 		18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18364B4617BFB6450066F67A /* SCMainViewController.m */; };
 		18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18364B4717BFB6450066F67A /* SCMainViewController.xib */; };
-		18439FB518912EB10094674E /* SCPlainResizingLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18439FB418912EB10094674E /* SCPlainResizingLayouter.m */; };
+		18439FB518912EB10094674E /* SCResizingStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18439FB418912EB10094674E /* SCResizingStackLayouter.m */; };
 		18439FB7189130210094674E /* colorful_umbrellas.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18439FB6189130210094674E /* colorful_umbrellas.jpg */; };
 		18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B601771840F0F500E3A0DD /* SCOverlayView.m */; };
 		18B6017A1840F10700E3A0DD /* SCOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B601791840F10700E3A0DD /* SCOverlayView.xib */; };
@@ -30,6 +30,7 @@
 		18C4D6B117F0C82A0046FACD /* SCStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A817F0C82A0046FACD /* SCStackViewController.m */; };
 		18C8B23317BFC443000FAEE5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C8B23217BFC443000FAEE5 /* QuartzCore.framework */; };
 		18DBB2D317F5B2CB0006CBFB /* MOScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */; };
+		18E967591896B050002F9B2D /* SCReversedResizingStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E967581896B050002F9B2D /* SCReversedResizingStackLayouter.m */; };
 		18FEAAE617B3ED2F00788EF0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE517B3ED2F00788EF0 /* UIKit.framework */; };
 		18FEAAE817B3ED2F00788EF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE717B3ED2F00788EF0 /* Foundation.framework */; };
 		18FEAAEA17B3ED2F00788EF0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */; };
@@ -54,8 +55,8 @@
 		18364B4517BFB6450066F67A /* SCMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMainViewController.h; sourceTree = "<group>"; };
 		18364B4617BFB6450066F67A /* SCMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMainViewController.m; sourceTree = "<group>"; };
 		18364B4717BFB6450066F67A /* SCMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCMainViewController.xib; sourceTree = "<group>"; };
-		18439FB318912EB10094674E /* SCPlainResizingLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCPlainResizingLayouter.h; sourceTree = "<group>"; };
-		18439FB418912EB10094674E /* SCPlainResizingLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPlainResizingLayouter.m; sourceTree = "<group>"; };
+		18439FB318912EB10094674E /* SCResizingStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCResizingStackLayouter.h; sourceTree = "<group>"; };
+		18439FB418912EB10094674E /* SCResizingStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCResizingStackLayouter.m; sourceTree = "<group>"; };
 		18439FB6189130210094674E /* colorful_umbrellas.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorful_umbrellas.jpg; sourceTree = "<group>"; };
 		18B601761840F0F500E3A0DD /* SCOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCOverlayView.h; sourceTree = "<group>"; };
 		18B601771840F0F500E3A0DD /* SCOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCOverlayView.m; sourceTree = "<group>"; };
@@ -78,6 +79,8 @@
 		18C8B23217BFC443000FAEE5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		18DBB2D117F5B2CB0006CBFB /* MOScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOScrollView.h; sourceTree = "<group>"; };
 		18DBB2D217F5B2CB0006CBFB /* MOScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOScrollView.m; sourceTree = "<group>"; };
+		18E967571896B050002F9B2D /* SCReversedResizingStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCReversedResizingStackLayouter.h; sourceTree = "<group>"; };
+		18E967581896B050002F9B2D /* SCReversedResizingStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCReversedResizingStackLayouter.m; sourceTree = "<group>"; };
 		18FEAAE217B3ED2F00788EF0 /* SCStackViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SCStackViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18FEAAE517B3ED2F00788EF0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		18FEAAE717B3ED2F00788EF0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -138,12 +141,12 @@
 				18C4D6A317F0C82A0046FACD /* SCSlidingStackLayouter.m */,
 				18C4D6A017F0C82A0046FACD /* SCParallaxStackLayouter.h */,
 				18C4D6A117F0C82A0046FACD /* SCParallaxStackLayouter.m */,
+				18439FB318912EB10094674E /* SCResizingStackLayouter.h */,
+				18439FB418912EB10094674E /* SCResizingStackLayouter.m */,
 				18C4D69C17F0C82A0046FACD /* SCGoogleMapsStackLayouter.h */,
 				18C4D69D17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m */,
 				18C4D69E17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.h */,
 				18C4D69F17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m */,
-				18439FB318912EB10094674E /* SCPlainResizingLayouter.h */,
-				18439FB418912EB10094674E /* SCPlainResizingLayouter.m */,
 				18C4D69917F0C82A0046FACD /* Reversed */,
 			);
 			path = Layouters;
@@ -152,6 +155,8 @@
 		18C4D69917F0C82A0046FACD /* Reversed */ = {
 			isa = PBXGroup;
 			children = (
+				18E967571896B050002F9B2D /* SCReversedResizingStackLayouter.h */,
+				18E967581896B050002F9B2D /* SCReversedResizingStackLayouter.m */,
 				18C4D69A17F0C82A0046FACD /* SCReversedStackLayouter.h */,
 				18C4D69B17F0C82A0046FACD /* SCReversedStackLayouter.m */,
 			);
@@ -301,11 +306,12 @@
 				1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */,
 				1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */,
 				18C4D6AB17F0C82A0046FACD /* SCReversedStackLayouter.m in Sources */,
-				18439FB518912EB10094674E /* SCPlainResizingLayouter.m in Sources */,
+				18439FB518912EB10094674E /* SCResizingStackLayouter.m in Sources */,
 				1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */,
 				18C4D6AF17F0C82A0046FACD /* SCSlidingStackLayouter.m in Sources */,
 				18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */,
 				18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */,
+				18E967591896B050002F9B2D /* SCReversedResizingStackLayouter.m in Sources */,
 				18DBB2D317F5B2CB0006CBFB /* MOScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
