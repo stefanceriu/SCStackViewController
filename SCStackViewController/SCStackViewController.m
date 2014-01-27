@@ -418,9 +418,9 @@
     }
     
     [self.scrollView setDelegate:nil];
-    [self.scrollView setContentInset:insets];
     
     CGPoint offset = self.scrollView.contentOffset;
+    [self.scrollView setContentInset:insets];
     if((self.scrollView.contentInset.left <= insets.left) || (self.scrollView.contentInset.top <= insets.top)) {
         [self.scrollView setContentOffset:offset];
     }
