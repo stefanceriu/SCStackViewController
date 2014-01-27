@@ -336,7 +336,7 @@
     [self.view addSubview:self.scrollView];
 }
 
-- (void)adjustForNewInterfaceOrientation
+- (void)viewWillLayoutSubviews
 {
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         [self updateFinalFramesForPosition:position];
@@ -346,12 +346,6 @@
     [self updateBoundsUsingNavigationContraints];
     
     [self scrollViewDidScroll:self.scrollView];
-    
-    //CGPoint offset = self.scrollView.contentOffset;
-    //[self adjustTargetContentOffset:&offset withVelocity:CGPointZero];
-    //[self.scrollView setContentOffset:offset animated:YES];
-    
-    [self.scrollView setContentOffset:CGPointZero animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -364,8 +358,6 @@
 {
     [super viewDidAppear:animated];
     [self.rootViewController endAppearanceTransition];
-    
-    [self adjustForNewInterfaceOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -973,7 +965,7 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
-    [self adjustForNewInterfaceOrientation];
+    [self.scrollView setContentOffset:CGPointZero animated:YES];
 }
 
 #pragma mark - Properties and fowarding
