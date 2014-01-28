@@ -15,12 +15,24 @@
  * actual offset based on the view controller's frame.
  */
 
+typedef enum {
+    SCStackNavigationStepBlockTypeNone,
+    SCStackNavigationStepBlockTypeForward,
+    SCStackNavigationStepBlockTypeReverse
+} SCStackNavigationStepBlockType;
+
 @interface SCStackNavigationStep : NSObject
 
 @property (nonatomic, readonly) CGFloat percentage;
 
+@property (nonatomic, readonly) SCStackNavigationStepBlockType blockType;
+
 + (instancetype)navigationStepWithPercentage:(CGFloat)percentage;
 
++ (instancetype)navigationStepWithPercentage:(CGFloat)percentage blockType:(SCStackNavigationStepBlockType)blockType;
+
 - (instancetype)initWithPercentage:(CGFloat)percentage;
+
+- (instancetype)initWithPercentage:(CGFloat)percentage blockType:(SCStackNavigationStepBlockType)blockType;
 
 @end

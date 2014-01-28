@@ -21,10 +21,25 @@
     return [[SCStackNavigationStep alloc] initWithPercentage:percentage];
 }
 
++ (instancetype)navigationStepWithPercentage:(CGFloat)percentage blockType:(SCStackNavigationStepBlockType)blockType
+{
+    return [[SCStackNavigationStep alloc] initWithPercentage:percentage blockType:blockType];
+}
+
 - (instancetype)initWithPercentage:(CGFloat)percentage
+{
+    if(self = [self initWithPercentage:percentage blockType:SCStackNavigationStepBlockTypeNone]) {
+
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithPercentage:(CGFloat)percentage blockType:(SCStackNavigationStepBlockType)blockType
 {
     if(self = [super init]) {
         _percentage = percentage;
+        _blockType = blockType;
     }
     
     return self;
