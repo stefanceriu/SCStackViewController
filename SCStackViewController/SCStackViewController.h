@@ -70,6 +70,14 @@ typedef enum {
 @property (nonatomic, assign) BOOL bounces;
 
 
+/** A Boolean value that determines whether scrolling is enabled for the Stack's
+ * scrollView.
+ *
+ * Default value is set to true
+ */
+@property (nonatomic, assign) BOOL scrollEnabled;
+
+
 /** A Boolean value that determines whether paging is enabled for the Stack's
  * scrollView.
  *

@@ -36,6 +36,7 @@
 @dynamic showsScrollIndicators;
 @dynamic minimumNumberOfTouches;
 @dynamic maximumNumberOfTouches;
+@dynamic scrollEnabled;
 
 #pragma mark - Constructors
 
