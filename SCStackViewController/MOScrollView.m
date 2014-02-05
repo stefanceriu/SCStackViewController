@@ -122,7 +122,11 @@ const static int maximumSteps = 10;
     }
     
     if(duration == 0.0f) {
+        
+        [UIView setAnimationsEnabled:NO];
         self.contentOffset = contentOffset;
+        [UIView setAnimationsEnabled:YES];
+        
         if(completion) {
             completion();
         }
@@ -150,56 +154,54 @@ const static int maximumSteps = 10;
 
 - (void)updateContentOffset:(CADisplayLink *)displayLink {
     
-    [UIView performWithoutAnimation:^{
+    // on the first invokation in an animation beginTime is zero
+    if (self.beginTime == 0.0) {
         
-        // on the first invokation in an animation beginTime is zero
-        if (self.beginTime == 0.0) {
-            
-            self.beginTime = displayLink.timestamp;
-            self.beginContentOffset = self.contentOffset;
+        self.beginTime = displayLink.timestamp;
+        self.beginContentOffset = self.contentOffset;
+    } else {
+        
+        CFTimeInterval deltaTime = displayLink.timestamp - self.beginTime;
+        
+        // ratio of duration that went by
+        CGFloat ratio = (CGFloat) (deltaTime / self.duration);
+        // ratio adjusted by timing function
+        CGFloat adjustedRatio;
+        
+        if (ratio > 1) {
+            adjustedRatio = 1.0;
         } else {
-            
-            CFTimeInterval deltaTime = displayLink.timestamp - self.beginTime;
-            
-            // ratio of duration that went by
-            CGFloat ratio = (CGFloat) (deltaTime / self.duration);
-            // ratio adjusted by timing function
-            CGFloat adjustedRatio;
-            
-            if (ratio > 1) {
-                adjustedRatio = 1.0;
-            } else {
-                adjustedRatio = (CGFloat) timingFunctionValue(self.timingFunction, ratio);
-            }
-            
-            if (1 - adjustedRatio < 0.001) {
-                
-                adjustedRatio = 1.0;
-                self.displayLink.paused = YES;
-                self.beginTime = 0.0;
-            }
-            
-            CGPoint currentDeltaContentOffset = CGPointMake(self.deltaContentOffset.x * adjustedRatio,
-                                                            self.deltaContentOffset.y * adjustedRatio);
-            
-            CGPoint contentOffset = CGPointMake(self.beginContentOffset.x + currentDeltaContentOffset.x,
-                                                self.beginContentOffset.y + currentDeltaContentOffset.y);
-            
-            self.contentOffset = contentOffset;
-            
-            if (adjustedRatio == 1.0) {
-                // inform delegate about end of animation
-                if([self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]) {
-                    [self.delegate scrollViewDidEndScrollingAnimation:self];
-                }
-                
-                if(self.completionBlock) {
-                    self.completionBlock();
-                }
-            }
+            adjustedRatio = (CGFloat) timingFunctionValue(self.timingFunction, ratio);
         }
         
-    }];
+        if (1 - adjustedRatio < 0.001) {
+            
+            adjustedRatio = 1.0;
+            self.displayLink.paused = YES;
+            self.beginTime = 0.0;
+        }
+        
+        CGPoint currentDeltaContentOffset = CGPointMake(self.deltaContentOffset.x * adjustedRatio,
+                                                        self.deltaContentOffset.y * adjustedRatio);
+        
+        CGPoint contentOffset = CGPointMake(self.beginContentOffset.x + currentDeltaContentOffset.x,
+                                            self.beginContentOffset.y + currentDeltaContentOffset.y);
+        
+        [UIView setAnimationsEnabled:NO];
+        self.contentOffset = contentOffset;
+        [UIView setAnimationsEnabled:YES];
+        
+        if (adjustedRatio == 1.0) {
+            // inform delegate about end of animation
+            if([self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]) {
+                [self.delegate scrollViewDidEndScrollingAnimation:self];
+            }
+            
+            if(self.completionBlock) {
+                self.completionBlock();
+            }
+        }
+    }
 }
 
 double cubicFunctionValue(double a, double b, double c, double d, double x) {
