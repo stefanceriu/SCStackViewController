@@ -183,37 +183,7 @@
     for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
         
         for(SCMenuViewController *viewController in [self.stackViewController viewControllersForPosition:position]) {
-            
-            if(![self.stackViewController isViewControllerVisible:viewController]) {
-                continue;
-            }
-            
-            CGFloat percentage = 0.0f;
-            
-            switch (position) {
-                case SCStackViewControllerPositionTop: {
-                    CGFloat remainder = ABS(CGRectGetMinY(viewController.view.frame)) - ABS(offset.y);
-                    percentage = MIN(100.0f, (1.0f - remainder / CGRectGetHeight(viewController.view.frame)) * 100.0f);
-                    break;
-                }
-                case SCStackViewControllerPositionLeft: {
-                    CGFloat remainder = ABS(CGRectGetMinX(viewController.view.frame)) - ABS(offset.x);
-                    percentage = MIN(100.0f, (1.0f - remainder / CGRectGetWidth(viewController.view.frame)) * 100.0f);
-                    break;
-                }
-                case SCStackViewControllerPositionBottom: {
-                    CGFloat remainder = CGRectGetMaxY(viewController.view.frame) - (offset.y + CGRectGetHeight(self.stackViewController.view.bounds));
-                    percentage = MIN(100.0f, (1.0f - remainder / CGRectGetHeight(viewController.view.frame)) * 100.0f);
-                    break;
-                }
-                case SCStackViewControllerPositionRight: {
-                    CGFloat remainder = CGRectGetMaxX(viewController.view.frame) - (offset.x + CGRectGetWidth(self.stackViewController.view.bounds));
-                    percentage = MIN(100.0f, (1.0f - remainder / CGRectGetWidth(viewController.view.frame)) * 100.0f);
-                    break;
-                }
-            }
-            
-            [viewController setVisiblePercentage:percentage];
+            [viewController setVisiblePercentage:[stackViewController visiblePercentageForViewController:viewController]];
         }
     }
 }

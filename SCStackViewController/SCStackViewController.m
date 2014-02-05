@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSMutableDictionary *finalFrames;
 @property (nonatomic, strong) NSMutableDictionary *navigationSteps;
 @property (nonatomic, strong) NSMutableDictionary *stepsForOffsets;
+@property (nonatomic, strong) NSMutableDictionary *visiblePercentages;
 
 @end
 
@@ -71,6 +72,7 @@
     self.finalFrames = [NSMutableDictionary dictionary];
     self.navigationSteps = [NSMutableDictionary dictionary];
     self.stepsForOffsets = [NSMutableDictionary dictionary];
+    self.visiblePercentages = [NSMutableDictionary dictionary];
     
     self.animationDuration = 0.25f;
     self.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
@@ -144,7 +146,7 @@
     [self addChildViewController:viewController];
     [viewController didMoveToParentViewController:self];
     
-    [self updateContentSizeIgnoringNavigationContraints];
+    [self updateBoundsIgnoringNavigationContraints];
     
     __weak typeof(self) weakSelf = self;
     if(unfold) {
@@ -179,8 +181,9 @@
     void(^cleanup)() = ^{
         [self.viewControllers[@(position)] removeObject:lastViewController];
         [self.finalFrames removeObjectForKey:@([lastViewController hash])];
+        [self.visiblePercentages removeObjectForKey:@([lastViewController hash])];
         [self updateFinalFramesForPosition:position];
-        [self updateContentSizeIgnoringNavigationContraints];
+        [self updateBoundsIgnoringNavigationContraints];
         
         if([self.visibleViewControllers containsObject:lastViewController]) {
             [lastViewController beginAppearanceTransition:NO animated:animated];
@@ -245,7 +248,7 @@
     CGPoint offset = CGPointZero;
     CGRect finalFrame = CGRectZero;
     
-    [self updateContentSizeIgnoringNavigationContraints];
+    [self updateBoundsIgnoringNavigationContraints];
     
     // Save the original navigation steps and just use the given one
     NSArray *previousSteps = self.navigationSteps[@([viewController hash])];
@@ -311,6 +314,15 @@
     return [self.visibleViewControllers containsObject:viewController];
 }
 
+- (CGFloat)visiblePercentageForViewController:(UIViewController *)viewController
+{
+    if([self isViewControllerVisible:viewController] == NO) {
+        return 0.0f;
+    }
+
+    return [self.visiblePercentages[@([viewController hash])] floatValue];
+}
+
 #pragma mark - UIViewController View Events
 
 - (void)viewDidLoad
@@ -343,7 +355,7 @@
         [self updateFinalFramesForPosition:position];
     }
     
-    [self updateContentSizeIgnoringNavigationContraints];
+    [self updateBoundsIgnoringNavigationContraints];
     [self updateBoundsUsingNavigationContraints];
     
     [self scrollViewDidScroll:self.scrollView];
@@ -386,7 +398,7 @@
 #pragma mark Navigation Contraints
 
 // Sets the insets to the summed up sizes of all the participating view controllers (used before pushing and popping)
-- (void)updateContentSizeIgnoringNavigationContraints
+- (void)updateBoundsIgnoringNavigationContraints
 {
     UIEdgeInsets insets = UIEdgeInsetsZero;
     
@@ -434,7 +446,7 @@
 - (void)updateBoundsUsingDefaultNavigationContraints
 {
     if(!(self.navigationContaintType & SCStackViewControllerNavigationContraintTypeForward)) {
-        [self updateContentSizeIgnoringNavigationContraints];
+        [self updateBoundsIgnoringNavigationContraints];
         return;
     }
     
@@ -675,6 +687,22 @@
             visible = visible || ((position == SCStackViewControllerPositionTop || position == SCStackViewControllerPositionBottom) && CGRectGetHeight(intersection) > 0.0f);
             
             if(visible) {
+                
+                switch (position) {
+                    case SCStackViewControllerPositionTop:
+                    case SCStackViewControllerPositionBottom:
+                    {
+                        [self.visiblePercentages setObject:@(roundf((CGRectGetHeight(intersection) * 1000) / CGRectGetHeight(adjustedFrame))/10.0f) forKey:@([viewController hash])];
+                        break;
+                    }
+                    case SCStackViewControllerPositionLeft:
+                    case SCStackViewControllerPositionRight:
+                    {
+                        [self.visiblePercentages setObject:@(roundf((CGRectGetWidth(intersection) * 1000) / CGRectGetWidth(adjustedFrame))/10.0f) forKey:@([viewController hash])];
+                        break;
+                    }
+                }
+                
                 // And if it's visible then we prepare for the next view controller by reducing the remainder some more
                 remainder = CGRectSubtract(remainder, CGRectIntersection(remainder, adjustedFrame), edge);
             }

@@ -276,6 +276,18 @@ typedef enum {
  */
 - (BOOL)isViewControllerVisible:(UIViewController *)viewController;
 
+/**
+ * @return Float value representing the visible percentage
+ * @param @param viewController The view controller for which to fetch the
+ * visible percentage
+ *
+ * A view controller is visible when any part of it is visible (within the
+ * Stack's scrollView bounds and not covered by any other view)
+ *
+ * Ranges from 100.0f to 0.0f
+ */
+- (CGFloat)visiblePercentageForViewController:(UIViewController *)viewController;
+
 @end
 
 
