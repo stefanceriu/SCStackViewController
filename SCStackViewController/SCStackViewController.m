@@ -880,6 +880,9 @@
         nextStepOffset.x = roundf(nextStepOffset.x);
         nextStepOffset.y = roundf(nextStepOffset.y);
         
+        // Cache the steps to avoid having to recalculate them later. Will clear the cache when the pagination is done.
+        [self.stepsForOffsets setObject:nextStep forKey:[NSValue valueWithCGPoint:nextStepOffset]];
+        
         if(!paginating) {
             // Trick the calculations into blocking
             if(nextStep.blockType == SCStackNavigationStepBlockTypeForward) {
@@ -890,9 +893,6 @@
                 nextStepOffset.y += 0.01f;
             }
         }
-        
-        // Cache the steps to avoid having to recalculate them later. Will clear the cache when the pagination is done.
-        [self.stepsForOffsets setObject:nextStep forKey:[NSValue valueWithCGPoint:nextStepOffset]];
         
         if((velocity.y > 0.0f && nextStepOffset.y > contentOffset.y) || (velocity.y < 0.0f && nextStepOffset.y < contentOffset.y) ||
            (velocity.x > 0.0f && nextStepOffset.x > contentOffset.x) || (velocity.x < 0.0f && nextStepOffset.x < contentOffset.x)) {
