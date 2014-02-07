@@ -1002,7 +1002,22 @@
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    [self adjustTargetContentOffset:targetContentOffset withVelocity:velocity];
+    // Bouncing target content offset when fix.
+    // When trying to adjust content offset while bouncing the velocity drops down to almost nothing.
+    // Seems to be an internal UIScrollView issue
+    if(self.scrollView.contentOffset.y < -self.scrollView.contentInset.top) {
+        targetContentOffset->y = -self.scrollView.contentInset.top;
+    } else if(self.scrollView.contentOffset.x < -self.scrollView.contentInset.left) {
+        targetContentOffset->x = -self.scrollView.contentInset.left;
+    } else if(self.scrollView.contentOffset.y > self.scrollView.contentInset.bottom) {
+        targetContentOffset->y = self.scrollView.contentInset.bottom;
+    } else if(self.scrollView.contentOffset.x > self.scrollView.contentInset.right) {
+        targetContentOffset->x = self.scrollView.contentInset.right;
+    }
+    // Normal pagination
+    else {
+        [self adjustTargetContentOffset:targetContentOffset withVelocity:velocity];
+    }
 }
 
 #pragma mark - Rotation Handling
