@@ -82,7 +82,7 @@
 
 - (void)setVisiblePercentage:(CGFloat)percentage
 {
-    [self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.2f%%", percentage]];
+    [self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.3f%%", percentage]];
 }
 
 - (IBAction)onPushButtonTap:(id)sender

@@ -692,13 +692,13 @@
                     case SCStackViewControllerPositionTop:
                     case SCStackViewControllerPositionBottom:
                     {
-                        [self.visiblePercentages setObject:@(roundf((CGRectGetHeight(intersection) * 1000) / CGRectGetHeight(adjustedFrame))/10.0f) forKey:@([viewController hash])];
+                        [self.visiblePercentages setObject:@(roundf((CGRectGetHeight(intersection) * 1000) / CGRectGetHeight(adjustedFrame))/1000.0f) forKey:@([viewController hash])];
                         break;
                     }
                     case SCStackViewControllerPositionLeft:
                     case SCStackViewControllerPositionRight:
                     {
-                        [self.visiblePercentages setObject:@(roundf((CGRectGetWidth(intersection) * 1000) / CGRectGetWidth(adjustedFrame))/10.0f) forKey:@([viewController hash])];
+                        [self.visiblePercentages setObject:@(roundf((CGRectGetWidth(intersection) * 1000) / CGRectGetWidth(adjustedFrame))/1000.0f) forKey:@([viewController hash])];
                         break;
                     }
                 }

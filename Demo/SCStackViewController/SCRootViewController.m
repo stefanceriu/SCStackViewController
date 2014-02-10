@@ -179,9 +179,7 @@
 {
     [self.overlayView setAlpha:ABS((offset.x?:offset.y)/300.0f)];
     
-    // One shouldn't rely on this code, it's hardly accurate.
     for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
-        
         for(SCMenuViewController *viewController in [self.stackViewController viewControllersForPosition:position]) {
             [viewController setVisiblePercentage:[stackViewController visiblePercentageForViewController:viewController]];
         }
