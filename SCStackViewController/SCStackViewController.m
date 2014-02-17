@@ -8,7 +8,7 @@
 
 #import "SCStackViewController.h"
 #import "SCStackLayouterProtocol.h"
-#import "MOScrollView.h"
+#import "SCStackViewControllerScrollView.h"
 
 #import "SCStackNavigationStep.h"
 
@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong) IBOutlet UIViewController *rootViewController;
 
-@property (nonatomic, strong) MOScrollView *scrollView;
+@property (nonatomic, strong) SCStackViewControllerScrollView *scrollView;
 
 @property (nonatomic, strong) NSDictionary *viewControllers;
 @property (nonatomic, strong) NSMutableArray *visibleViewControllers;
@@ -331,7 +331,7 @@
     
     [self.view setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
-    self.scrollView = [[MOScrollView alloc] initWithFrame:self.view.bounds];
+    self.scrollView = [[SCStackViewControllerScrollView alloc] initWithFrame:self.view.bounds];
     [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.scrollView setDirectionalLockEnabled:YES];
     [self.scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
@@ -631,9 +631,9 @@
         
         // Determine the amount of unobstructed space the stacked view controllers might be seen through
         if(shouldStackControllersAboveRoot) {
-            remainder = CGRectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.view.bounds), edge);
+            remainder = [self subtractRect:CGRectIntersection(self.scrollView.bounds, self.view.bounds) fromRect:self.scrollView.bounds withEdge:edge];
         } else {
-            remainder = CGRectSubtract(self.scrollView.bounds, CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame), edge);
+            remainder = [self subtractRect:CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame) fromRect:self.scrollView.bounds withEdge:edge];
         }
         
         BOOL isReversed = NO;
@@ -704,7 +704,7 @@
                 }
                 
                 // And if it's visible then we prepare for the next view controller by reducing the remainder some more
-                remainder = CGRectSubtract(remainder, CGRectIntersection(remainder, adjustedFrame), edge);
+                remainder = [self subtractRect:CGRectIntersection(remainder, adjustedFrame) fromRect:remainder withEdge:edge];
             }
             
             // Finally, trigger appearance callbacks and new frame
@@ -1098,7 +1098,7 @@
     return edge;
 }
 
-CGRect CGRectSubtract(CGRect r1, CGRect r2, CGRectEdge edge)
+- (CGRect)subtractRect:(CGRect)r2 fromRect:(CGRect)r1 withEdge:(CGRectEdge)edge
 {
     CGRect intersection = CGRectIntersection(r1, r2);
     if (CGRectIsNull(intersection)) {
