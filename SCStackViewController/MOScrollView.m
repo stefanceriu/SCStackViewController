@@ -95,10 +95,13 @@ const static int maximumSteps = 10;
 
 - (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated
 {
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wundeclared-selector"
     //Ignoring calls from any textView contained by this scroll
     if([[self performSelector:@selector(firstResponder)] isKindOfClass:[UITextField class]]) {
         return;
     }
+    #pragma clang diagnostic pop
     
     [super scrollRectToVisible:rect animated:animated];
 }
