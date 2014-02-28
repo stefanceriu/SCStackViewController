@@ -653,25 +653,25 @@
                 switch (position) {
                     case SCStackViewControllerPositionTop: {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
-                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
                         adjustedFrame.origin.y = [self maximumInsetForPosition:position].y + totalSize;
                         break;
                     }
                     case SCStackViewControllerPositionLeft: {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
-                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
                         adjustedFrame.origin.x = [self maximumInsetForPosition:position].x + totalSize;
                         break;
                     }
                     case SCStackViewControllerPositionBottom: {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
-                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
                         adjustedFrame.origin.y = CGRectGetHeight(self.view.bounds) + [self maximumInsetForPosition:position].y - totalSize;
                         break;
                     }
                     case SCStackViewControllerPositionRight: {
                         NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
-                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
                         adjustedFrame.origin.x = CGRectGetWidth(self.view.bounds) + [self maximumInsetForPosition:position].x - totalSize;
                         break;
                     }
@@ -1058,13 +1058,13 @@
 {
     switch (position) {
         case SCStackViewControllerPositionTop:
-            return CGPointMake(0, -[[self.viewControllers[@(position)] valueForKeyPath:@"@sum.viewHeight"] floatValue]);
+            return CGPointMake(0, -[[self.viewControllers[@(position)] valueForKeyPath:@"@sum.sc_viewHeight"] floatValue]);
         case SCStackViewControllerPositionLeft:
-            return CGPointMake(-[[self.viewControllers[@(position)] valueForKeyPath:@"@sum.viewWidth"] floatValue], 0);
+            return CGPointMake(-[[self.viewControllers[@(position)] valueForKeyPath:@"@sum.sc_viewWidth"] floatValue], 0);
         case SCStackViewControllerPositionBottom:
-            return CGPointMake(0, [[self.viewControllers[@(position)] valueForKeyPath:@"@sum.viewHeight"] floatValue]);
+            return CGPointMake(0, [[self.viewControllers[@(position)] valueForKeyPath:@"@sum.sc_viewHeight"] floatValue]);
         case SCStackViewControllerPositionRight:
-            return CGPointMake([[self.viewControllers[@(position)] valueForKeyPath:@"@sum.viewWidth"] floatValue], 0);
+            return CGPointMake([[self.viewControllers[@(position)] valueForKeyPath:@"@sum.sc_viewWidth"] floatValue], 0);
         default:
             return CGPointZero;
     }
@@ -1117,7 +1117,7 @@
 
 @implementation UIViewController (SCStackViewController)
 
-- (SCStackViewController *)stackViewController
+- (SCStackViewController *)sc_stackViewController
 {
     UIResponder *responder = self;
     while ((responder = [responder nextResponder])) {
@@ -1128,12 +1128,12 @@
     return nil;
 }
 
-- (CGFloat)viewWidth
+- (CGFloat)sc_viewWidth
 {
     return CGRectGetWidth(self.view.bounds);
 }
 
-- (CGFloat)viewHeight
+- (CGFloat)sc_viewHeight
 {
     return CGRectGetHeight(self.view.bounds);
 }

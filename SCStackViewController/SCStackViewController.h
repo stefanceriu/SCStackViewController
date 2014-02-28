@@ -92,7 +92,7 @@ typedef enum {
  * When set to true the Stack's scrollView bounces on every page. Navigating 
  * through more than 1 page will require multiple swipes.
  * 
- * Default value is set to true
+ * Default value is set to false
  */
 @property (nonatomic, assign) BOOL continuousNavigationEnabled;
 
@@ -364,18 +364,18 @@ typedef enum {
  * @return First SCStackViewController instance found by looking up the
  * responder chain
  */
-- (SCStackViewController *)stackViewController;
+- (SCStackViewController *)sc_stackViewController;
 
 
 /**
  * @return ViewController's view width
  */
-- (CGFloat)viewWidth;
+- (CGFloat)sc_viewWidth;
 
 
 /**
  * @return ViewController's view height
  */
-- (CGFloat)viewHeight;
+- (CGFloat)sc_viewHeight;
 
 @end

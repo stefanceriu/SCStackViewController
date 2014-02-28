@@ -101,7 +101,7 @@
 
 - (IBAction)onScrollToMeButtonTapped:(id)sender
 {
-    [self.stackViewController navigateToViewController:self animated:YES completion:nil];
+    [self.sc_stackViewController navigateToViewController:self animated:YES completion:nil];
 }
 
 @end

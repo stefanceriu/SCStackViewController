@@ -23,19 +23,19 @@
     CGRect finalFrame =  viewController.view.frame;
     switch (position) {
         case SCStackViewControllerPositionTop: {
-            finalFrame.origin.y = - [[viewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            finalFrame.origin.y = - [[viewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
             break;
         }
         case SCStackViewControllerPositionLeft: {
-            finalFrame.origin.x = - [[viewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            finalFrame.origin.x = - [[viewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
             break;
         }
         case SCStackViewControllerPositionBottom: {
-            finalFrame.origin.y = CGRectGetHeight(stackController.view.bounds) + [[viewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue] - finalFrame.size.height;
+            finalFrame.origin.y = CGRectGetHeight(stackController.view.bounds) + [[viewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue] - finalFrame.size.height;
             break;
         }
         case SCStackViewControllerPositionRight: {
-            finalFrame.origin.x = CGRectGetWidth(stackController.view.bounds) + [[viewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue] - finalFrame.size.width;
+            finalFrame.origin.x = CGRectGetWidth(stackController.view.bounds) + [[viewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue] - finalFrame.size.width;
             break;
         }
         default:

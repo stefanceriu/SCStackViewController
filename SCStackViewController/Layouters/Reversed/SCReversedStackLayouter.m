@@ -22,30 +22,30 @@
     switch (position) {
         case SCStackViewControllerPositionTop: {
             NSArray *previousViewControllers = [viewControllers subarrayWithRange:NSMakeRange(0, [viewControllers indexOfObject:viewController])];
-            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
             
-            finalFrame.origin.y = - totalSize + [[previousViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            finalFrame.origin.y = - totalSize + [[previousViewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
             break;
         }
         case SCStackViewControllerPositionLeft: {
             NSArray *previousViewControllers = [viewControllers subarrayWithRange:NSMakeRange(0, [viewControllers indexOfObject:viewController])];
-            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
             
-            finalFrame.origin.x = - totalSize + [[previousViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            finalFrame.origin.x = - totalSize + [[previousViewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
             break;
         }
         case SCStackViewControllerPositionBottom: {
             NSArray *previousViewControllers = [viewControllers subarrayWithRange:NSMakeRange(0, [viewControllers indexOfObject:viewController] + 1)];
-            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
             
-            finalFrame.origin.y = CGRectGetHeight(stackController.view.bounds) + totalSize - [[previousViewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            finalFrame.origin.y = CGRectGetHeight(stackController.view.bounds) + totalSize - [[previousViewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
             break;
         }
         case SCStackViewControllerPositionRight: {
             NSArray *previousViewControllers = [viewControllers subarrayWithRange:NSMakeRange(0, [viewControllers indexOfObject:viewController] + 1)];
-            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
             
-            finalFrame.origin.x = CGRectGetWidth(stackController.view.bounds) + totalSize - [[previousViewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            finalFrame.origin.x = CGRectGetWidth(stackController.view.bounds) + totalSize - [[previousViewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
             break;
         }
         default:
@@ -69,28 +69,28 @@
     switch (position) {
         case SCStackViewControllerPositionTop:
         {
-            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
             frame.origin.y =  MIN(-CGRectGetHeight(((UIViewController*)viewControllers[0]).view.frame), finalFrame.origin.y + (totalSize + contentOffset.y));
             frame.size.width = CGRectGetWidth(stackController.view.bounds);
             break;
         }
         case SCStackViewControllerPositionLeft:
         {
-            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
             frame.origin.x =  MIN(-CGRectGetWidth(((UIViewController*)viewControllers[0]).view.frame), finalFrame.origin.x + (totalSize + contentOffset.x));
             frame.size.height = CGRectGetHeight(stackController.view.bounds);
             break;
         }
         case SCStackViewControllerPositionBottom:
         {
-            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewHeight"] floatValue];
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
             frame.origin.y = MAX(CGRectGetMaxY(stackController.view.bounds), CGRectGetMinY(finalFrame) - (totalSize - contentOffset.y));
             frame.size.width = CGRectGetWidth(stackController.view.bounds);
             break;
         }
         case SCStackViewControllerPositionRight:
         {
-            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.viewWidth"] floatValue];
+            CGFloat totalSize = [[viewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
             frame.origin.x = MAX(CGRectGetMaxX(stackController.view.bounds), CGRectGetMinX(finalFrame) - (totalSize - contentOffset.x));
             frame.size.height = CGRectGetHeight(stackController.view.bounds);
             break;
