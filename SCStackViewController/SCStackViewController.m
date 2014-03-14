@@ -86,6 +86,10 @@
              forPosition:(SCStackViewControllerPosition)position
 {
     [self.layouters setObject:layouter forKey:@(position)];
+    
+    [UIView animateWithDuration:self.animationDuration animations:^{
+        [self updateFramesAndTriggerAppearanceCallbacks];
+    }];
 }
 
 - (void)registerNavigationSteps:(NSArray *)navigationSteps forViewController:(UIViewController *)viewController
@@ -292,10 +296,8 @@
     // Navigate to the determined offset, restore the previous navigation states and update navigation contraints
     __weak typeof(self) weakSelf = self;
     [self.scrollView setContentOffset:offset withTimingFunction:self.timingFunction duration:(animated ? self.animationDuration : 0.0f) completion:^{
-        if(previousSteps) {
-            [weakSelf registerNavigationSteps:previousSteps forViewController:viewController];
-        }
-        
+
+        [weakSelf registerNavigationSteps:previousSteps forViewController:viewController];
         [weakSelf updateBoundsUsingNavigationContraints];
         
         if(completion) {
