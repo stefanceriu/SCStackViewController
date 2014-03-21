@@ -169,6 +169,12 @@ typedef enum {
 - (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
              forPosition:(SCStackViewControllerPosition)position;
 
+/** Retrieve the layouter for the given position
+ *
+ * @param position The SCStackViewControllerPosition to fetch the layouter for
+ */
+- (id<SCStackLayouterProtocol>)layouterForPosition:(SCStackViewControllerPosition)position;
+
 
 /**-----------------------------------------------------------------------------
  * @name Performing an Operation
@@ -287,6 +293,12 @@ typedef enum {
  * Ranges from 100.0f to 0.0f
  */
 - (CGFloat)visiblePercentageForViewController:(UIViewController *)viewController;
+
+/**
+ * @return The current content offset in the stack's scrollView
+ *
+ */
+- (CGPoint)contentOffset;
 
 @end
 

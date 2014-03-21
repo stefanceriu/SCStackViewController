@@ -92,6 +92,11 @@
     }];
 }
 
+- (id<SCStackLayouterProtocol>)layouterForPosition:(SCStackViewControllerPosition)position
+{
+    return self.layouters[@(position)];
+}
+
 - (void)registerNavigationSteps:(NSArray *)navigationSteps forViewController:(UIViewController *)viewController
 {
     if(navigationSteps == nil) {
