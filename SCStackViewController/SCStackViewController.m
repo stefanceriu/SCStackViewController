@@ -285,34 +285,61 @@
                 case SCStackViewControllerPositionTop:
                 {
                     CGPoint velocity = currentStep.percentage > step.percentage ? CGPointMake(0.0f, 1.0f) : CGPointMake(0.0f, -1.0f);
-                    offset.y = (isReversed ? ([self maximumInsetForPosition:position].y - CGRectGetMinY(finalFrame)) : CGRectGetMaxY(finalFrame));
+                    
+                    if(velocity.y >= 0.0f) {
+                        offset.y = (isReversed ? ([self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame)) : CGRectGetMinY(finalFrame));
+                    } else {
+                        offset.y = (isReversed ? ([self maximumInsetForPosition:position].y - CGRectGetMinY(finalFrame)) : CGRectGetMaxY(finalFrame));
+                    }
+                    
+                    
                     offset = [self nextStepOffsetForViewController:viewController position:position velocity:velocity reversed:isReversed contentOffset:offset paginating:NO];
                     break;
                 }
                 case SCStackViewControllerPositionLeft:
                 {
                     CGPoint velocity = currentStep.percentage > step.percentage ? CGPointMake(1.0f, 0.0f) : CGPointMake(-1.0f, 0.0f);
-                    offset.x = (isReversed ? ([self maximumInsetForPosition:position].x - CGRectGetMinX(finalFrame)) : CGRectGetMaxX(finalFrame));
+
+                    if(velocity.x >= 0.0f) {
+                        offset.x = (isReversed ? ([self maximumInsetForPosition:position].x - CGRectGetMaxX(finalFrame)) : CGRectGetMinX(finalFrame));
+                    } else {
+                        offset.x = (isReversed ? ([self maximumInsetForPosition:position].x - CGRectGetMinX(finalFrame)) : CGRectGetMaxX(finalFrame));
+                    }
+                    
                     offset = [self nextStepOffsetForViewController:viewController position:position velocity:velocity reversed:isReversed contentOffset:offset paginating:NO];
                     break;
                 }
                 case SCStackViewControllerPositionBottom:
                 {
                     CGPoint velocity = currentStep.percentage > step.percentage ? CGPointMake(0.0f, -1.0f) : CGPointMake(0.0f, 1.0f);
-                    offset.y = (isReversed ? ([self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + CGRectGetHeight(self.view.bounds)) : CGRectGetMinY(finalFrame) - CGRectGetHeight(self.view.bounds));
+                    
+                    if(velocity.y >= 0.0f) {
+                        offset.y = (isReversed ? ([self maximumInsetForPosition:position].y - CGRectGetMaxY(finalFrame) + CGRectGetHeight(self.view.bounds)) : CGRectGetMinY(finalFrame) - CGRectGetHeight(self.view.bounds));
+                    } else {
+                        offset.y = (isReversed ? ([self maximumInsetForPosition:position].y - CGRectGetMinY(finalFrame) + CGRectGetHeight(self.view.bounds)) : CGRectGetMaxY(finalFrame) - CGRectGetHeight(self.view.bounds));
+                    }
+                    
                     offset = [self nextStepOffsetForViewController:viewController position:position velocity:velocity reversed:isReversed contentOffset:offset paginating:NO];
                     break;
                 }
                 case SCStackViewControllerPositionRight:
                 {
                     CGPoint velocity = currentStep.percentage > step.percentage ? CGPointMake(-1.0f, 0.0f) : CGPointMake(1.0f, 0.0f);
-                    offset.x = (isReversed ? ([self maximumInsetForPosition:position].x - CGRectGetMaxX(finalFrame) + CGRectGetWidth(self.view.bounds)) : CGRectGetMinX(finalFrame) - CGRectGetWidth(self.view.bounds));
+                    
+                    if(velocity.x >= 0.0f) {
+                        offset.x = (isReversed ? ([self maximumInsetForPosition:position].x - CGRectGetMaxX(finalFrame) + CGRectGetWidth(self.view.bounds)) : CGRectGetMinX(finalFrame) - CGRectGetWidth(self.view.bounds));
+                    } else {
+                        offset.x = (isReversed ? ([self maximumInsetForPosition:position].x - CGRectGetMinX(finalFrame) + CGRectGetWidth(self.view.bounds)) : CGRectGetMaxX(finalFrame) - CGRectGetWidth(self.view.bounds));
+                    }
+                    
                     offset = [self nextStepOffsetForViewController:viewController position:position velocity:velocity reversed:isReversed contentOffset:offset paginating:NO];
                     break;
                 }
                 default:
                     break;
             }
+        } else {
+            offset = self.contentOffset;
         }
     }
     
