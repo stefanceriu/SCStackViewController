@@ -274,11 +274,7 @@
             isReversed = [self.layouters[@(position)] isReversed];
         }
         
-        SCStackNavigationStep *currentStep = self.stepsForOffsets[[NSValue valueWithCGPoint:self.scrollView.contentOffset]];
-        
-        if(currentStep == nil) {
-            currentStep = [SCStackNavigationStep navigationStepWithPercentage:0.0f];
-        }
+        SCStackNavigationStep *currentStep = [SCStackNavigationStep navigationStepWithPercentage:[self visiblePercentageForViewController:viewController]];
         
         if(currentStep.percentage != step.percentage) {
             switch (position) {
