@@ -11,6 +11,17 @@ SCStackViewController is a container view controller which allows you to stack o
 7. Customizable interaction area
 8. Completion blocks for everything
 
+### Change Log v3.0.1
+
+* Fixed step navigation methods
+* Fixed pagination after bouncing
+* Exposed visiblePercentageForViewController: method
+* Exposed layouterForPosition: method
+* Fixed firstResponder warning
+* Fixed duplicate symbols when used together with [SCPageViewController](https://github.com/stefanceriu/SCPageViewController)
+* Renamed UIViewController category methods to avoid conflicts
+* Various tweaks and fixes
+
 ### Change Log v3.0.0
 
 * Added a new feature called navigation steps whic represent a relative position in a view controller at which the stack will paginate/stop while scrolling. Useful for defining multiple steps when folding/unfolding a certain view controller. 
