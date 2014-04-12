@@ -57,7 +57,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([self.delegate respondsToSelector:@selector(mainViewController:didSelectLayouterType:)]) {
-        [self.delegate mainViewController:self didSelectLayouterType:indexPath.row];
+        [self.delegate mainViewController:self didSelectLayouterType:(SCStackLayouterType)indexPath.row];
     }
 }
 

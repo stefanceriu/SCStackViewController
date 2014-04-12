@@ -108,6 +108,7 @@
     SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:firstPosition];
     [leftViewController setDelegate:self];
     
+    [self.stackViewController contentOffset];
     
     [self.stackViewController popToRootViewControllerFromPosition:firstPosition
                                                          animated:YES

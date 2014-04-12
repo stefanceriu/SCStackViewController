@@ -142,6 +142,12 @@ typedef enum {
  */
 @property (nonatomic, assign) NSUInteger maximumNumberOfTouches;
 
+/**
+ * @return The current content offset in the stack's scrollView
+ *
+ */
+@property (nonatomic, readonly) CGPoint contentOffset;
+
 
 /**-----------------------------------------------------------------------------
  * @name Initializing the Stack
@@ -293,12 +299,6 @@ typedef enum {
  * Ranges from 100.0f to 0.0f
  */
 - (CGFloat)visiblePercentageForViewController:(UIViewController *)viewController;
-
-/**
- * @return The current content offset in the stack's scrollView
- *
- */
-- (CGPoint)contentOffset;
 
 @end
 
