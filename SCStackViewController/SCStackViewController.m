@@ -1065,13 +1065,6 @@
     }
 }
 
-#pragma mark - Rotation Handling
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self.scrollView setContentOffset:CGPointZero animated:YES];
-}
-
 #pragma mark - Properties and fowarding
 
 - (BOOL)showsScrollIndicators
