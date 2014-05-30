@@ -1082,7 +1082,7 @@
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
-    return [[self.scrollView class] instanceMethodSignatureForSelector:aSelector];
+    return [[SCStackViewControllerScrollView class] instanceMethodSignatureForSelector:aSelector];
 }
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation
