@@ -1079,15 +1079,27 @@
 }
 
 // Forward scrollEnabled, contentOffset, bounces, touchRefusalArea, minimum and maximum numberOfTouches
-- (id)forwardingTargetForSelector:(SEL)aSelector
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
-    if([self.scrollView respondsToSelector:aSelector]) {
-        return self.scrollView;
-    } else if([self.scrollView.panGestureRecognizer respondsToSelector:aSelector]) {
-        return self.scrollView.panGestureRecognizer;
+    return [[self.scrollView class] instanceMethodSignatureForSelector:aSelector];
+}
+
+- (void)forwardInvocation:(NSInvocation *)anInvocation
+{
+    if(self.scrollView == nil) {
+        return;
     }
     
-    return self;
+    if([self.scrollView respondsToSelector:anInvocation.selector]) {
+        [anInvocation setTarget:self.scrollView];
+    } else if([self.scrollView.panGestureRecognizer respondsToSelector:anInvocation.selector]) {
+        [anInvocation setTarget:self.scrollView.panGestureRecognizer];
+    } else {
+        [NSException raise:@"SCStackViewControllerUnrecognizedSelectorException" format:@"Unrecognized selector %@", NSStringFromSelector(anInvocation.selector)];
+    }
+    
+    [anInvocation invoke];
 }
 
 #pragma mark - Helpers
