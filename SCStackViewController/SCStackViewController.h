@@ -173,7 +173,23 @@ typedef enum {
  * layouter is responsible
  */
 - (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
-             forPosition:(SCStackViewControllerPosition)position;
+             forPosition:(SCStackViewControllerPosition)position __attribute__((deprecated));
+
+
+/** Registers a layouter for the given position
+ *
+ * The Stack uses the layouters to get view frames and calculate contentInsets,
+ * pagination etc.
+ *
+ * @param layouter Object that adopts the SCStackLayouterProtocol and provides
+ * final and intermediate view frames.
+ * @param position The SCStackViewControllerPosition for which the given
+ * layouter is responsible
+ * @param animated Controls whether the change will be animated
+ */
+- (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
+             forPosition:(SCStackViewControllerPosition)position
+                animated:(BOOL)animated;
 
 /** Retrieve the layouter for the given position
  *

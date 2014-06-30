@@ -100,10 +100,10 @@
     
     id<SCStackLayouterProtocol> aboveRootLayouter = [[typeToLayouter[@(type)] alloc] init];
     [aboveRootLayouter setShouldStackControllersAboveRoot:YES];
-    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:firstPosition];
+    [self.stackViewController registerLayouter:aboveRootLayouter forPosition:firstPosition animated:YES];
     
     id<SCStackLayouterProtocol> belowRootLayouter = [[typeToLayouter[@(type)] alloc] init];
-    [self.stackViewController registerLayouter:belowRootLayouter forPosition:secondPosition];
+    [self.stackViewController registerLayouter:belowRootLayouter forPosition:secondPosition animated:YES];
     
     SCMenuViewController *leftViewController = [[SCMenuViewController alloc] initWithPosition:firstPosition];
     [leftViewController setDelegate:self];

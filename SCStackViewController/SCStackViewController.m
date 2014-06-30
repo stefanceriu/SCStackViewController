@@ -85,12 +85,23 @@
 
 - (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
              forPosition:(SCStackViewControllerPosition)position
+                animated:(BOOL)animated
 {
     [self.layouters setObject:layouter forKey:@(position)];
     
-    [UIView animateWithDuration:self.animationDuration animations:^{
+    if(animated) {
+        [UIView animateWithDuration:self.animationDuration animations:^{
+            [self updateFramesAndTriggerAppearanceCallbacks];
+        }];
+    } else {
         [self updateFramesAndTriggerAppearanceCallbacks];
-    }];
+    }
+}
+
+- (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
+             forPosition:(SCStackViewControllerPosition)position
+{
+    [self registerLayouter:layouter forPosition:position animated:YES];
 }
 
 - (id<SCStackLayouterProtocol>)layouterForPosition:(SCStackViewControllerPosition)position
