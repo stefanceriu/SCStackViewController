@@ -29,6 +29,8 @@
 @property (nonatomic, strong) NSMutableDictionary *stepsForOffsets;
 @property (nonatomic, strong) NSMutableDictionary *visiblePercentages;
 
+@property (nonatomic, assign) BOOL isViewVisible;
+
 @end
 
 @implementation SCStackViewController
@@ -420,24 +422,37 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [self.rootViewController beginAppearanceTransition:YES animated:animated];
+    
+    self.isViewVisible = YES;
+    
+    [self updateFramesAndTriggerAppearanceCallbacks];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     [self.rootViewController endAppearanceTransition];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
     [self.rootViewController beginAppearanceTransition:NO animated:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+    
     [self.rootViewController endAppearanceTransition];
+    
+    self.isViewVisible = NO;
+    
+    [self updateFramesAndTriggerAppearanceCallbacks];
 }
 
 #pragma mark - Stack Management
@@ -741,6 +756,8 @@
             // If a view controller's frame does intersect the remainder then it's visible
             BOOL visible = ((position == SCStackViewControllerPositionLeft || position == SCStackViewControllerPositionRight) && CGRectGetWidth(intersection) > 0.0f);
             visible = visible || ((position == SCStackViewControllerPositionTop || position == SCStackViewControllerPositionBottom) && CGRectGetHeight(intersection) > 0.0f);
+            
+            visible = visible && self.isViewVisible;
             
             if(visible) {
                 
