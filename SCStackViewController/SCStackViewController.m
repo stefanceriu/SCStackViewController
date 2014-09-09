@@ -428,6 +428,8 @@
     self.isViewVisible = YES;
     
     [self updateFramesAndTriggerAppearanceCallbacks];
+    
+    [self.view setNeedsLayout];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -504,7 +506,7 @@
     [self.scrollView setDelegate:nil];
     
     CGPoint offset = self.scrollView.contentOffset;
-    [self.scrollView setContentInset:insets];
+    [self.scrollView setContentInset:UIEdgeInsetsIntegral(insets)];
     if((self.scrollView.contentInset.left <= insets.left) || (self.scrollView.contentInset.top <= insets.top)) {
         [self.scrollView setContentOffset:offset];
     }
@@ -551,7 +553,7 @@
         }
     }
     
-    [self.scrollView setContentInset:insets];
+    [self.scrollView setContentInset:UIEdgeInsetsIntegral(insets)];
 }
 
 // Sets the insets to the next navigation steps based on the current state
@@ -653,7 +655,7 @@
         }
     }
     
-    [self.scrollView setContentInset:insets];
+    [self.scrollView setContentInset:UIEdgeInsetsIntegral(insets)];
 }
 
 #pragma mark Appearance callbacks and framesetting
@@ -850,6 +852,8 @@
             CGRect frame = [self.finalFrames[@(viewController.hash)] CGRectValue];
             frame.origin.x = frame.origin.x > 0.0f ? CGRectGetMinX(frame) - CGRectGetWidth(self.view.bounds) : CGRectGetMinX(frame);
             frame.origin.y = frame.origin.y > 0.0f ? CGRectGetMinY(frame) - CGRectGetHeight(self.view.bounds) : CGRectGetMinY(frame);
+            
+            frame = CGRectOffset(CGRectInset(frame, -0.5f, -0.5f), 0.5f, 0.5f); //consider the maximum X and maximum Y edges
             
             if(CGRectContainsPoint(frame, adjustedOffset)) {
                 
@@ -1174,6 +1178,16 @@
     }
     
     return edge;
+}
+
+UIEdgeInsets UIEdgeInsetsIntegral(UIEdgeInsets edgeInsets)
+{
+    edgeInsets.top = roundf(edgeInsets.top);
+    edgeInsets.left = roundf(edgeInsets.left);
+    edgeInsets.bottom = roundf(edgeInsets.bottom);
+    edgeInsets.right = roundf(edgeInsets.right);
+    
+    return edgeInsets;
 }
 
 - (CGRect)subtractRect:(CGRect)r2 fromRect:(CGRect)r1 withEdge:(CGRectEdge)edge
