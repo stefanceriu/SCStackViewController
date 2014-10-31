@@ -8,7 +8,7 @@
 
 #import "SCStackViewController.h"
 #import "SCStackLayouterProtocol.h"
-#import "SCStackViewControllerScrollView.h"
+#import "SCScrollView.h"
 
 #import "SCStackNavigationStep.h"
 
@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong) IBOutlet UIViewController *rootViewController;
 
-@property (nonatomic, strong) SCStackViewControllerScrollView *scrollView;
+@property (nonatomic, strong) SCScrollView *scrollView;
 
 @property (nonatomic, strong) NSDictionary *viewControllers;
 @property (nonatomic, strong) NSMutableArray *visibleViewControllers;
@@ -389,7 +389,7 @@
     
     [self.view setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
-    self.scrollView = [[SCStackViewControllerScrollView alloc] initWithFrame:self.view.bounds];
+    self.scrollView = [[SCScrollView alloc] initWithFrame:self.view.bounds];
     [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.scrollView setDirectionalLockEnabled:YES];
     [self.scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
@@ -1114,7 +1114,7 @@
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
-    return [[SCStackViewControllerScrollView class] instanceMethodSignatureForSelector:aSelector];
+    return [[SCScrollView class] instanceMethodSignatureForSelector:aSelector];
 }
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation
