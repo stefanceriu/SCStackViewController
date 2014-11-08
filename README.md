@@ -1,15 +1,35 @@
 # SCStackViewController
 
-SCStackViewController is a container view controller which allows you to stack other view controllers on the  top/left/bottom/right of the root and build custom transitions between them while providing correct physics and appearance calls. It was build with the following points in mind:
+SCStackViewController is a container view controller which allows you to stack other view controllers on the  top/left/bottom/right of the root and build custom transitions between them while providing correct physics and appearance calls.
 
-1. Simple to understand and modify
-2. Left/right OR top/bottom stacking
-3. Correct physics
-4. Correct appearance calls
-5. Customizable transitions
-6. Pagination
-7. Customizable interaction area
-8. Completion blocks for everything
+It was build with the following points in mind:
+
+1. Left/right OR top/bottom stacking
+2. Customizable transitions and animations (through layouters and easing functions)
+3. Pagination
+4. Realistic physics
+5. Correct appearance calls
+6. Customizable interaction area
+7. Completion blocks
+and more..
+
+### Change Log v3.1.0
+
+* Switched to SCScrollView
+* Drops CAMediaTimingFunction in favour of [AHEasing](https://github.com/warrenm/AHEasing) for more animation options and control (31 easing functions available ootb with support for creating custom ones through the SCEasingFunctionProtocol)
+* Fixes display link retain cycles
+* Allows content offset animation interruption
+* Various other tweaks and fixes
+
+* New easing functions examples
+    * Ease In Out Back
+![Parallax+BackEaseInOut](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/BackEaseInOut-Stack.gif)
+
+    * Ease Out Bounce
+![Parallax+BounceEaseOut](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/BounceEaseOut-Stack.gif)
+
+    * Ease Out Elastic
+![Parallax+ElasticEaseOut](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/ElasticEaseOut-Stack.gif)
 
 ### Change Log v3.0.1
 
@@ -24,15 +44,17 @@ SCStackViewController is a container view controller which allows you to stack o
 
 ### Change Log v3.0.0
 
-* Added a new feature called navigation steps whic represent a relative position in a view controller at which the stack will paginate/stop while scrolling. Useful for defining multiple steps when folding/unfolding a certain view controller. 
+* Added a new feature called navigation steps which represent a relative position in a view controller at which the stack will paginate/stop while scrolling. Useful for defining multiple steps when folding/unfolding a certain view controller. 
 
 - a navigation steps is created using the percentage at which the stack should bounce/paginate (ranges from 0.0 to 1.0) and is assigned on a per viewController basis.
+
 ```
 SCStackNavigationStep *step = [SCStackNavigationStep navigationStepWithPercentage:0.5f];
 [self.stackViewController registerNavigationSteps:@[step] forViewController:leftViewController];
 ```
 
 - the client can also navigate to any navigation step, registered or not, using:
+
 ```
 -(void)navigateToStep:(SCStackNavigationStep *)step
        inViewController:(UIViewController *)viewController
@@ -42,6 +64,7 @@ SCStackNavigationStep *step = [SCStackNavigationStep navigationStepWithPercentag
 
 
 * Added option for specifying if the navigation steps are respected when folding, unfolding or both
+
 ```
 [self.stackViewController setNavigationContaintType:SCStackViewControllerNavigationContraintTypeForward | SCStackViewControllerNavigationContraintTypeReverse];
 ```
@@ -50,7 +73,7 @@ SCStackNavigationStep *step = [SCStackNavigationStep navigationStepWithPercentag
 * Better rotation handling
 * Added new layouter which resizes the root view controller instead of offsetting it
 
-![ResizingStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/v3.0.0/Resizing.gif)
+![ResizingStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/Resizing.gif)
 
 ### Change Log v2.1.0
 
@@ -88,57 +111,62 @@ The stack itself relies on layouters to know where to place the stacked controll
 ##### Plain Stack Layouter
 It places the view controllers to their final position and doesn't modify them while dragging.
 
-![PlainStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/Plain.gif)
+![PlainStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/Plain.gif)
 
 ##### Reversed Stack Layouter
 Reverses the direction used in the plain layouter
 
-![ReversedStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/Reversed.gif)
+![ReversedStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/Reversed.gif)
 
 ##### Sliding Stack Layouter
 It reveals every new controller from beneath the previous one through sliding
 
-![SlidingStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/Sliding.gif)
+![SlidingStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/Sliding.gif)
 
 ##### Parallax Stack Layouter
 Add a nice parallax effect while revealing the stacked controllers
 
-![ParallaxStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/Parallax.gif)
+![ParallaxStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/Parallax.gif)
 
 ##### GoogleMaps Stack Layouter
 The effect seen in the Google Maps app when opening the drawer
 
-![GoogleMapsStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/GoogleMaps.gif)
+![GoogleMapsStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/GoogleMaps.gif)
 
 ##### MerryGoRound Stack Layouter
 Just something I was playing with.. :)
 
-![MerryGoRoundStackLayouter](https://dl.dropboxusercontent.com/u/12748201/recordings/v2.1.0/MerryGoRound.gif)
+![MerryGoRoundStackLayouter](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/MerryGoRound.gif)
 
 ## Usage
 
 - Import the stack into your project
+
 ```
 #import "SCStackViewController.h"
 ```
 
 - Create a new instance
+
 ```
 stackViewController = [[SCStackViewController alloc] initWithRootViewController:rootViewController];
 ```
  
-- Set a touch refusal area (optional)
-```
-[stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]]
-```
- 
 - Register layouters
+
 ```
 id<SCStackLayouterProtocol> layouter = [[SCParallaxStackLayouter alloc] init];
 [stackViewController registerLayouter:layouter forPosition:SCStackViewControllerPositionLeft];
 ```
 
+- Set a touch refusal area (optional)
+
+```
+[stackViewController setTouchRefusalArea:[UIBezierPath bezierPathWithRect:CGRectInset(self.view.bounds, 50, 50)]]
+```
+
 - Push view controllers
+
 ```
 [self.stackViewController pushViewController:leftViewController 
         						  atPosition:SCStackViewControllerPositionLeft 

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
+#import "SCEasingFunction.h"
+
 typedef enum {
     SCStackLayouterTypePlain,
     SCStackLayouterTypeSliding,
@@ -28,6 +30,12 @@ typedef enum {
 @protocol SCMainViewControllerDelegate <NSObject>
 
 - (void)mainViewController:(SCMainViewController *)mainViewController
-     didSelectLayouterType:(SCStackLayouterType)type;
+     didChangeLayouterType:(SCStackLayouterType)type;
+
+- (void)mainViewController:(SCMainViewController *)mainViewController
+    didChangeAnimationType:(SCEasingFunctionType)type;
+
+- (void)mainViewController:(SCMainViewController *)mainViewController
+didChangeAnimationDuration:(NSTimeInterval)duration;
 
 @end

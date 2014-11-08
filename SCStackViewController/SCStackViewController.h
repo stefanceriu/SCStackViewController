@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
-#import <QuartzCore/CAMediaTimingFunction.h>
-
 /** Sides on which view controllers may be stacked */
 typedef enum {
     SCStackViewControllerPositionTop,
@@ -27,10 +25,11 @@ typedef enum {
 
 
 @protocol SCStackLayouterProtocol;
+@protocol SCEasingFunctionProtocol;
+
 @protocol SCStackViewControllerDelegate;
 
 @class SCStackNavigationStep;
-
 
 /** SCStackViewController is a container view controller which allows you to 
  * stack other view controllers on the top/left/bottom/right of the root and 
@@ -117,9 +116,9 @@ typedef enum {
 
 /** Timing function used in push/pop/navigate operations
  *
- * Default value is set to kCAMediaTimingFunctionEaseInEaseOut
+ * Default value is set to SCEasingFunctionTypeSineEaseInOut
  */
-@property (nonatomic, strong) CAMediaTimingFunction *timingFunction;
+@property (nonatomic, strong) id<SCEasingFunctionProtocol> easingFunction;
 
 
 /** Animation duration for push/pop/navigate operations

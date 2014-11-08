@@ -7,10 +7,11 @@
 //
 
 #import "SCStackViewController.h"
-#import "SCStackLayouterProtocol.h"
-#import "SCScrollView.h"
 
+#import "SCScrollView.h"
+#import "SCEasingFunction.h"
 #import "SCStackNavigationStep.h"
+#import "SCStackLayouterProtocol.h"
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
@@ -77,8 +78,8 @@
     self.stepsForOffsets = [NSMutableDictionary dictionary];
     self.visiblePercentages = [NSMutableDictionary dictionary];
     
+    self.easingFunction = [SCEasingFunction easingFunctionWithType:SCEasingFunctionTypeSineEaseInOut];
     self.animationDuration = 0.25f;
-    self.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
     self.navigationContaintType = SCStackViewControllerNavigationContraintTypeForward | SCStackViewControllerNavigationContraintTypeReverse;
 }
@@ -173,7 +174,7 @@
     
     __weak typeof(self) weakSelf = self;
     if(unfold) {
-        [self.scrollView setContentOffset:[self maximumInsetForPosition:position] withTimingFunction:self.timingFunction duration:(animated ? self.animationDuration : 0.0f) completion:^{
+        [self.scrollView setContentOffset:[self maximumInsetForPosition:position] easingFunction:self.easingFunction duration:(animated ? self.animationDuration : 0.0f) completion:^{
             [weakSelf updateBoundsUsingNavigationContraints];
             if(completion) {
                 completion();
@@ -351,7 +352,7 @@
     
     // Navigate to the determined offset, restore the previous navigation states and update navigation contraints
     __weak typeof(self) weakSelf = self;
-    [self.scrollView setContentOffset:offset withTimingFunction:self.timingFunction duration:(animated ? self.animationDuration : 0.0f) completion:^{
+    [self.scrollView setContentOffset:offset easingFunction:self.easingFunction duration:(animated ? self.animationDuration : 0.0f) completion:^{
 
         [weakSelf registerNavigationSteps:previousSteps forViewController:viewController];
         [weakSelf updateBoundsUsingNavigationContraints];

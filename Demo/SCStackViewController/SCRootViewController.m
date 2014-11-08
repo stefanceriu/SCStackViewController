@@ -25,6 +25,8 @@
 
 #import "SCStackNavigationStep.h"
 
+#import "SCEasingFunction.h"
+
 @interface SCRootViewController () <SCStackViewControllerDelegate, SCOverlayViewDelegate, SCMenuViewControllerDelegate, SCMainViewControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet SCStackViewController *stackViewController;
@@ -61,6 +63,7 @@
     [self addChildViewController:self.stackViewController];
     [self.stackViewController didMoveToParentViewController:self];
     
+    [self.stackViewController setEasingFunction:[SCEasingFunction easingFunctionWithType:SCEasingFunctionTypeLinear]];
     
     // Optional properties
     [self.stackViewController setShowsScrollIndicators:NO];
@@ -74,24 +77,24 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self mainViewController:self.mainViewController didSelectLayouterType:SCStackLayouterTypeParallax];
+    [self mainViewController:self.mainViewController didChangeLayouterType:SCStackLayouterTypePlain];
 }
 
 #pragma mark - SCMainViewControllerDelegate
 
-- (void)mainViewController:(SCMainViewController *)mainViewController didSelectLayouterType:(SCStackLayouterType)type
+- (void)mainViewController:(SCMainViewController *)mainViewController didChangeLayouterType:(SCStackLayouterType)type
 {
     static NSDictionary *typeToLayouter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         typeToLayouter = (@{
-                            @(SCStackLayouterTypePlain)              : [SCStackLayouter class],
-                            @(SCStackLayouterTypeSliding)            : [SCSlidingStackLayouter class],
-                            @(SCStackLayouterTypeParallax)           : [SCParallaxStackLayouter class],
-                            @(SCStackLayouterTypeGoogleMaps)         : [SCGoogleMapsStackLayouter class],
-                            @(SCStackLayouterTypeMerryGoRound)       : [SCMerryGoRoundStackLayouter class],
-                            @(SCStackLayouterTypeReversed)           : [SCReversedStackLayouter class],
-                            @(SCStacklayouterTypePlainResizing)      : [SCResizingStackLayouter class]
+                            @(SCStackLayouterTypePlain)         : [SCStackLayouter class],
+                            @(SCStackLayouterTypeSliding)       : [SCSlidingStackLayouter class],
+                            @(SCStackLayouterTypeParallax)      : [SCParallaxStackLayouter class],
+                            @(SCStackLayouterTypeGoogleMaps)    : [SCGoogleMapsStackLayouter class],
+                            @(SCStackLayouterTypeMerryGoRound)  : [SCMerryGoRoundStackLayouter class],
+                            @(SCStackLayouterTypeReversed)      : [SCReversedStackLayouter class],
+                            @(SCStacklayouterTypePlainResizing) : [SCResizingStackLayouter class]
                             });
     });
     
@@ -141,6 +144,16 @@
                                                                                                animated:NO
                                                                                              completion:nil];
                                                        }];
+}
+
+- (void)mainViewController:(SCMainViewController *)mainViewController didChangeAnimationType:(SCEasingFunctionType)type
+{
+    [self.stackViewController setEasingFunction:[SCEasingFunction easingFunctionWithType:type]];
+}
+
+- (void)mainViewController:(SCMainViewController *)mainViewController didChangeAnimationDuration:(NSTimeInterval)duration
+{
+    [self.stackViewController setAnimationDuration:duration];
 }
 
 #pragma mark - SCOverlayViewDelegate
