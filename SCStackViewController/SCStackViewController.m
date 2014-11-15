@@ -203,31 +203,46 @@
         return;
     }
     
+    [self popViewController:lastViewController
+                   animated:animated
+                 completion:completion];
+}
+
+- (void)popViewController:(UIViewController *)viewController
+                 animated:(BOOL)animated
+               completion:(void(^)())completion
+{
+    if(viewController == nil) {
+        return;
+    }
+    
+    SCStackViewControllerPosition position = [self positionForViewController:viewController];
+
     UIViewController *previousViewController;
-    if([self.loadedControllers[@(position)] count] == 1) {
+    if([self.loadedControllers[@(position)] indexOfObject:viewController] == 0) {
         previousViewController = self.rootViewController;
     } else {
-        previousViewController = [self.loadedControllers[@(position)] objectAtIndex:[self.loadedControllers[@(position)] indexOfObject:lastViewController] - 1];
+        previousViewController = [self.loadedControllers[@(position)] objectAtIndex:[self.loadedControllers[@(position)] indexOfObject:viewController] - 1];
     }
     
     void(^cleanup)() = ^{
-        [self.loadedControllers[@(position)] removeObject:lastViewController];
-        [self.finalFrames removeObjectForKey:@([lastViewController hash])];
-        [self.visiblePercentages removeObjectForKey:@([lastViewController hash])];
+        [self.loadedControllers[@(position)] removeObject:viewController];
+        [self.finalFrames removeObjectForKey:@([viewController hash])];
+        [self.visiblePercentages removeObjectForKey:@([viewController hash])];
         [self updateFinalFramesForPosition:position];
         [self updateBoundsIgnoringNavigationContraints];
         
-        if([self.visibleControllers containsObject:lastViewController]) {
-            [lastViewController beginAppearanceTransition:NO animated:animated];
+        if([self.visibleControllers containsObject:viewController]) {
+            [viewController beginAppearanceTransition:NO animated:animated];
         }
         
-        [lastViewController willMoveToParentViewController:nil];
-        [lastViewController.view removeFromSuperview];
-        [lastViewController removeFromParentViewController];
+        [viewController willMoveToParentViewController:nil];
+        [viewController.view removeFromSuperview];
+        [viewController removeFromParentViewController];
         
-        if([self.visibleControllers containsObject:lastViewController]) {
-            [lastViewController endAppearanceTransition];
-            [self.visibleControllers removeObject:lastViewController];
+        if([self.visibleControllers containsObject:viewController]) {
+            [viewController endAppearanceTransition];
+            [self.visibleControllers removeObject:viewController];
         }
         
         [self updateBoundsUsingNavigationContraints];
@@ -237,7 +252,7 @@
         }
     };
     
-    if([self.visibleControllers containsObject:lastViewController]) {
+    if([self.visibleControllers containsObject:viewController]) {
         [self navigateToViewController:previousViewController animated:animated completion:cleanup];
     } else {
         cleanup();

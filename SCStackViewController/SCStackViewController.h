@@ -235,6 +235,16 @@ typedef enum {
                            animated:(BOOL)animated
                          completion:(void(^)())completion;
 
+/** Pops the given view controller
+ *
+ * @param viewController The view controller to top
+ * @param animated Controls whether the pop will be animated
+ * @param completion Completion block called when the pop is done
+ */
+- (void)popViewController:(UIViewController *)viewController
+                 animated:(BOOL)animated
+               completion:(void(^)())completion;
+
 
 /** Pops all the view controllers from the given position
  *
