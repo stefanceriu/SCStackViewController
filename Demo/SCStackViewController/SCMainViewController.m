@@ -50,15 +50,13 @@ typedef NS_ENUM(NSUInteger, SCPickerViewComponentType)
             static NSDictionary *typeToString;
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
-                typeToString = (@{
-                                  @(SCStackLayouterTypePlain)              : @"Plain",
+                typeToString = (@{@(SCStackLayouterTypePlain)              : @"Plain",
                                   @(SCStackLayouterTypeSliding)            : @"Sliding",
                                   @(SCStackLayouterTypeParallax)           : @"Parallax",
                                   @(SCStackLayouterTypeGoogleMaps)         : @"Google Maps",
                                   @(SCStackLayouterTypeMerryGoRound)       : @"Merry Go Round",
                                   @(SCStackLayouterTypeReversed)           : @"Reversed",
-                                  @(SCStacklayouterTypePlainResizing)      : @"Resizing"
-                                  });
+                                  @(SCStacklayouterTypePlainResizing)      : @"Resizing"});
             });
             
             return [[NSAttributedString alloc] initWithString:typeToString[@(row)]
@@ -69,8 +67,7 @@ typedef NS_ENUM(NSUInteger, SCPickerViewComponentType)
             static NSDictionary *typeToString;
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
-                typeToString = (@{
-                                  @(SCEasingFunctionTypeLinear)               : @"Linear",
+                typeToString = (@{@(SCEasingFunctionTypeLinear)               : @"Linear",
                                   
                                   @(SCEasingFunctionTypeQuadraticEaseIn)      : @"Quadratic Ease In",
                                   @(SCEasingFunctionTypeQuadraticEaseOut)     : @"Quadratic Ease Out",
@@ -110,8 +107,7 @@ typedef NS_ENUM(NSUInteger, SCPickerViewComponentType)
                                   
                                   @(SCEasingFunctionTypeBounceEaseIn)         : @"Bounce Ease In",
                                   @(SCEasingFunctionTypeBounceEaseOut)        : @"Bounce Ease Out",
-                                  @(SCEasingFunctionTypeBounceEaseInOut)      : @"Bounce Ease In Out"
-                                  });
+                                  @(SCEasingFunctionTypeBounceEaseInOut)      : @"Bounce Ease In Out"});
             });
             
             return [[NSAttributedString alloc] initWithString:typeToString[@(row)]

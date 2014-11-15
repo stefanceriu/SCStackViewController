@@ -21,8 +21,8 @@
 
 @property (nonatomic, strong) SCScrollView *scrollView;
 
-@property (nonatomic, strong) NSDictionary *viewControllers;
-@property (nonatomic, strong) NSMutableArray *visibleViewControllers;
+@property (nonatomic, strong) NSDictionary *loadedControllers;
+@property (nonatomic, strong) NSMutableArray *visibleControllers;
 
 @property (nonatomic, strong) NSMutableDictionary *layouters;
 @property (nonatomic, strong) NSMutableDictionary *finalFrames;
@@ -31,6 +31,8 @@
 @property (nonatomic, strong) NSMutableDictionary *visiblePercentages;
 
 @property (nonatomic, assign) BOOL isViewVisible;
+
+@property (nonatomic, assign) BOOL isRootViewControllerVisible;
 
 @end
 
@@ -63,14 +65,12 @@
 
 - (void)setup
 {
-    self.viewControllers = (@{
-                              @(SCStackViewControllerPositionTop)   : [NSMutableArray array],
-                              @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
-                              @(SCStackViewControllerPositionBottom): [NSMutableArray array],
-                              @(SCStackViewControllerPositionRight) : [NSMutableArray array]
-                              });
+    self.loadedControllers = (@{@(SCStackViewControllerPositionTop)   : [NSMutableArray array],
+                                @(SCStackViewControllerPositionLeft)  : [NSMutableArray array],
+                                @(SCStackViewControllerPositionBottom): [NSMutableArray array],
+                                @(SCStackViewControllerPositionRight) : [NSMutableArray array]});
     
-    self.visibleViewControllers = [NSMutableArray array];
+    self.visibleControllers = [NSMutableArray array];
     
     self.layouters = [NSMutableDictionary dictionary];
     self.finalFrames = [NSMutableDictionary dictionary];
@@ -135,7 +135,7 @@
 {
     NSAssert(viewController != nil, @"Trying to push nil view controller");
     
-    if([[self.viewControllers.allValues valueForKeyPath:@"@unionOfArrays.self"] containsObject:viewController]) {
+    if([[self.loadedControllers.allValues valueForKeyPath:@"@unionOfArrays.self"] containsObject:viewController]) {
         NSLog(@"Trying to push an already pushed view controller");
         
         if(unfold) {
@@ -146,7 +146,7 @@
         return;
     }
     
-    NSMutableArray *viewControllers = self.viewControllers[@(position)];
+    NSMutableArray *viewControllers = self.loadedControllers[@(position)];
     [viewControllers addObject:viewController];
     
     [self updateFinalFramesForPosition:position];
@@ -193,23 +193,31 @@
                            animated:(BOOL)animated
                          completion:(void(^)())completion
 {
-    UIViewController *lastViewController = [self.viewControllers[@(position)] lastObject];
+    UIViewController *lastViewController = [self.loadedControllers[@(position)] lastObject];
+    
+    if(lastViewController == nil) {
+        if(completion) {
+            completion();
+        }
+        
+        return;
+    }
     
     UIViewController *previousViewController;
-    if([self.viewControllers[@(position)] count] == 1) {
+    if([self.loadedControllers[@(position)] count] == 1) {
         previousViewController = self.rootViewController;
     } else {
-        previousViewController = [self.viewControllers[@(position)] objectAtIndex:[self.viewControllers[@(position)] indexOfObject:lastViewController] - 1];
+        previousViewController = [self.loadedControllers[@(position)] objectAtIndex:[self.loadedControllers[@(position)] indexOfObject:lastViewController] - 1];
     }
     
     void(^cleanup)() = ^{
-        [self.viewControllers[@(position)] removeObject:lastViewController];
+        [self.loadedControllers[@(position)] removeObject:lastViewController];
         [self.finalFrames removeObjectForKey:@([lastViewController hash])];
         [self.visiblePercentages removeObjectForKey:@([lastViewController hash])];
         [self updateFinalFramesForPosition:position];
         [self updateBoundsIgnoringNavigationContraints];
         
-        if([self.visibleViewControllers containsObject:lastViewController]) {
+        if([self.visibleControllers containsObject:lastViewController]) {
             [lastViewController beginAppearanceTransition:NO animated:animated];
         }
         
@@ -217,9 +225,9 @@
         [lastViewController.view removeFromSuperview];
         [lastViewController removeFromParentViewController];
         
-        if([self.visibleViewControllers containsObject:lastViewController]) {
+        if([self.visibleControllers containsObject:lastViewController]) {
             [lastViewController endAppearanceTransition];
-            [self.visibleViewControllers removeObject:lastViewController];
+            [self.visibleControllers removeObject:lastViewController];
         }
         
         [self updateBoundsUsingNavigationContraints];
@@ -229,7 +237,7 @@
         }
     };
     
-    if([self.visibleViewControllers containsObject:lastViewController]) {
+    if([self.visibleControllers containsObject:lastViewController]) {
         [self navigateToViewController:previousViewController animated:animated completion:cleanup];
     } else {
         cleanup();
@@ -243,7 +251,7 @@
     [self navigateToViewController:self.rootViewController
                           animated:animated
                         completion:^{
-                            NSMutableArray *viewControllers = self.viewControllers[@(position)];
+                            NSMutableArray *viewControllers = self.loadedControllers[@(position)];
                             
                             for(int i=0; viewControllers.count; i++) {
                                 [self popViewControllerAtPosition:position animated:NO completion:nil];
@@ -365,12 +373,21 @@
 
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position
 {
-    return [self.viewControllers[@(position)] copy];
+    return [self.loadedControllers[@(position)] copy];
+}
+
+- (NSArray *)visibleViewControllers
+{
+    if(self.isRootViewControllerVisible) {
+        return [[NSArray arrayWithObject:self.rootViewController] arrayByAddingObjectsFromArray:self.visibleControllers];
+    } else {
+        return [self.visibleControllers copy];
+    }
 }
 
 - (BOOL)isViewControllerVisible:(UIViewController *)viewController
 {
-    return [self.visibleViewControllers containsObject:viewController];
+    return [self.visibleControllers containsObject:viewController];
 }
 
 - (CGFloat)visiblePercentageForViewController:(UIViewController *)viewController
@@ -462,7 +479,7 @@
 
 - (void)updateFinalFramesForPosition:(SCStackViewControllerPosition)position
 {
-    NSMutableArray *viewControllers = self.viewControllers[@(position)];
+    NSMutableArray *viewControllers = self.loadedControllers[@(position)];
     [viewControllers enumerateObjectsUsingBlock:^(UIViewController *controller, NSUInteger idx, BOOL *stop) {
         CGRect finalFrame = [self.layouters[@(position)] finalFrameForViewController:controller withIndex:idx atPosition:position withinGroup:viewControllers inStackController:self];
         [self.finalFrames setObject:[NSValue valueWithCGRect:finalFrame] forKey:@([controller hash])];
@@ -478,7 +495,7 @@
     
     for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
         
-        NSArray *viewControllerHashes = [self.viewControllers[@(position)] valueForKeyPath:@"@distinctUnionOfObjects.hash"];
+        NSArray *viewControllerHashes = [self.loadedControllers[@(position)] valueForKeyPath:@"@distinctUnionOfObjects.hash"];
         NSArray *finalFrameKeys = [self.finalFrames.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSNumber *hash, NSDictionary *bindings) {
             return [viewControllerHashes containsObject:hash];
         }]];
@@ -527,7 +544,7 @@
     UIEdgeInsets insets = UIEdgeInsetsZero;
     
     for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
-        NSArray *viewControllers = self.viewControllers[@(position)];
+        NSArray *viewControllers = self.loadedControllers[@(position)];
         
         if(viewControllers.count == 0) {
             continue;
@@ -565,7 +582,7 @@
     }
     
     UIEdgeInsets insets = UIEdgeInsetsZero;
-    UIViewController *lastVisibleController = [self.visibleViewControllers lastObject];
+    UIViewController *lastVisibleController = [self.visibleControllers lastObject];
     
     if(CGPointEqualToPoint(self.scrollView.contentOffset, CGPointZero) || lastVisibleController == nil) {
         [self updateBoundsUsingDefaultNavigationContraints];
@@ -574,9 +591,9 @@
     
     SCStackViewControllerPosition lastVisibleControllerPosition = [self positionForViewController:lastVisibleController];
     
-    NSArray *viewControllersArray = self.viewControllers[@(lastVisibleControllerPosition)];
+    NSArray *viewControllersArray = self.loadedControllers[@(lastVisibleControllerPosition)];
     
-    lastVisibleController = [[self.visibleViewControllers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    lastVisibleController = [[self.visibleControllers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         return [@([viewControllersArray indexOfObject:obj1]) compare:@([viewControllersArray indexOfObject:obj2])];
     }] lastObject];
     
@@ -682,18 +699,18 @@
         activeLayouter = self.layouters[@(SCStackViewControllerPositionRight)];
     }
     
+    CGRect newRootViewControllerFrame;
+    if([activeLayouter respondsToSelector:@selector(currentFrameForRootViewController:contentOffset:inStackController:)]) {
+        newRootViewControllerFrame = [activeLayouter currentFrameForRootViewController:self.rootViewController contentOffset:offset inStackController:self];
+    } else {
+        newRootViewControllerFrame = self.view.bounds;
+    }
+    
+    __block CGRect rootRemainder = CGRectIntersection(self.scrollView.bounds, newRootViewControllerFrame);
+    
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         
         id<SCStackLayouterProtocol> layouter = self.layouters[@(position)];
-        
-        if([layouter isEqual:activeLayouter]) {
-            if([layouter respondsToSelector:@selector(currentFrameForRootViewController:contentOffset:inStackController:)]) {
-                CGRect frame = [layouter currentFrameForRootViewController:self.rootViewController contentOffset:offset inStackController:self];
-                [self.rootViewController.view setFrame:frame];
-            }
-        } else if(activeLayouter == nil) {
-            [self.rootViewController.view setFrame:self.view.bounds];
-        }
         
         BOOL shouldStackControllersAboveRoot = NO;
         if([layouter respondsToSelector:@selector(shouldStackControllersAboveRoot)]) {
@@ -707,7 +724,7 @@
         if(shouldStackControllersAboveRoot) {
             remainder = [self subtractRect:CGRectIntersection(self.scrollView.bounds, self.view.bounds) fromRect:self.scrollView.bounds withEdge:edge];
         } else {
-            remainder = [self subtractRect:CGRectIntersection(self.scrollView.bounds, self.rootViewController.view.frame) fromRect:self.scrollView.bounds withEdge:edge];
+            remainder = [self subtractRect:CGRectIntersection(self.scrollView.bounds, newRootViewControllerFrame) fromRect:self.scrollView.bounds withEdge:edge];
         }
         
         BOOL isReversed = NO;
@@ -715,7 +732,7 @@
             isReversed = [layouter isReversed];
         }
         
-        NSArray *viewControllersArray = self.viewControllers[@(position)];
+        NSArray *viewControllersArray = self.loadedControllers[@(position)];
         [viewControllersArray enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger index, BOOL *stop) {
             
             CGRect nextFrame =  [layouter currentFrameForViewController:viewController withIndex:index atPosition:position finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue] contentOffset:offset inStackController:self];
@@ -781,11 +798,15 @@
                 
                 // And if it's visible then we prepare for the next view controller by reducing the remainder some more
                 remainder = [self subtractRect:CGRectIntersection(remainder, adjustedFrame) fromRect:remainder withEdge:edge];
+                
+                if(shouldStackControllersAboveRoot) {
+                    rootRemainder = [self subtractRect:CGRectIntersection(rootRemainder, adjustedFrame) fromRect:rootRemainder withEdge:edge];
+                }
             }
             
             // Finally, trigger appearance callbacks and new frame
-            if(visible && ![self.visibleViewControllers containsObject:viewController]) {
-                [self.visibleViewControllers addObject:viewController];
+            if(visible && ![self.visibleControllers containsObject:viewController]) {
+                [self.visibleControllers addObject:viewController];
                 [viewController beginAppearanceTransition:YES animated:NO];
                 [viewController.view setFrame:nextFrame];
                 [viewController endAppearanceTransition];
@@ -794,8 +815,8 @@
                     [self.delegate stackViewController:self didShowViewController:viewController position:position];
                 }
                 
-            } else if(!visible && [self.visibleViewControllers containsObject:viewController]) {
-                [self.visibleViewControllers removeObject:viewController];
+            } else if(!visible && [self.visibleControllers containsObject:viewController]) {
+                [self.visibleControllers removeObject:viewController];
                 [viewController beginAppearanceTransition:NO animated:NO];
                 [viewController.view setFrame:nextFrame];
                 [viewController endAppearanceTransition];
@@ -808,6 +829,25 @@
                 [viewController.view setFrame:nextFrame];
             }
         }];
+    }
+    
+    // Figure out if the root is still visible or not and call its appearance methods
+    BOOL visible = (([self.loadedControllers[@(SCStackViewControllerPositionLeft)] count] || [self.loadedControllers[@(SCStackViewControllerPositionRight)] count]) && CGRectGetWidth(rootRemainder) > 0.0f);
+    visible = visible || (([self.loadedControllers[@(SCStackViewControllerPositionTop)] count] || [self.loadedControllers[@(SCStackViewControllerPositionBottom)] count]) && CGRectGetHeight(rootRemainder) > 0.0f);
+    visible = visible && self.isViewVisible;
+    
+    if(visible && !self.isRootViewControllerVisible) {
+        self.isRootViewControllerVisible = YES;
+        [self.rootViewController beginAppearanceTransition:YES animated:NO];
+        [self.rootViewController.view setFrame:newRootViewControllerFrame];
+        [self.rootViewController endAppearanceTransition];
+    } else if(!visible && self.isRootViewControllerVisible) {
+        self.isRootViewControllerVisible = NO;
+        [self.rootViewController beginAppearanceTransition:NO animated:NO];
+        [self.rootViewController.view setFrame:newRootViewControllerFrame];
+        [self.rootViewController endAppearanceTransition];
+    } else {
+        [self.rootViewController.view setFrame:newRootViewControllerFrame];
     }
 }
 
@@ -843,7 +883,7 @@
             }
         }
         
-        NSArray *viewControllersArray = self.viewControllers[@(position)];
+        NSArray *viewControllersArray = self.loadedControllers[@(position)];
         
         __block BOOL keepGoing = YES;
         
@@ -1032,7 +1072,7 @@
         return;
     }
     
-    UIViewController *lastVisibleViewController = [self.visibleViewControllers lastObject];
+    UIViewController *lastVisibleViewController = [self.visibleControllers lastObject];
     
     
     SCStackNavigationStep *step;
@@ -1141,13 +1181,13 @@
 {
     switch (position) {
         case SCStackViewControllerPositionTop:
-            return CGPointMake(0, -[[self.viewControllers[@(position)] valueForKeyPath:@"@sum.sc_viewHeight"] floatValue]);
+            return CGPointMake(0, -[[self.loadedControllers[@(position)] valueForKeyPath:@"@sum.sc_viewHeight"] floatValue]);
         case SCStackViewControllerPositionLeft:
-            return CGPointMake(-[[self.viewControllers[@(position)] valueForKeyPath:@"@sum.sc_viewWidth"] floatValue], 0);
+            return CGPointMake(-[[self.loadedControllers[@(position)] valueForKeyPath:@"@sum.sc_viewWidth"] floatValue], 0);
         case SCStackViewControllerPositionBottom:
-            return CGPointMake(0, [[self.viewControllers[@(position)] valueForKeyPath:@"@sum.sc_viewHeight"] floatValue]);
+            return CGPointMake(0, [[self.loadedControllers[@(position)] valueForKeyPath:@"@sum.sc_viewHeight"] floatValue]);
         case SCStackViewControllerPositionRight:
-            return CGPointMake([[self.viewControllers[@(position)] valueForKeyPath:@"@sum.sc_viewWidth"] floatValue], 0);
+            return CGPointMake([[self.loadedControllers[@(position)] valueForKeyPath:@"@sum.sc_viewWidth"] floatValue], 0);
         default:
             return CGPointZero;
     }
@@ -1156,7 +1196,7 @@
 - (SCStackViewControllerPosition)positionForViewController:(UIViewController *)viewController
 {
     for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
-        if([self.viewControllers[@(position)] containsObject:viewController]) {
+        if([self.loadedControllers[@(position)] containsObject:viewController]) {
             return position;
         }
     }
@@ -1193,6 +1233,10 @@ UIEdgeInsets UIEdgeInsetsIntegral(UIEdgeInsets edgeInsets)
 
 - (CGRect)subtractRect:(CGRect)r2 fromRect:(CGRect)r1 withEdge:(CGRectEdge)edge
 {
+    if(CGRectEqualToRect(r1, r2)) {
+        return CGRectZero;
+    }
+    
     CGRect intersection = CGRectIntersection(r1, r2);
     if (CGRectIsNull(intersection)) {
         return r1;

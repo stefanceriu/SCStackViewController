@@ -291,6 +291,13 @@ typedef enum {
  */
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position;
 
+/**
+ * @return An NSArray of view controllers that are currently visible. Includes
+ * root view controller.
+ *
+ */
+- (NSArray *)visibleViewControllers;
+
 
 /**
  * @return BOOL value representing the visibility of the passed view controller
