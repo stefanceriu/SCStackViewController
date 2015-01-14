@@ -1178,6 +1178,14 @@
     }
 }
 
+#pragma mark - Rotation Handling
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    // Leave enough room for the scrollView's content to adjust. Will be recalculated on layoutSubviews
+    [self.scrollView setContentInset:UIEdgeInsetsMake(CGFLOAT_MAX, CGFLOAT_MAX, CGFLOAT_MAX, CGFLOAT_MAX)];
+}
+
 #pragma mark - Helpers
 
 - (CGPoint)maximumInsetForPosition:(SCStackViewControllerPosition)position
