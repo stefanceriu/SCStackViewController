@@ -133,6 +133,10 @@
                   animated:(BOOL)animated
                 completion:(void(^)())completion
 {
+	if(self.scrollView.isRunningAnimation && self.shouldBlockInteractionWhileAnimating) {
+		return;
+	}
+	
     NSAssert(viewController != nil, @"Trying to push nil view controller");
     
     if([[self.loadedControllers.allValues valueForKeyPath:@"@unionOfArrays.self"] containsObject:viewController]) {
@@ -193,6 +197,10 @@
                            animated:(BOOL)animated
                          completion:(void(^)())completion
 {
+	if(self.scrollView.isRunningAnimation && self.shouldBlockInteractionWhileAnimating) {
+		return;
+	}
+	
     UIViewController *lastViewController = [self.loadedControllers[@(position)] lastObject];
     
     if(lastViewController == nil) {
@@ -212,6 +220,10 @@
                  animated:(BOOL)animated
                completion:(void(^)())completion
 {
+	if(self.scrollView.isRunningAnimation && self.shouldBlockInteractionWhileAnimating) {
+		return;
+	}
+	
     if(viewController == nil) {
         return;
     }
@@ -292,6 +304,10 @@
               animated:(BOOL)animated
             completion:(void(^)())completion
 {
+	if(self.scrollView.isRunningAnimation && self.shouldBlockInteractionWhileAnimating) {
+		return;
+	}
+	
     CGPoint offset = CGPointZero;
     CGRect finalFrame = CGRectZero;
     
@@ -402,6 +418,10 @@
 
 - (BOOL)isViewControllerVisible:(UIViewController *)viewController
 {
+	if([viewController isEqual:self.rootViewController]) {
+		return self.isRootViewControllerVisible;
+	}
+	
     return [self.visibleControllers containsObject:viewController];
 }
 
@@ -847,8 +867,13 @@
     }
     
     // Figure out if the root is still visible or not and call its appearance methods
-    BOOL visible = (([self.loadedControllers[@(SCStackViewControllerPositionLeft)] count] || [self.loadedControllers[@(SCStackViewControllerPositionRight)] count]) && CGRectGetWidth(rootRemainder) > 0.0f);
-    visible = visible || (([self.loadedControllers[@(SCStackViewControllerPositionTop)] count] || [self.loadedControllers[@(SCStackViewControllerPositionBottom)] count]) && CGRectGetHeight(rootRemainder) > 0.0f);
+	BOOL hasVerticalControllers = ([self.loadedControllers[@(SCStackViewControllerPositionTop)] count] || [self.loadedControllers[@(SCStackViewControllerPositionBottom)] count]);
+	BOOL hasHorizontalController = ([self.loadedControllers[@(SCStackViewControllerPositionLeft)] count] || [self.loadedControllers[@(SCStackViewControllerPositionRight)] count]);
+	
+    BOOL visible = (hasHorizontalController && CGRectGetWidth(rootRemainder) > 0.0f);
+    visible = visible || (hasVerticalControllers && CGRectGetHeight(rootRemainder) > 0.0f);
+	visible = visible || (!hasHorizontalController && !hasVerticalControllers);
+	
     visible = visible && self.isViewVisible;
     
     if(visible && !self.isRootViewControllerVisible) {

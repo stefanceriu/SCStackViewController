@@ -141,11 +141,19 @@ typedef enum {
  */
 @property (nonatomic, assign) NSUInteger maximumNumberOfTouches;
 
+
 /**
  * @return The current content offset in the stack's scrollView
  *
  */
 @property (nonatomic, readonly) CGPoint contentOffset;
+
+
+/**
+ * @return Blocks interaction while animations are running
+ *
+ */
+@property (nonatomic, assign) BOOL shouldBlockInteractionWhileAnimating;
 
 
 /**-----------------------------------------------------------------------------
