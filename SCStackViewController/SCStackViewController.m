@@ -7,6 +7,7 @@
 //
 
 #import "SCStackViewController.h"
+#import "SCStackViewControllerView.h"
 
 #import "SCScrollView.h"
 #import "SCEasingFunction.h"
@@ -15,7 +16,7 @@
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
-@interface SCStackViewController () <UIScrollViewDelegate>
+@interface SCStackViewController () <SCStackViewControllerViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UIViewController *rootViewController;
 
@@ -409,11 +410,17 @@
 
 - (NSArray *)visibleViewControllers
 {
-    if(self.isRootViewControllerVisible) {
-        return [[NSArray arrayWithObject:self.rootViewController] arrayByAddingObjectsFromArray:self.visibleControllers];
-    } else {
-        return [self.visibleControllers copy];
-    }
+	NSArray *viewControllers = [self viewControllersForPosition:[self positionForViewController:self.visibleControllers.lastObject]];
+	
+	NSArray *sortedViewControllers = [self.visibleControllers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+		return [@([viewControllers indexOfObject:obj1]) compare:@([viewControllers indexOfObject:obj2])];
+	}];
+	
+	if(self.isRootViewControllerVisible) {
+		return [[NSArray arrayWithObject:self.rootViewController] arrayByAddingObjectsFromArray:sortedViewControllers];
+	}
+	
+	return sortedViewControllers;
 }
 
 - (BOOL)isViewControllerVisible:(UIViewController *)viewController
@@ -422,7 +429,7 @@
 		return self.isRootViewControllerVisible;
 	}
 	
-    return [self.visibleControllers containsObject:viewController];
+    return [self.visibleViewControllers containsObject:viewController];
 }
 
 - (CGFloat)visiblePercentageForViewController:(UIViewController *)viewController
@@ -435,6 +442,13 @@
 }
 
 #pragma mark - UIViewController View Events
+
+- (void)loadView
+{
+	SCStackViewControllerView *view = [[SCStackViewControllerView alloc] init];
+	[view setDelegate:self];
+	self.view = view;
+}
 
 - (void)viewDidLoad
 {
@@ -462,14 +476,28 @@
 
 - (void)viewWillLayoutSubviews
 {
+	[super viewWillLayoutSubviews];
+	
+	[self.scrollView setDelegate:nil];
+	
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         [self updateFinalFramesForPosition:position];
     }
     
     [self updateBoundsIgnoringNavigationContraints];
-    [self updateBoundsUsingNavigationContraints];
-    
-    [self scrollViewDidScroll:self.scrollView];
+	
+	UIViewController *lastVisibleViewController = [self.visibleViewControllers lastObject];
+	CGFloat visiblePercentage = [self visiblePercentageForViewController:lastVisibleViewController];
+	
+	[self navigateToStep:[SCStackNavigationStep navigationStepWithPercentage:visiblePercentage] inViewController:lastVisibleViewController animated:NO completion:nil];
+	
+	[self updateFramesAndTriggerAppearanceCallbacks];
+	[self updateBoundsUsingNavigationContraints];
+}
+
+- (void)viewDidLayoutSubviews
+{
+	[self.scrollView setDelegate:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -617,22 +645,15 @@
     }
     
     UIEdgeInsets insets = UIEdgeInsetsZero;
-    UIViewController *lastVisibleController = [self.visibleControllers lastObject];
+    UIViewController *lastVisibleController = [self.visibleViewControllers lastObject];
     
     if(CGPointEqualToPoint(self.scrollView.contentOffset, CGPointZero) || lastVisibleController == nil) {
         [self updateBoundsUsingDefaultNavigationContraints];
         return;
     }
-    
+	
     SCStackViewControllerPosition lastVisibleControllerPosition = [self positionForViewController:lastVisibleController];
-    
     NSArray *viewControllersArray = self.loadedControllers[@(lastVisibleControllerPosition)];
-    
-    lastVisibleController = [[self.visibleControllers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [@([viewControllersArray indexOfObject:obj1]) compare:@([viewControllersArray indexOfObject:obj2])];
-    }] lastObject];
-    
-    
     NSUInteger visibleControllerIndex = [viewControllersArray indexOfObject:lastVisibleController];
     
     BOOL isReversed = NO;
@@ -805,7 +826,7 @@
                         break;
                 }
             }
-            
+			
             CGRect intersection = CGRectIntersection(remainder, adjustedFrame);
             
             // If a view controller's frame does intersect the remainder then it's visible
@@ -1095,6 +1116,18 @@
     return nextStepOffset;
 }
 
+#pragma mark - SCStackViewControllerViewDelegate
+
+- (void)stackViewControllerViewWillChangeFrame:(SCStackViewControllerView *)stackViewControllerView
+{
+	[self.scrollView setDelegate:nil];
+}
+
+- (void)stackViewControllerViewDidChangeFrame:(SCStackViewControllerView *)stackViewControllerView
+{
+	[self.scrollView setDelegate:self];
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -1112,8 +1145,7 @@
         return;
     }
     
-    UIViewController *lastVisibleViewController = [self.visibleControllers lastObject];
-    
+    UIViewController *lastVisibleViewController = [self.visibleViewControllers lastObject];
     
     SCStackNavigationStep *step;
     if(lastVisibleViewController == nil) {
