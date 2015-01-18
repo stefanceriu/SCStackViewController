@@ -910,11 +910,21 @@
         [self.rootViewController beginAppearanceTransition:YES animated:NO];
         [self.rootViewController.view setFrame:newRootViewControllerFrame];
         [self.rootViewController endAppearanceTransition];
+		
+		if([self.delegate respondsToSelector:@selector(stackViewController:didShowViewController:position:)]) {
+			[self.delegate stackViewController:self didShowViewController:self.rootViewController position:-1];
+		}
+		
     } else if(!visible && self.isRootViewControllerVisible) {
         self.isRootViewControllerVisible = NO;
         [self.rootViewController beginAppearanceTransition:NO animated:NO];
         [self.rootViewController.view setFrame:newRootViewControllerFrame];
         [self.rootViewController endAppearanceTransition];
+		
+		if([self.delegate respondsToSelector:@selector(stackViewController:didHideViewController:position:)]) {
+			[self.delegate stackViewController:self didHideViewController:self.rootViewController position:-1];
+		}
+		
     } else {
         [self.rootViewController.view setFrame:newRootViewControllerFrame];
     }
