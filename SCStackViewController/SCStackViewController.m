@@ -138,7 +138,7 @@
 		return;
 	}
 	
-    NSAssert(viewController != nil, @"Trying to push nil view controller");
+    NSAssert(viewController != nil, @"Trying to push a nil view controller");
     
     if([[self.loadedControllers.allValues valueForKeyPath:@"@unionOfArrays.self"] containsObject:viewController]) {
         NSLog(@"Trying to push an already pushed view controller");
@@ -179,12 +179,21 @@
     
     __weak typeof(self) weakSelf = self;
     if(unfold) {
-        [self.scrollView setContentOffset:[self maximumInsetForPosition:position] easingFunction:self.easingFunction duration:(animated ? self.animationDuration : 0.0f) completion:^{
-            [weakSelf updateBoundsUsingNavigationContraints];
-            if(completion) {
-                completion();
-            }
-        }];
+		
+		void(^cleanup)() = ^{
+			[weakSelf updateBoundsUsingNavigationContraints];
+			if(completion) {
+				completion();
+			}
+		};
+		
+		if(animated) {
+			[self.scrollView setContentOffset:[self maximumInsetForPosition:position] easingFunction:self.easingFunction duration:self.animationDuration completion:cleanup];
+		} else {
+			[self.scrollView setContentOffset:[self maximumInsetForPosition:position]];
+			cleanup();
+		}
+		
     } else {
         
         [self updateBoundsUsingNavigationContraints];
@@ -391,16 +400,22 @@
     }
     
     // Navigate to the determined offset, restore the previous navigation states and update navigation contraints
-    __weak typeof(self) weakSelf = self;
-    [self.scrollView setContentOffset:offset easingFunction:self.easingFunction duration:(animated ? self.animationDuration : 0.0f) completion:^{
-
-        [weakSelf registerNavigationSteps:previousSteps forViewController:viewController];
-        [weakSelf updateBoundsUsingNavigationContraints];
-        
-        if(completion) {
-            completion();
-        }
-    }];
+	__weak typeof(self) weakSelf = self;
+	void(^cleanup)() = ^{
+		[weakSelf registerNavigationSteps:previousSteps forViewController:viewController];
+		[weakSelf updateBoundsUsingNavigationContraints];
+		
+		if(completion) {
+			completion();
+		}
+	};
+	
+	if(animated) {
+		[self.scrollView setContentOffset:offset easingFunction:self.easingFunction duration:self.animationDuration completion:cleanup];
+	} else {
+		[self.scrollView setContentOffset:offset];
+		cleanup();
+	}
 }
 
 - (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position
@@ -454,7 +469,7 @@
 {
     [super viewDidLoad];
     
-    [self.view setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
     self.scrollView = [[SCScrollView alloc] initWithFrame:self.view.bounds];
     [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -478,8 +493,6 @@
 {
 	[super viewWillLayoutSubviews];
 	
-	[self.scrollView setDelegate:nil];
-	
     for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
         [self updateFinalFramesForPosition:position];
     }
@@ -493,11 +506,6 @@
 	
 	[self updateFramesAndTriggerAppearanceCallbacks];
 	[self updateBoundsUsingNavigationContraints];
-}
-
-- (void)viewDidLayoutSubviews
-{
-	[self.scrollView setDelegate:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated

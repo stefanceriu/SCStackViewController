@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'SCStackViewController'
-  s.version  = '3.1.1'
+  s.version  = '3.1.2'
   s.platform = :ios
   s.ios.deployment_target = '5.0'
 
