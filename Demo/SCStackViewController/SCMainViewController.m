@@ -17,9 +17,18 @@ typedef NS_ENUM(NSUInteger, SCPickerViewComponentType)
 
 @interface SCMainViewController () <UIPickerViewDataSource, UIPickerViewDelegate>
 
+@property (nonatomic, weak) IBOutlet UILabel *visiblePercentageLabel;
+
 @end
 
 @implementation SCMainViewController
+
+#pragma mark - Public
+
+- (void)setVisiblePercentage:(CGFloat)percentage
+{
+	[self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.3f%%", percentage]];
+}
 
 #pragma mark - UIPickerViewDataSource
 

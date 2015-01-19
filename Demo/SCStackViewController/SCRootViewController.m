@@ -198,6 +198,8 @@
             [viewController setVisiblePercentage:[stackViewController visiblePercentageForViewController:viewController]];
         }
     }
+	
+	[self.mainViewController setVisiblePercentage:[stackViewController visiblePercentageForViewController:self.mainViewController]];
 }
 
 #pragma mark - Rotation Handling

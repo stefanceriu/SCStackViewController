@@ -25,6 +25,8 @@ typedef enum {
 
 @property (nonatomic, weak) IBOutlet id<SCMainViewControllerDelegate> delegate;
 
+- (void)setVisiblePercentage:(CGFloat)percentage;
+
 @end
 
 @protocol SCMainViewControllerDelegate <NSObject>

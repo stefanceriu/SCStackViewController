@@ -926,7 +926,14 @@
 		}
 		
     } else {
-        [self.rootViewController.view setFrame:newRootViewControllerFrame];
+		
+		[self.rootViewController.view setFrame:newRootViewControllerFrame];
+		
+		if(hasVerticalControllers) {
+			[self.visiblePercentages setObject:@(roundf((CGRectGetHeight(rootRemainder) * 1000) / CGRectGetHeight(newRootViewControllerFrame))/1000.0f) forKey:@([self.rootViewController hash])];
+		} else if(hasHorizontalController) {
+			[self.visiblePercentages setObject:@(roundf((CGRectGetWidth(rootRemainder) * 1000) / CGRectGetWidth(newRootViewControllerFrame))/1000.0f) forKey:@([self.rootViewController hash])];
+		}
     }
 }
 

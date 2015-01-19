@@ -13,6 +13,10 @@ It was build with the following points in mind:
 7. Completion blocks
 and more..
 
+### Change Log v3.1.3
+
+* Started calculating the visible percentage for the root view controller
+
 ### Change Log v3.1.2
 
 * Exposed visibleViewControllers array

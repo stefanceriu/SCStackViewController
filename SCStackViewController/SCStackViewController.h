@@ -336,7 +336,7 @@ typedef enum {
  * A view controller is visible when any part of it is visible (within the
  * Stack's scrollView bounds and not covered by any other view)
  *
- * Ranges from 100.0f to 0.0f
+ * Ranges from 0.0f to 1.0f
  */
 - (CGFloat)visiblePercentageForViewController:(UIViewController *)viewController;
 
