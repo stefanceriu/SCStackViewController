@@ -13,6 +13,13 @@ It was build with the following points in mind:
 7. Completion blocks
 and more..
 
+### Change Log v3.1.2
+
+* Exposed visibleViewControllers array
+* Added popViewController:animated:completion: method
+* Fixed rotation and autoresizing handling
+* Calling didShowViewController: and didHideViewController: delegate methods for root view controller appearance changes
+
 ### Change Log v3.1.0
 
 * Switched to SCScrollView
