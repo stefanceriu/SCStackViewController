@@ -77,13 +77,13 @@
 }
 
 - (CGRect)currentFrameForRootViewController:(UIViewController *)rootViewController
-                              contentOffset:(CGPoint)contentOffset
-                          inStackController:(SCStackViewController *)stackController
+							  contentOffset:(CGPoint)contentOffset
+						  inStackController:(SCStackViewController *)stackViewController
 {
     if(self.shouldStackControllersAboveRoot) {
         return CGRectMake(contentOffset.x, contentOffset.y, rootViewController.view.bounds.size.width, rootViewController.view.bounds.size.height);
     } else {
-        return stackController.view.bounds;
+		return stackViewController.view.bounds;
     }
 }
 

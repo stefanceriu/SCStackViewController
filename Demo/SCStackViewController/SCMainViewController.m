@@ -8,8 +8,7 @@
 
 #import "SCMainViewController.h"
 
-typedef NS_ENUM(NSUInteger, SCPickerViewComponentType)
-{
+typedef NS_ENUM(NSUInteger, SCPickerViewComponentType) {
     SCPickerViewComponentTypeLayouter,
     SCPickerViewComponentTypeEasingFunction,
     SCPickerViewComponentTypeAnimationDuration
@@ -17,6 +16,10 @@ typedef NS_ENUM(NSUInteger, SCPickerViewComponentType)
 
 @interface SCMainViewController () <UIPickerViewDataSource, UIPickerViewDelegate>
 
+@property (nonatomic, assign) SCStackDemoType currentDemoType;
+
+@property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControl;
 @property (nonatomic, weak) IBOutlet UILabel *visiblePercentageLabel;
 
 @end
@@ -28,6 +31,43 @@ typedef NS_ENUM(NSUInteger, SCPickerViewComponentType)
 - (void)setVisiblePercentage:(CGFloat)percentage
 {
 	[self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.3f%%", percentage]];
+}
+
+- (void)setCurrentDemoType:(SCStackDemoType)currentDemoType
+{
+	_currentDemoType = currentDemoType;
+}
+
+- (void)showAnimationOptionsAnimated:(BOOL)animated
+{
+	[self setAnimationOptionsVisible:YES animated:animated];
+}
+
+- (void)hideAnimationOptionsAnimated:(BOOL)animated
+{
+//	[self setAnimationOptionsVisible:normal animated:animated];
+}
+
+- (void)setAnimationOptionsVisible:(BOOL)visible animated:(BOOL)animated
+{
+	[UIView animateWithDuration:(animated ? 0.25f : 0.0f) animations:^{
+		[self.pickerView setAlpha:visible];
+		
+		for(NSUInteger i=0; i<SCPickerViewComponentTypeAnimationDuration+1; i++) {
+			[self.pickerView selectRow:0 inComponent:i animated:YES];
+		}
+	}];
+}
+
+#pragma mark - UISegmentedControl
+
+- (IBAction)segmentedControlDidChangeSelectedIndex:(UISegmentedControl *)sender
+{
+	[self setCurrentDemoType:(SCStackDemoType)sender.selectedSegmentIndex];
+	
+	if([self.delegate respondsToSelector:@selector(mainViewController:didChangeDemoType:)]) {
+		[self.delegate mainViewController:self didChangeDemoType:self.currentDemoType];
+	}
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -62,8 +102,6 @@ typedef NS_ENUM(NSUInteger, SCPickerViewComponentType)
                 typeToString = (@{@(SCStackLayouterTypePlain)              : @"Plain",
                                   @(SCStackLayouterTypeSliding)            : @"Sliding",
                                   @(SCStackLayouterTypeParallax)           : @"Parallax",
-                                  @(SCStackLayouterTypeGoogleMaps)         : @"Google Maps",
-                                  @(SCStackLayouterTypeMerryGoRound)       : @"Merry Go Round",
                                   @(SCStackLayouterTypeReversed)           : @"Reversed",
                                   @(SCStacklayouterTypePlainResizing)      : @"Resizing"});
             });

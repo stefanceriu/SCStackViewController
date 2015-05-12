@@ -8,16 +8,22 @@
 
 #import "SCEasingFunction.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, SCStackDemoType) {
+	SCStackDemoTypeVerticalImages,
+	SCStackDemoTypeSideMenus,
+	SCStackDemoTypeTitleBar,
+	SCStackDemoTypeModal,
+	SCStackDemoTypeGeneric,
+};
+
+typedef NS_ENUM(NSUInteger, SCStackLayouterType) {
     SCStackLayouterTypePlain,
     SCStackLayouterTypeSliding,
     SCStackLayouterTypeParallax,
-    SCStackLayouterTypeGoogleMaps,
-    SCStackLayouterTypeMerryGoRound,
     SCStackLayouterTypeReversed,
     SCStacklayouterTypePlainResizing,
     SCStackLayouterTypeCount
-} SCStackLayouterType;
+};
 
 @protocol SCMainViewControllerDelegate;
 
@@ -27,9 +33,15 @@ typedef enum {
 
 - (void)setVisiblePercentage:(CGFloat)percentage;
 
+- (void)showAnimationOptionsAnimated:(BOOL)animated;
+- (void)hideAnimationOptionsAnimated:(BOOL)animated;
+
 @end
 
 @protocol SCMainViewControllerDelegate <NSObject>
+
+- (void)mainViewController:(SCMainViewController *)mainViewController
+		 didChangeDemoType:(SCStackDemoType)type;
 
 - (void)mainViewController:(SCMainViewController *)mainViewController
      didChangeLayouterType:(SCStackLayouterType)type;

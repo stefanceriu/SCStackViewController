@@ -18,12 +18,10 @@ static const CGFloat shadowSize = 10;
     CGRect shadowRect = self.bounds;
     
     if(position & SCShadowEdgeTop) {
-        shadowRect.origin.y -= shadowSize;
         shadowRect.size.height += shadowSize;
     }
     
     if(position & SCShadowEdgeLeft) {
-        shadowRect.origin.x -= shadowSize;
         shadowRect.size.width += shadowSize;
     }
     

@@ -8,6 +8,6 @@
 
 @interface UIColor (RandomColors)
 
-+ (UIColor *)randomColor;
++ (UIColor *)randomColorWithAlpha:(CGFloat)alpha;
 
 @end

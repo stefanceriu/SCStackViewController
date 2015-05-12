@@ -32,8 +32,9 @@
 @property (nonatomic, strong) NSMutableDictionary *visiblePercentages;
 
 @property (nonatomic, assign) BOOL isViewVisible;
-
 @property (nonatomic, assign) BOOL isRootViewControllerVisible;
+
+@property (nonatomic, strong) id<SCStackLayouterProtocol> lastUsedLayouter;
 
 @end
 
@@ -476,8 +477,9 @@
     [self.scrollView setDirectionalLockEnabled:YES];
     [self.scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
     [self.scrollView setDelegate:self];
-    
+	
     [self setPagingEnabled:YES];
+	[self setShowsScrollIndicators:NO];
     
     
     [self.rootViewController.view setFrame:self.view.bounds];
@@ -761,8 +763,12 @@
         activeLayouter = self.layouters[@(SCStackViewControllerPositionBottom)];
     } else if(offset.x > 0.0f) {
         activeLayouter = self.layouters[@(SCStackViewControllerPositionRight)];
-    }
-    
+	} else {
+		activeLayouter = self.lastUsedLayouter;
+	}
+	
+	self.lastUsedLayouter = activeLayouter;
+		
     CGRect newRootViewControllerFrame;
     if([activeLayouter respondsToSelector:@selector(currentFrameForRootViewController:contentOffset:inStackController:)]) {
         newRootViewControllerFrame = [activeLayouter currentFrameForRootViewController:self.rootViewController contentOffset:offset inStackController:self];
@@ -803,40 +809,45 @@
             
             // If using a reversed layouter adjust the frame to normal
             CGRect adjustedFrame = nextFrame;
-            
-            if(isReversed && index > 0) {
-                switch (position) {
-                    case SCStackViewControllerPositionTop: {
-                        NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
-                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
-                        adjustedFrame.origin.y = [self maximumInsetForPosition:position].y + totalSize;
-                        break;
-                    }
-                    case SCStackViewControllerPositionLeft: {
-                        NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
-                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
-                        adjustedFrame.origin.x = [self maximumInsetForPosition:position].x + totalSize;
-                        break;
-                    }
-                    case SCStackViewControllerPositionBottom: {
-                        NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
-                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
-                        adjustedFrame.origin.y = CGRectGetHeight(self.view.bounds) + [self maximumInsetForPosition:position].y - totalSize;
-                        break;
-                    }
-                    case SCStackViewControllerPositionRight: {
-                        NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
-                        CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
-                        adjustedFrame.origin.x = CGRectGetWidth(self.view.bounds) + [self maximumInsetForPosition:position].x - totalSize;
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
+			
+			if(index > 0) {
+				if(isReversed) {
+					switch (position) {
+						case SCStackViewControllerPositionTop: {
+							NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
+							CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
+							adjustedFrame.origin.y = [self maximumInsetForPosition:position].y + totalSize;
+							break;
+						}
+						case SCStackViewControllerPositionLeft: {
+							NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index + 1, viewControllersArray.count - index - 1)];
+							CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
+							adjustedFrame.origin.x = [self maximumInsetForPosition:position].x + totalSize;
+							break;
+						}
+						case SCStackViewControllerPositionBottom: {
+							NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
+							CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewHeight"] floatValue];
+							adjustedFrame.origin.y = CGRectGetHeight(self.view.bounds) + [self maximumInsetForPosition:position].y - totalSize;
+							break;
+						}
+						case SCStackViewControllerPositionRight: {
+							NSArray *remainingViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(index, viewControllersArray.count - index)];
+							CGFloat totalSize = [[remainingViewControllers valueForKeyPath:@"@sum.sc_viewWidth"] floatValue];
+							adjustedFrame.origin.x = CGRectGetWidth(self.view.bounds) + [self maximumInsetForPosition:position].x - totalSize;
+							break;
+						}
+					}
+				} else {	
+					NSArray *previousViewControllers = [viewControllersArray subarrayWithRange:NSMakeRange(0, index)];
+					for(UIViewController *controller in previousViewControllers) {
+						adjustedFrame = [self subtractRect:controller.view.frame fromRect:adjustedFrame withEdge:edge];
+					}
+				}
+			}
 			
             CGRect intersection = CGRectIntersection(remainder, adjustedFrame);
-            
+			
             // If a view controller's frame does intersect the remainder then it's visible
             BOOL visible = ((position == SCStackViewControllerPositionLeft || position == SCStackViewControllerPositionRight) && CGRectGetWidth(intersection) > 0.0f);
             visible = visible || ((position == SCStackViewControllerPositionTop || position == SCStackViewControllerPositionBottom) && CGRectGetHeight(intersection) > 0.0f);
@@ -892,6 +903,16 @@
             } else {
                 [viewController.view setFrame:nextFrame];
             }
+			
+			if([layouter respondsToSelector:@selector(sublayerTransformForViewController:withIndex:atPosition:finalFrame:contentOffset:inStackController:)]) {
+				CATransform3D transform = [layouter sublayerTransformForViewController:viewController
+																			 withIndex:index
+																			atPosition:position
+																			finalFrame:[self.finalFrames[@(viewController.hash)] CGRectValue]
+																		 contentOffset:offset
+																	 inStackController:self];
+				[viewController.view.layer setSublayerTransform:transform];
+			}
         }];
     }
     
@@ -935,6 +956,13 @@
 			[self.visiblePercentages setObject:@(roundf((CGRectGetWidth(rootRemainder) * 1000) / CGRectGetWidth(newRootViewControllerFrame))/1000.0f) forKey:@([self.rootViewController hash])];
 		}
     }
+	
+	if([activeLayouter respondsToSelector:@selector(sublayerTransformForRootViewController:contentOffset:inStackController:)]) {
+		CATransform3D transform = [activeLayouter sublayerTransformForRootViewController:self.rootViewController
+																		   contentOffset:offset
+																	   inStackController:self];
+		[self.rootViewController.view.layer setSublayerTransform:transform];
+	}
 }
 
 #pragma mark Pagination

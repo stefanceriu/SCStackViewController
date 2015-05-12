@@ -7,21 +7,21 @@
 //
 
 /** Sides on which view controllers may be stacked */
-typedef enum {
-    SCStackViewControllerPositionTop,
-    SCStackViewControllerPositionLeft,
-    SCStackViewControllerPositionBottom,
-    SCStackViewControllerPositionRight
-} SCStackViewControllerPosition;
+typedef NS_ENUM(NSUInteger, SCStackViewControllerPosition) {
+	SCStackViewControllerPositionTop,
+	SCStackViewControllerPositionLeft,
+	SCStackViewControllerPositionBottom,
+	SCStackViewControllerPositionRight
+};
 
 
 /** Navigation contraint types that can be used used when continuous
  * navigation is disabled
  */
-typedef enum {
+typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
     SCStackViewControllerNavigationContraintTypeForward = 1 << 0, /** Scroll view bounces on steps only when unfolding the stack*/
     SCStackViewControllerNavigationContraintTypeReverse = 1 << 1  /** Scroll view bounces on steps only when folding the stack*/
-} SCStackViewControllerNavigationContraintType;
+};
 
 
 @protocol SCStackLayouterProtocol;

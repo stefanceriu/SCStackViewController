@@ -22,7 +22,7 @@
  * @param index The index of the view controller in the Stack's children array
  * @param position The position in the stack
  * @param viewController The full children array for the given position
- * @param stackController The calling StackViewController
+ * @param stackViewController The calling StackViewController
  *
  * @return The frame for the viewController's view
  *
@@ -31,7 +31,7 @@
                             withIndex:(NSUInteger)index
                            atPosition:(SCStackViewControllerPosition)position
                           withinGroup:(NSArray *)viewControllers
-                    inStackController:(SCStackViewController *)stackController;
+                    inStackController:(SCStackViewController *)stackViewController;
 
 /** Returns the intermediate frame for the given view controller and current
  * offset
@@ -41,7 +41,7 @@
  * @param position The position in the stack
  * @param finalFrame previously calculate final frame for this view controller
  * @param contentOffset current offset in the Stack's scrollView
- * @param stackController The calling StackViewController
+ * @param stackViewController The calling StackViewController
  *
  * @return The frame for the viewController's view
  *
@@ -51,11 +51,28 @@
                              atPosition:(SCStackViewControllerPosition)position
                              finalFrame:(CGRect)finalFrame
                           contentOffset:(CGPoint)contentOffset
-                      inStackController:(SCStackViewController *)stackController;
+                      inStackController:(SCStackViewController *)stackViewController;
 
 
 @optional
 
+/** Returns the view controller sublayer transformation that should be used
+ * for the currnet stack offset
+ *
+ * @param viewController The view controller for which to calculate the frame
+ * @param index The index of the view controller in the Stack's children array
+ * @param position The position in the stack
+ * @param stackViewController The calling StackViewController
+ *
+ * @return The sublayer transformation to be applied
+ *
+ */
+- (CATransform3D)sublayerTransformForViewController:(UIViewController *)viewController
+										  withIndex:(NSUInteger)index
+										 atPosition:(SCStackViewControllerPosition)position
+										 finalFrame:(CGRect)finalFrame
+									  contentOffset:(CGPoint)contentOffset
+								  inStackController:(SCStackViewController *)stackViewController;
 
 
 /** Returns the rootViewController's intermediate frame for
@@ -63,14 +80,29 @@
  *
  * @param rootViewController the stack's root view controller
  * @param contentOffset current offset in the Stack's scrollView
- * @param stackController The calling StackViewController
+ * @param stackViewController The calling StackViewController
  *
  * @return The frame for the rootViewController's view
  *
  */
 - (CGRect)currentFrameForRootViewController:(UIViewController *)rootViewController
                               contentOffset:(CGPoint)contentOffset
-                          inStackController:(SCStackViewController *)stackController;
+                          inStackController:(SCStackViewController *)stackViewController;
+
+/** Returns the root view controller sublayer transformation that should be used 
+ * for the currnet stack offset
+ *
+ * @param viewController The view controller for which to calculate the frame
+ * @param index The index of the view controller in the Stack's children array
+ * @param position The position in the stack
+ * @param stackViewController The calling StackViewController
+ *
+ * @return The sublayer transformation to be applied
+ *
+ */
+- (CATransform3D)sublayerTransformForRootViewController:(UIViewController *)rootViewController
+										  contentOffset:(CGPoint)contentOffset
+									  inStackController:(SCStackViewController *)stackViewController;
 
 
 /**

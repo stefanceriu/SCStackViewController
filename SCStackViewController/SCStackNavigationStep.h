@@ -15,11 +15,11 @@
  * actual offset based on the view controller's frame.
  */
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, SCStackNavigationStepBlockType) {
     SCStackNavigationStepBlockTypeNone,
     SCStackNavigationStepBlockTypeForward,
     SCStackNavigationStepBlockTypeReverse
-} SCStackNavigationStepBlockType;
+};
 
 @interface SCStackNavigationStep : NSObject
 

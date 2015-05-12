@@ -1,3 +1,4 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 pod 'SCScrollView', '~> 1.1'
+pod 'ChameleonFramework'

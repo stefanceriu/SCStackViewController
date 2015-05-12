@@ -7,11 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1816C6D61AFF5BBF003959EC /* 0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6C41AFF5BBF003959EC /* 0.jpg */; };
+		1816C6D71AFF5BBF003959EC /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6C51AFF5BBF003959EC /* 1.jpg */; };
+		1816C6D81AFF5BBF003959EC /* 10.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6C61AFF5BBF003959EC /* 10.jpg */; };
+		1816C6D91AFF5BBF003959EC /* 11.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6C71AFF5BBF003959EC /* 11.jpg */; };
+		1816C6DA1AFF5BBF003959EC /* 12.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6C81AFF5BBF003959EC /* 12.jpg */; };
+		1816C6DB1AFF5BBF003959EC /* 13.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6C91AFF5BBF003959EC /* 13.jpg */; };
+		1816C6DC1AFF5BBF003959EC /* 14.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6CA1AFF5BBF003959EC /* 14.jpg */; };
+		1816C6DD1AFF5BBF003959EC /* 15.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6CB1AFF5BBF003959EC /* 15.jpg */; };
+		1816C6DE1AFF5BBF003959EC /* 16.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6CC1AFF5BBF003959EC /* 16.jpg */; };
+		1816C6DF1AFF5BBF003959EC /* 17.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6CD1AFF5BBF003959EC /* 17.jpg */; };
+		1816C6E01AFF5BBF003959EC /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6CE1AFF5BBF003959EC /* 2.jpg */; };
+		1816C6E11AFF5BBF003959EC /* 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6CF1AFF5BBF003959EC /* 3.jpg */; };
+		1816C6E21AFF5BBF003959EC /* 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6D01AFF5BBF003959EC /* 4.jpg */; };
+		1816C6E31AFF5BBF003959EC /* 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6D11AFF5BBF003959EC /* 5.jpg */; };
+		1816C6E41AFF5BBF003959EC /* 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6D21AFF5BBF003959EC /* 6.jpg */; };
+		1816C6E51AFF5BBF003959EC /* 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6D31AFF5BBF003959EC /* 7.jpg */; };
+		1816C6E61AFF5BBF003959EC /* 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6D41AFF5BBF003959EC /* 8.jpg */; };
+		1816C6E71AFF5BBF003959EC /* 9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1816C6D51AFF5BBF003959EC /* 9.jpg */; };
 		1823A8E117BEAC7500D58582 /* UIColor+RandomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D017BEAC7500D58582 /* UIColor+RandomColors.m */; };
 		1823A8E217BEAC7500D58582 /* UIView+Shadows.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D217BEAC7500D58582 /* UIView+Shadows.m */; };
 		1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D417BEAC7500D58582 /* SCAppDelegate.m */; };
-		1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8D617BEAC7500D58582 /* SCMenuViewController.m */; };
-		1823A8E517BEAC7500D58582 /* SCMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */; };
 		1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1823A8DF17BEAC7500D58582 /* SCRootViewController.m */; };
 		1823A8E917BEAC7500D58582 /* SCRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1823A8E017BEAC7500D58582 /* SCRootViewController.xib */; };
 		1830BFDE1886C060004ED34D /* SCStackNavigationStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830BFDD1886C060004ED34D /* SCStackNavigationStep.m */; };
@@ -19,18 +35,33 @@
 		18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18364B4717BFB6450066F67A /* SCMainViewController.xib */; };
 		183913261A6ADD7700BD9B59 /* SCStackViewControllerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 183913251A6ADD7700BD9B59 /* SCStackViewControllerView.m */; };
 		18439FB518912EB10094674E /* SCResizingStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18439FB418912EB10094674E /* SCResizingStackLayouter.m */; };
-		18439FB7189130210094674E /* colorful_umbrellas.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18439FB6189130210094674E /* colorful_umbrellas.jpg */; };
+		186F755C1B00A0FB0073714C /* left-menu-tab.png in Resources */ = {isa = PBXBuildFile; fileRef = 186F75581B00A0FB0073714C /* left-menu-tab.png */; };
+		186F755D1B00A0FB0073714C /* left-menu-tab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 186F75591B00A0FB0073714C /* left-menu-tab@2x.png */; };
+		186F755E1B00A0FB0073714C /* right-menu-tab.png in Resources */ = {isa = PBXBuildFile; fileRef = 186F755A1B00A0FB0073714C /* right-menu-tab.png */; };
+		186F755F1B00A0FB0073714C /* right-menu-tab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 186F755B1B00A0FB0073714C /* right-menu-tab@2x.png */; };
+		1870D3C61AFEC0EE0041C6D8 /* feathers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1870D3C51AFEC0EE0041C6D8 /* feathers.jpg */; };
+		189627941AFE8212003D96F1 /* SCReversedStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 189627931AFE8212003D96F1 /* SCReversedStackLayouter.m */; };
+		189627961AFE8423003D96F1 /* london.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 189627951AFE8423003D96F1 /* london.jpg */; };
+		18B382381B01D6AF008E7C4B /* SCImagesLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B382261B01D6AF008E7C4B /* SCImagesLayouter.m */; };
+		18B382391B01D6AF008E7C4B /* SCImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B382281B01D6AF008E7C4B /* SCImageViewController.m */; };
+		18B3823A1B01D6AF008E7C4B /* SCImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B382291B01D6AF008E7C4B /* SCImageViewController.xib */; };
+		18B3823B1B01D6AF008E7C4B /* SCMenusLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B3822C1B01D6AF008E7C4B /* SCMenusLayouter.m */; };
+		18B3823C1B01D6AF008E7C4B /* SCMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B3822E1B01D6AF008E7C4B /* SCMenuViewController.m */; };
+		18B3823D1B01D6AF008E7C4B /* SCMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B3822F1B01D6AF008E7C4B /* SCMenuViewController.xib */; };
+		18B3823E1B01D6AF008E7C4B /* SCModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B382321B01D6AF008E7C4B /* SCModalViewController.m */; };
+		18B3823F1B01D6AF008E7C4B /* SCModalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B382331B01D6AF008E7C4B /* SCModalViewController.xib */; };
+		18B382401B01D6AF008E7C4B /* SCTitleBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B382361B01D6AF008E7C4B /* SCTitleBarViewController.m */; };
+		18B382411B01D6AF008E7C4B /* SCTitleBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B382371B01D6AF008E7C4B /* SCTitleBarViewController.xib */; };
+		18B382471B01D929008E7C4B /* SCModalLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B382461B01D929008E7C4B /* SCModalLayouter.m */; };
 		18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B601771840F0F500E3A0DD /* SCOverlayView.m */; };
 		18B6017A1840F10700E3A0DD /* SCOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B601791840F10700E3A0DD /* SCOverlayView.xib */; };
-		18C4D6AB17F0C82A0046FACD /* SCReversedStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D69B17F0C82A0046FACD /* SCReversedStackLayouter.m */; };
-		18C4D6AC17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D69D17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m */; };
-		18C4D6AD17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D69F17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m */; };
 		18C4D6AE17F0C82A0046FACD /* SCParallaxStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A117F0C82A0046FACD /* SCParallaxStackLayouter.m */; };
 		18C4D6AF17F0C82A0046FACD /* SCSlidingStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A317F0C82A0046FACD /* SCSlidingStackLayouter.m */; };
 		18C4D6B017F0C82A0046FACD /* SCStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A517F0C82A0046FACD /* SCStackLayouter.m */; };
 		18C4D6B117F0C82A0046FACD /* SCStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4D6A817F0C82A0046FACD /* SCStackViewController.m */; };
 		18C8B23317BFC443000FAEE5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C8B23217BFC443000FAEE5 /* QuartzCore.framework */; };
-		18E967591896B050002F9B2D /* SCReversedResizingStackLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E967581896B050002F9B2D /* SCReversedResizingStackLayouter.m */; };
+		18ED27791B02481800659E87 /* SCTitleBarCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ED27771B02481800659E87 /* SCTitleBarCollectionViewCell.m */; };
+		18ED277A1B02481800659E87 /* SCTitleBarCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18ED27781B02481800659E87 /* SCTitleBarCollectionViewCell.xib */; };
 		18FEAAE617B3ED2F00788EF0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE517B3ED2F00788EF0 /* UIKit.framework */; };
 		18FEAAE817B3ED2F00788EF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE717B3ED2F00788EF0 /* Foundation.framework */; };
 		18FEAAEA17B3ED2F00788EF0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */; };
@@ -39,15 +70,30 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1816C6C41AFF5BBF003959EC /* 0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 0.jpg; sourceTree = "<group>"; };
+		1816C6C51AFF5BBF003959EC /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
+		1816C6C61AFF5BBF003959EC /* 10.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 10.jpg; sourceTree = "<group>"; };
+		1816C6C71AFF5BBF003959EC /* 11.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 11.jpg; sourceTree = "<group>"; };
+		1816C6C81AFF5BBF003959EC /* 12.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 12.jpg; sourceTree = "<group>"; };
+		1816C6C91AFF5BBF003959EC /* 13.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 13.jpg; sourceTree = "<group>"; };
+		1816C6CA1AFF5BBF003959EC /* 14.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 14.jpg; sourceTree = "<group>"; };
+		1816C6CB1AFF5BBF003959EC /* 15.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 15.jpg; sourceTree = "<group>"; };
+		1816C6CC1AFF5BBF003959EC /* 16.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 16.jpg; sourceTree = "<group>"; };
+		1816C6CD1AFF5BBF003959EC /* 17.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 17.jpg; sourceTree = "<group>"; };
+		1816C6CE1AFF5BBF003959EC /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
+		1816C6CF1AFF5BBF003959EC /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpg; sourceTree = "<group>"; };
+		1816C6D01AFF5BBF003959EC /* 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 4.jpg; sourceTree = "<group>"; };
+		1816C6D11AFF5BBF003959EC /* 5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 5.jpg; sourceTree = "<group>"; };
+		1816C6D21AFF5BBF003959EC /* 6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6.jpg; sourceTree = "<group>"; };
+		1816C6D31AFF5BBF003959EC /* 7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 7.jpg; sourceTree = "<group>"; };
+		1816C6D41AFF5BBF003959EC /* 8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 8.jpg; sourceTree = "<group>"; };
+		1816C6D51AFF5BBF003959EC /* 9.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 9.jpg; sourceTree = "<group>"; };
 		1823A8CF17BEAC7500D58582 /* UIColor+RandomColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RandomColors.h"; sourceTree = "<group>"; };
 		1823A8D017BEAC7500D58582 /* UIColor+RandomColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RandomColors.m"; sourceTree = "<group>"; };
 		1823A8D117BEAC7500D58582 /* UIView+Shadows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Shadows.h"; sourceTree = "<group>"; };
 		1823A8D217BEAC7500D58582 /* UIView+Shadows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shadows.m"; sourceTree = "<group>"; };
 		1823A8D317BEAC7500D58582 /* SCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAppDelegate.h; sourceTree = "<group>"; };
 		1823A8D417BEAC7500D58582 /* SCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCAppDelegate.m; sourceTree = "<group>"; };
-		1823A8D517BEAC7500D58582 /* SCMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMenuViewController.h; sourceTree = "<group>"; };
-		1823A8D617BEAC7500D58582 /* SCMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMenuViewController.m; sourceTree = "<group>"; };
-		1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCMenuViewController.xib; sourceTree = "<group>"; };
 		1823A8DE17BEAC7500D58582 /* SCRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRootViewController.h; sourceTree = "<group>"; };
 		1823A8DF17BEAC7500D58582 /* SCRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRootViewController.m; sourceTree = "<group>"; };
 		1823A8E017BEAC7500D58582 /* SCRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCRootViewController.xib; sourceTree = "<group>"; };
@@ -60,16 +106,36 @@
 		183913251A6ADD7700BD9B59 /* SCStackViewControllerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStackViewControllerView.m; sourceTree = "<group>"; };
 		18439FB318912EB10094674E /* SCResizingStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCResizingStackLayouter.h; sourceTree = "<group>"; };
 		18439FB418912EB10094674E /* SCResizingStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCResizingStackLayouter.m; sourceTree = "<group>"; };
-		18439FB6189130210094674E /* colorful_umbrellas.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorful_umbrellas.jpg; sourceTree = "<group>"; };
+		186F75581B00A0FB0073714C /* left-menu-tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left-menu-tab.png"; sourceTree = "<group>"; };
+		186F75591B00A0FB0073714C /* left-menu-tab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left-menu-tab@2x.png"; sourceTree = "<group>"; };
+		186F755A1B00A0FB0073714C /* right-menu-tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-menu-tab.png"; sourceTree = "<group>"; };
+		186F755B1B00A0FB0073714C /* right-menu-tab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-menu-tab@2x.png"; sourceTree = "<group>"; };
+		1870D3C21AFEA7C40041C6D8 /* SCStackedViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStackedViewControllerProtocol.h; sourceTree = "<group>"; };
+		1870D3C51AFEC0EE0041C6D8 /* feathers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = feathers.jpg; sourceTree = "<group>"; };
+		189627921AFE8212003D96F1 /* SCReversedStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCReversedStackLayouter.h; sourceTree = "<group>"; };
+		189627931AFE8212003D96F1 /* SCReversedStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCReversedStackLayouter.m; sourceTree = "<group>"; };
+		189627951AFE8423003D96F1 /* london.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = london.jpg; sourceTree = "<group>"; };
+		18B382251B01D6AF008E7C4B /* SCImagesLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCImagesLayouter.h; sourceTree = "<group>"; };
+		18B382261B01D6AF008E7C4B /* SCImagesLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCImagesLayouter.m; sourceTree = "<group>"; };
+		18B382271B01D6AF008E7C4B /* SCImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCImageViewController.h; sourceTree = "<group>"; };
+		18B382281B01D6AF008E7C4B /* SCImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCImageViewController.m; sourceTree = "<group>"; };
+		18B382291B01D6AF008E7C4B /* SCImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCImageViewController.xib; sourceTree = "<group>"; };
+		18B3822B1B01D6AF008E7C4B /* SCMenusLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMenusLayouter.h; sourceTree = "<group>"; };
+		18B3822C1B01D6AF008E7C4B /* SCMenusLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMenusLayouter.m; sourceTree = "<group>"; };
+		18B3822D1B01D6AF008E7C4B /* SCMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMenuViewController.h; sourceTree = "<group>"; };
+		18B3822E1B01D6AF008E7C4B /* SCMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMenuViewController.m; sourceTree = "<group>"; };
+		18B3822F1B01D6AF008E7C4B /* SCMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCMenuViewController.xib; sourceTree = "<group>"; };
+		18B382311B01D6AF008E7C4B /* SCModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCModalViewController.h; sourceTree = "<group>"; };
+		18B382321B01D6AF008E7C4B /* SCModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCModalViewController.m; sourceTree = "<group>"; };
+		18B382331B01D6AF008E7C4B /* SCModalViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCModalViewController.xib; sourceTree = "<group>"; };
+		18B382351B01D6AF008E7C4B /* SCTitleBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTitleBarViewController.h; sourceTree = "<group>"; };
+		18B382361B01D6AF008E7C4B /* SCTitleBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTitleBarViewController.m; sourceTree = "<group>"; };
+		18B382371B01D6AF008E7C4B /* SCTitleBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCTitleBarViewController.xib; sourceTree = "<group>"; };
+		18B382451B01D929008E7C4B /* SCModalLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCModalLayouter.h; sourceTree = "<group>"; };
+		18B382461B01D929008E7C4B /* SCModalLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCModalLayouter.m; sourceTree = "<group>"; };
 		18B601761840F0F500E3A0DD /* SCOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCOverlayView.h; sourceTree = "<group>"; };
 		18B601771840F0F500E3A0DD /* SCOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCOverlayView.m; sourceTree = "<group>"; };
 		18B601791840F10700E3A0DD /* SCOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCOverlayView.xib; sourceTree = "<group>"; };
-		18C4D69A17F0C82A0046FACD /* SCReversedStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCReversedStackLayouter.h; sourceTree = "<group>"; };
-		18C4D69B17F0C82A0046FACD /* SCReversedStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCReversedStackLayouter.m; sourceTree = "<group>"; };
-		18C4D69C17F0C82A0046FACD /* SCGoogleMapsStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGoogleMapsStackLayouter.h; sourceTree = "<group>"; };
-		18C4D69D17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGoogleMapsStackLayouter.m; sourceTree = "<group>"; };
-		18C4D69E17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMerryGoRoundStackLayouter.h; sourceTree = "<group>"; };
-		18C4D69F17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMerryGoRoundStackLayouter.m; sourceTree = "<group>"; };
 		18C4D6A017F0C82A0046FACD /* SCParallaxStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCParallaxStackLayouter.h; sourceTree = "<group>"; };
 		18C4D6A117F0C82A0046FACD /* SCParallaxStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCParallaxStackLayouter.m; sourceTree = "<group>"; };
 		18C4D6A217F0C82A0046FACD /* SCSlidingStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSlidingStackLayouter.h; sourceTree = "<group>"; };
@@ -80,8 +146,9 @@
 		18C4D6A717F0C82A0046FACD /* SCStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStackViewController.h; sourceTree = "<group>"; };
 		18C4D6A817F0C82A0046FACD /* SCStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStackViewController.m; sourceTree = "<group>"; };
 		18C8B23217BFC443000FAEE5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		18E967571896B050002F9B2D /* SCReversedResizingStackLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCReversedResizingStackLayouter.h; sourceTree = "<group>"; };
-		18E967581896B050002F9B2D /* SCReversedResizingStackLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCReversedResizingStackLayouter.m; sourceTree = "<group>"; };
+		18ED27761B02481800659E87 /* SCTitleBarCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTitleBarCollectionViewCell.h; sourceTree = "<group>"; };
+		18ED27771B02481800659E87 /* SCTitleBarCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTitleBarCollectionViewCell.m; sourceTree = "<group>"; };
+		18ED27781B02481800659E87 /* SCTitleBarCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCTitleBarCollectionViewCell.xib; sourceTree = "<group>"; };
 		18FEAAE217B3ED2F00788EF0 /* SCStackViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SCStackViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18FEAAE517B3ED2F00788EF0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		18FEAAE717B3ED2F00788EF0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -110,6 +177,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1816C6C31AFF5BBF003959EC /* Panoramas */ = {
+			isa = PBXGroup;
+			children = (
+				1816C6C41AFF5BBF003959EC /* 0.jpg */,
+				1816C6C51AFF5BBF003959EC /* 1.jpg */,
+				1816C6C61AFF5BBF003959EC /* 10.jpg */,
+				1816C6C71AFF5BBF003959EC /* 11.jpg */,
+				1816C6C81AFF5BBF003959EC /* 12.jpg */,
+				1816C6C91AFF5BBF003959EC /* 13.jpg */,
+				1816C6CA1AFF5BBF003959EC /* 14.jpg */,
+				1816C6CB1AFF5BBF003959EC /* 15.jpg */,
+				1816C6CC1AFF5BBF003959EC /* 16.jpg */,
+				1816C6CD1AFF5BBF003959EC /* 17.jpg */,
+				1816C6CE1AFF5BBF003959EC /* 2.jpg */,
+				1816C6CF1AFF5BBF003959EC /* 3.jpg */,
+				1816C6D01AFF5BBF003959EC /* 4.jpg */,
+				1816C6D11AFF5BBF003959EC /* 5.jpg */,
+				1816C6D21AFF5BBF003959EC /* 6.jpg */,
+				1816C6D31AFF5BBF003959EC /* 7.jpg */,
+				1816C6D41AFF5BBF003959EC /* 8.jpg */,
+				1816C6D51AFF5BBF003959EC /* 9.jpg */,
+			);
+			path = Panoramas;
+			sourceTree = "<group>";
+		};
 		1823A8CE17BEAC7500D58582 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +211,77 @@
 				1823A8D217BEAC7500D58582 /* UIView+Shadows.m */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		1896276A1AFE70CB003D96F1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1896276B1AFE70CB003D96F1 /* Images */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1896276B1AFE70CB003D96F1 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				1816C6C31AFF5BBF003959EC /* Panoramas */,
+				1870D3C51AFEC0EE0041C6D8 /* feathers.jpg */,
+				186F75581B00A0FB0073714C /* left-menu-tab.png */,
+				186F75591B00A0FB0073714C /* left-menu-tab@2x.png */,
+				189627951AFE8423003D96F1 /* london.jpg */,
+				186F755A1B00A0FB0073714C /* right-menu-tab.png */,
+				186F755B1B00A0FB0073714C /* right-menu-tab@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		18B382241B01D6AF008E7C4B /* ImagesDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18B382251B01D6AF008E7C4B /* SCImagesLayouter.h */,
+				18B382261B01D6AF008E7C4B /* SCImagesLayouter.m */,
+				18B382271B01D6AF008E7C4B /* SCImageViewController.h */,
+				18B382281B01D6AF008E7C4B /* SCImageViewController.m */,
+				18B382291B01D6AF008E7C4B /* SCImageViewController.xib */,
+			);
+			path = ImagesDemo;
+			sourceTree = "<group>";
+		};
+		18B3822A1B01D6AF008E7C4B /* MenusDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18B3822B1B01D6AF008E7C4B /* SCMenusLayouter.h */,
+				18B3822C1B01D6AF008E7C4B /* SCMenusLayouter.m */,
+				18B3822D1B01D6AF008E7C4B /* SCMenuViewController.h */,
+				18B3822E1B01D6AF008E7C4B /* SCMenuViewController.m */,
+				18B3822F1B01D6AF008E7C4B /* SCMenuViewController.xib */,
+			);
+			path = MenusDemo;
+			sourceTree = "<group>";
+		};
+		18B382301B01D6AF008E7C4B /* ModalDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18B382451B01D929008E7C4B /* SCModalLayouter.h */,
+				18B382461B01D929008E7C4B /* SCModalLayouter.m */,
+				18B382311B01D6AF008E7C4B /* SCModalViewController.h */,
+				18B382321B01D6AF008E7C4B /* SCModalViewController.m */,
+				18B382331B01D6AF008E7C4B /* SCModalViewController.xib */,
+			);
+			path = ModalDemo;
+			sourceTree = "<group>";
+		};
+		18B382341B01D6AF008E7C4B /* TitleBarDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18B382351B01D6AF008E7C4B /* SCTitleBarViewController.h */,
+				18B382361B01D6AF008E7C4B /* SCTitleBarViewController.m */,
+				18B382371B01D6AF008E7C4B /* SCTitleBarViewController.xib */,
+				18ED27761B02481800659E87 /* SCTitleBarCollectionViewCell.h */,
+				18ED27771B02481800659E87 /* SCTitleBarCollectionViewCell.m */,
+				18ED27781B02481800659E87 /* SCTitleBarCollectionViewCell.xib */,
+			);
+			path = TitleBarDemo;
 			sourceTree = "<group>";
 		};
 		18C4D69717F0C82A0046FACD /* SCStackViewController */ = {
@@ -148,24 +311,10 @@
 				18C4D6A117F0C82A0046FACD /* SCParallaxStackLayouter.m */,
 				18439FB318912EB10094674E /* SCResizingStackLayouter.h */,
 				18439FB418912EB10094674E /* SCResizingStackLayouter.m */,
-				18C4D69C17F0C82A0046FACD /* SCGoogleMapsStackLayouter.h */,
-				18C4D69D17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m */,
-				18C4D69E17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.h */,
-				18C4D69F17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m */,
-				18C4D69917F0C82A0046FACD /* Reversed */,
+				189627921AFE8212003D96F1 /* SCReversedStackLayouter.h */,
+				189627931AFE8212003D96F1 /* SCReversedStackLayouter.m */,
 			);
 			path = Layouters;
-			sourceTree = "<group>";
-		};
-		18C4D69917F0C82A0046FACD /* Reversed */ = {
-			isa = PBXGroup;
-			children = (
-				18C4D69A17F0C82A0046FACD /* SCReversedStackLayouter.h */,
-				18C4D69B17F0C82A0046FACD /* SCReversedStackLayouter.m */,
-				18E967571896B050002F9B2D /* SCReversedResizingStackLayouter.h */,
-				18E967581896B050002F9B2D /* SCReversedResizingStackLayouter.m */,
-			);
-			path = Reversed;
 			sourceTree = "<group>";
 		};
 		18FEAAD917B3ED2F00788EF0 = {
@@ -210,13 +359,16 @@
 				18364B4517BFB6450066F67A /* SCMainViewController.h */,
 				18364B4617BFB6450066F67A /* SCMainViewController.m */,
 				18364B4717BFB6450066F67A /* SCMainViewController.xib */,
-				1823A8D517BEAC7500D58582 /* SCMenuViewController.h */,
-				1823A8D617BEAC7500D58582 /* SCMenuViewController.m */,
-				1823A8D717BEAC7500D58582 /* SCMenuViewController.xib */,
 				18B601761840F0F500E3A0DD /* SCOverlayView.h */,
 				18B601771840F0F500E3A0DD /* SCOverlayView.m */,
 				18B601791840F10700E3A0DD /* SCOverlayView.xib */,
+				1870D3C21AFEA7C40041C6D8 /* SCStackedViewControllerProtocol.h */,
+				18B382241B01D6AF008E7C4B /* ImagesDemo */,
+				18B3822A1B01D6AF008E7C4B /* MenusDemo */,
+				18B382301B01D6AF008E7C4B /* ModalDemo */,
+				18B382341B01D6AF008E7C4B /* TitleBarDemo */,
 				1823A8CE17BEAC7500D58582 /* Helpers */,
+				1896276A1AFE70CB003D96F1 /* Resources */,
 				18FEAAEC17B3ED2F00788EF0 /* Supporting Files */,
 			);
 			name = Demo;
@@ -226,7 +378,6 @@
 		18FEAAEC17B3ED2F00788EF0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				18439FB6189130210094674E /* colorful_umbrellas.jpg */,
 				18FEAAED17B3ED2F00788EF0 /* SCStackViewController-Info.plist */,
 				18FEAAF117B3ED2F00788EF0 /* main.m */,
 				18FEAAF317B3ED2F00788EF0 /* SCStackViewController-Prefix.pch */,
@@ -297,10 +448,37 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18439FB7189130210094674E /* colorful_umbrellas.jpg in Resources */,
-				1823A8E517BEAC7500D58582 /* SCMenuViewController.xib in Resources */,
+				1816C6E41AFF5BBF003959EC /* 6.jpg in Resources */,
+				1816C6DF1AFF5BBF003959EC /* 17.jpg in Resources */,
+				18B382411B01D6AF008E7C4B /* SCTitleBarViewController.xib in Resources */,
+				1816C6DB1AFF5BBF003959EC /* 13.jpg in Resources */,
+				1816C6E71AFF5BBF003959EC /* 9.jpg in Resources */,
+				1816C6D91AFF5BBF003959EC /* 11.jpg in Resources */,
+				1816C6D81AFF5BBF003959EC /* 10.jpg in Resources */,
 				18B6017A1840F10700E3A0DD /* SCOverlayView.xib in Resources */,
+				1816C6DD1AFF5BBF003959EC /* 15.jpg in Resources */,
+				1870D3C61AFEC0EE0041C6D8 /* feathers.jpg in Resources */,
+				18ED277A1B02481800659E87 /* SCTitleBarCollectionViewCell.xib in Resources */,
+				186F755D1B00A0FB0073714C /* left-menu-tab@2x.png in Resources */,
+				1816C6E21AFF5BBF003959EC /* 4.jpg in Resources */,
+				1816C6E51AFF5BBF003959EC /* 7.jpg in Resources */,
+				186F755C1B00A0FB0073714C /* left-menu-tab.png in Resources */,
+				18B3823D1B01D6AF008E7C4B /* SCMenuViewController.xib in Resources */,
+				189627961AFE8423003D96F1 /* london.jpg in Resources */,
+				18B3823A1B01D6AF008E7C4B /* SCImageViewController.xib in Resources */,
+				186F755E1B00A0FB0073714C /* right-menu-tab.png in Resources */,
+				1816C6E61AFF5BBF003959EC /* 8.jpg in Resources */,
+				1816C6D61AFF5BBF003959EC /* 0.jpg in Resources */,
+				1816C6DA1AFF5BBF003959EC /* 12.jpg in Resources */,
+				1816C6E01AFF5BBF003959EC /* 2.jpg in Resources */,
+				1816C6DC1AFF5BBF003959EC /* 14.jpg in Resources */,
+				1816C6DE1AFF5BBF003959EC /* 16.jpg in Resources */,
+				186F755F1B00A0FB0073714C /* right-menu-tab@2x.png in Resources */,
+				18B3823F1B01D6AF008E7C4B /* SCModalViewController.xib in Resources */,
+				1816C6D71AFF5BBF003959EC /* 1.jpg in Resources */,
 				1823A8E917BEAC7500D58582 /* SCRootViewController.xib in Resources */,
+				1816C6E31AFF5BBF003959EC /* 5.jpg in Resources */,
+				1816C6E11AFF5BBF003959EC /* 3.jpg in Resources */,
 				18364B4917BFB6450066F67A /* SCMainViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,24 +523,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18B3823C1B01D6AF008E7C4B /* SCMenuViewController.m in Sources */,
 				18FEAAF217B3ED2F00788EF0 /* main.m in Sources */,
-				18C4D6AC17F0C82A0046FACD /* SCGoogleMapsStackLayouter.m in Sources */,
 				18C4D6AE17F0C82A0046FACD /* SCParallaxStackLayouter.m in Sources */,
 				18C4D6B017F0C82A0046FACD /* SCStackLayouter.m in Sources */,
-				18C4D6AD17F0C82A0046FACD /* SCMerryGoRoundStackLayouter.m in Sources */,
 				1830BFDE1886C060004ED34D /* SCStackNavigationStep.m in Sources */,
 				1823A8E117BEAC7500D58582 /* UIColor+RandomColors.m in Sources */,
+				189627941AFE8212003D96F1 /* SCReversedStackLayouter.m in Sources */,
+				18B382391B01D6AF008E7C4B /* SCImageViewController.m in Sources */,
+				18B3823E1B01D6AF008E7C4B /* SCModalViewController.m in Sources */,
 				1823A8E217BEAC7500D58582 /* UIView+Shadows.m in Sources */,
+				18B382471B01D929008E7C4B /* SCModalLayouter.m in Sources */,
 				18C4D6B117F0C82A0046FACD /* SCStackViewController.m in Sources */,
 				1823A8E317BEAC7500D58582 /* SCAppDelegate.m in Sources */,
-				1823A8E417BEAC7500D58582 /* SCMenuViewController.m in Sources */,
-				18C4D6AB17F0C82A0046FACD /* SCReversedStackLayouter.m in Sources */,
+				18ED27791B02481800659E87 /* SCTitleBarCollectionViewCell.m in Sources */,
 				18439FB518912EB10094674E /* SCResizingStackLayouter.m in Sources */,
 				1823A8E817BEAC7500D58582 /* SCRootViewController.m in Sources */,
 				18C4D6AF17F0C82A0046FACD /* SCSlidingStackLayouter.m in Sources */,
+				18B382401B01D6AF008E7C4B /* SCTitleBarViewController.m in Sources */,
+				18B3823B1B01D6AF008E7C4B /* SCMenusLayouter.m in Sources */,
 				18B601781840F0F500E3A0DD /* SCOverlayView.m in Sources */,
 				18364B4817BFB6450066F67A /* SCMainViewController.m in Sources */,
-				18E967591896B050002F9B2D /* SCReversedResizingStackLayouter.m in Sources */,
+				18B382381B01D6AF008E7C4B /* SCImagesLayouter.m in Sources */,
 				183913261A6ADD7700BD9B59 /* SCStackViewControllerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,10 +614,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EBD53A29BD55EE85F062AF39 /* Pods.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SCStackViewController/SCStackViewController-Prefix.pch";
 				INFOPLIST_FILE = "SCStackViewController/SCStackViewController-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
@@ -446,10 +629,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 642CD41E6249C9730BE87603 /* Pods.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SCStackViewController/SCStackViewController-Prefix.pch";
 				INFOPLIST_FILE = "SCStackViewController/SCStackViewController-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
