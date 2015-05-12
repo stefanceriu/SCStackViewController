@@ -1,11 +1,14 @@
 # SCStackViewController
+
+![Version](https://img.shields.io/cocoapods/v/SCStackViewController.svg)&nbsp;![License](https://img.shields.io/cocoapods/l/SCStackViewController.svg)&nbsp;![Platform](https://img.shields.io/cocoapods/p/SCStackViewController.svg)
+
 SCStackViewController is a generic container view controller which allows you to stack child view controllers on the top/left/bottom/right of the root and build custom transitions between them while providing correct physics and appearance calls, custom layouts, easing functions, custom navigation steps and more.
 
 It was built with versatility in mind so it can be applied to quite a few different scenarios, some of which you can see bellow:
 
 ### Demo - for more, 'pod try scstackviewcontroller' or see the included project
 ##### Top stacked view controllers with elastic ease out easing function and perspective transform
-![Images](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/ImagesDemo2.gif)
+![Images](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/ImagesDemo.gif)
 
 ##### Side stacked with parallax and root resizing
 ![SideMenus](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/SideMenusDemo.gif)
