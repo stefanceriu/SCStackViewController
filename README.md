@@ -5,7 +5,7 @@ It was built with versatility in mind so it can be applied to quite a few differ
 
 ### Demo - for more, 'pod try scstackviewcontroller' or see the included project
 ##### Top stacked view controllers with elastic ease out easing function and perspective transform
-![Images](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/ImagesDemo.gif)
+![Images](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/ImagesDemo2.gif)
 
 ##### Side stacked with parallax and root resizing
 ![SideMenus](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/SideMenusDemo.gif)
