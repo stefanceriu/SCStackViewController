@@ -27,8 +27,11 @@
 
 @property (nonatomic, strong) NSMutableDictionary *layouters;
 @property (nonatomic, strong) NSMutableDictionary *finalFrames;
+
 @property (nonatomic, strong) NSMutableDictionary *navigationSteps;
+@property (nonatomic, strong) NSMutableDictionary *previousNavigationSteps;
 @property (nonatomic, strong) NSMutableDictionary *stepsForOffsets;
+
 @property (nonatomic, strong) NSMutableDictionary *visiblePercentages;
 
 @property (nonatomic, assign) BOOL isViewVisible;
@@ -77,6 +80,7 @@
     self.layouters = [NSMutableDictionary dictionary];
     self.finalFrames = [NSMutableDictionary dictionary];
     self.navigationSteps = [NSMutableDictionary dictionary];
+	self.previousNavigationSteps = [NSMutableDictionary dictionary];
     self.stepsForOffsets = [NSMutableDictionary dictionary];
     self.visiblePercentages = [NSMutableDictionary dictionary];
     
@@ -324,8 +328,14 @@
     
     [self updateBoundsIgnoringNavigationContraints];
     
-    // Save the original navigation steps and just use the given one
-    NSArray *previousSteps = self.navigationSteps[@([viewController hash])];
+	// Save the original navigation steps and just use the given one
+	if(self.previousNavigationSteps[@([viewController hash])] == nil) {
+		NSArray *previousSteps = self.navigationSteps[@([viewController hash])];
+		if(previousSteps) {
+			self.previousNavigationSteps[@([viewController hash])] = previousSteps;
+		}
+	}
+	
     [self registerNavigationSteps:(step ? @[step] : nil) forViewController:viewController];
     
     if(![viewController isEqual:self.rootViewController]) {
@@ -403,7 +413,12 @@
     // Navigate to the determined offset, restore the previous navigation states and update navigation contraints
 	__weak typeof(self) weakSelf = self;
 	void(^cleanup)() = ^{
-		[weakSelf registerNavigationSteps:previousSteps forViewController:viewController];
+		[weakSelf registerNavigationSteps:self.previousNavigationSteps[@([viewController hash])] forViewController:viewController];
+		
+		if(![weakSelf.scrollView isRunningAnimation]) {
+			[weakSelf.previousNavigationSteps removeObjectForKey:@([viewController hash])];
+		}
+		
 		[weakSelf updateBoundsUsingNavigationContraints];
 		
 		if(completion) {
