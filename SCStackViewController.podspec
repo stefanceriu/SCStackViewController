@@ -13,10 +13,8 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/stefanceriu'
   s.source   = { :git => 'https://github.com/stefanceriu/SCStackViewController.git', :tag => "v#{s.version}" }
   s.license      = { :type => 'MIT License', :file => 'LICENSE' }
-  s.source_files = 'SCStackViewController/*', 'SCStackViewController/Layouters/*', 'SCStackViewController/Layouters/Reversed/*'
+  s.source_files = 'SCStackViewController/*', 'SCStackViewController/Layouters/*'
   s.requires_arc = true
-  s.frameworks = 'UIKit', 'QuartzCore', 'CoreGraphics', 'Foundation'
-  s.screenshots = ["https://dl.dropboxusercontent.com/u/12748201/Recordings/v3.0.0/Resizing.gif"]
 
   s.dependency 'SCScrollView', '~> 1.1'
 
