@@ -36,7 +36,7 @@
     [super viewDidLoad];
     [self updateShadow];
 	
-	[self.backgroundImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%d.jpg", arc4random()%18]]];
+	[self.backgroundImageView setImage:[UIImage imageNamed:@"panorama.jpg"]];
 }
 
 - (void)viewWillLayoutSubviews
