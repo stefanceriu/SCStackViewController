@@ -15,6 +15,9 @@
  * actual offset based on the view controller's frame.
  */
 
+@import Foundation;
+@import CoreGraphics;
+
 typedef NS_ENUM(NSUInteger, SCStackNavigationStepBlockType) {
     SCStackNavigationStepBlockTypeNone,
     SCStackNavigationStepBlockTypeForward,

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
+@import UIKit;
+
 @interface SCAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

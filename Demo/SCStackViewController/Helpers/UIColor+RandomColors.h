@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
+@import UIKit;
+
 @interface UIColor (RandomColors)
 
 + (UIColor *)randomColorWithAlpha:(CGFloat)alpha;

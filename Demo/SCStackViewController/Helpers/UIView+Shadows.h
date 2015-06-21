@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
+@import UIKit;
+
 typedef NS_ENUM(NSUInteger, SCShadowEdge) {
     SCShadowEdgeNone   = 0,
     SCShadowEdgeTop    = 1 << 0,

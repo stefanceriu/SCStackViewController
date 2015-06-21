@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Stefan Ceriu. All rights reserved.
 //
 
+@import UIKit;
+
 /** Sides on which view controllers may be stacked */
 typedef NS_ENUM(NSUInteger, SCStackViewControllerPosition) {
 	SCStackViewControllerPositionTop,
