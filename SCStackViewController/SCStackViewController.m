@@ -50,7 +50,10 @@
 @dynamic scrollEnabled;
 @dynamic contentOffset;
 
-#pragma mark - Constructors
+- (void)dealloc
+{
+	[self.scrollView setDelegate:nil];
+}
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController
 {
