@@ -12,6 +12,7 @@
 #import "SCStackNavigationStep.h"
 
 #import "UIView+Shadows.h"
+#import "UIColor+RandomColors.h"
 #import "SCTitleBarCollectionViewCell.h"
 
 @interface SCTitleBarViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -87,7 +88,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
 	SCTitleBarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([SCTitleBarCollectionViewCell class]) forIndexPath:indexPath];
-	[cell.imageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%d.jpg", arc4random()%18]]];
+	[cell.imageView setBackgroundColor:[UIColor randomColorWithAlpha:1.0f]];
 	return cell;
 }
 
