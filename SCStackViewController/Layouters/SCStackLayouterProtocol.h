@@ -9,7 +9,7 @@
 #import "SCStackViewController.h"
 
 /** An object adopting the SCStackLayouter protocol is responsible for returning
- * the itermediate and final frames for the Stack's children when called. They 
+ * the itermediate and final frames for the Stack's children when called. They
  * have access the the actual children so that they can customize the navigation
  * effects at each point of the transition.
  */
@@ -28,10 +28,10 @@
  *
  */
 - (CGRect)finalFrameForViewController:(UIViewController *)viewController
-                            withIndex:(NSUInteger)index
-                           atPosition:(SCStackViewControllerPosition)position
-                          withinGroup:(NSArray *)viewControllers
-                    inStackController:(SCStackViewController *)stackViewController;
+							withIndex:(NSUInteger)index
+						   atPosition:(SCStackViewControllerPosition)position
+						  withinGroup:(NSArray *)viewControllers
+					inStackController:(SCStackViewController *)stackViewController;
 
 /** Returns the intermediate frame for the given view controller and current
  * offset
@@ -47,11 +47,11 @@
  *
  */
 - (CGRect)currentFrameForViewController:(UIViewController *)viewController
-                              withIndex:(NSUInteger)index
-                             atPosition:(SCStackViewControllerPosition)position
-                             finalFrame:(CGRect)finalFrame
-                          contentOffset:(CGPoint)contentOffset
-                      inStackController:(SCStackViewController *)stackViewController;
+							  withIndex:(NSUInteger)index
+							 atPosition:(SCStackViewControllerPosition)position
+							 finalFrame:(CGRect)finalFrame
+						  contentOffset:(CGPoint)contentOffset
+					  inStackController:(SCStackViewController *)stackViewController;
 
 
 @optional
@@ -86,10 +86,10 @@
  *
  */
 - (CGRect)currentFrameForRootViewController:(UIViewController *)rootViewController
-                              contentOffset:(CGPoint)contentOffset
-                          inStackController:(SCStackViewController *)stackViewController;
+							  contentOffset:(CGPoint)contentOffset
+						  inStackController:(SCStackViewController *)stackViewController;
 
-/** Returns the root view controller sublayer transformation that should be used 
+/** Returns the root view controller sublayer transformation that should be used
  * for the currnet stack offset
  *
  * @param viewController The view controller for which to calculate the frame

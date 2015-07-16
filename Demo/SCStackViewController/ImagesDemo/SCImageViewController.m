@@ -24,49 +24,49 @@
 
 - (instancetype)initWithPosition:(SCStackViewControllerPosition)position
 {
-    if(self = [super init]) {
-        self.position = position;
-    }
-    
-    return self;
+	if(self = [super init]) {
+		self.position = position;
+	}
+	
+	return self;
 }
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    [self updateShadow];
+	[super viewDidLoad];
+	[self updateShadow];
 	
 	[self.backgroundImageView setImage:[UIImage imageNamed:@"panorama.jpg"]];
 }
 
 - (void)viewWillLayoutSubviews
 {
-    [super viewWillLayoutSubviews];
-    [self updateShadow];
+	[super viewWillLayoutSubviews];
+	[self updateShadow];
 }
 
 - (void)setVisiblePercentage:(CGFloat)percentage
 {
-    [self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.3f%%", percentage]];
+	[self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.3f%%", percentage]];
 }
 
 - (IBAction)onPushButtonTap:(id)sender
 {
-    if([self.delegate respondsToSelector:@selector(stackedViewControllerDidRequestPush:)]) {
-        [self.delegate stackedViewControllerDidRequestPush:self];
-    }
+	if([self.delegate respondsToSelector:@selector(stackedViewControllerDidRequestPush:)]) {
+		[self.delegate stackedViewControllerDidRequestPush:self];
+	}
 }
 
 - (IBAction)onPopButtonTap:(id)sender
 {
-    if([self.delegate respondsToSelector:@selector(stackedViewControllerDidRequestPop:)]) {
-        [self.delegate stackedViewControllerDidRequestPop:self];
-    }
+	if([self.delegate respondsToSelector:@selector(stackedViewControllerDidRequestPop:)]) {
+		[self.delegate stackedViewControllerDidRequestPop:self];
+	}
 }
 
 - (IBAction)onScrollToMeButtonTapped:(id)sender
 {
-    [self.sc_stackViewController navigateToViewController:self animated:YES completion:nil];
+	[self.sc_stackViewController navigateToViewController:self animated:YES completion:nil];
 }
 
 - (void)updateShadow

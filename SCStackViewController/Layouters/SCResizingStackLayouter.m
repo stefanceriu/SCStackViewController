@@ -12,18 +12,18 @@
 
 - (id)init
 {
-    if(self = [super init]) {
-        self.shouldStackControllersAboveRoot =  YES;
-    }
-    
-    return self;
+	if(self = [super init]) {
+		self.shouldStackControllersAboveRoot =  YES;
+	}
+	
+	return self;
 }
 
 - (CGRect)currentFrameForRootViewController:(UIViewController *)rootViewController
-                              contentOffset:(CGPoint)contentOffset
-                          inStackController:(SCStackViewController *)stackController
+							  contentOffset:(CGPoint)contentOffset
+						  inStackController:(SCStackViewController *)stackController
 {
-    return CGRectMake(MAX(0,contentOffset.x), MAX(0,contentOffset.y), MAX(0, CGRectGetWidth(stackController.view.bounds) - ABS(contentOffset.x)), MAX(0, CGRectGetHeight(stackController.view.bounds) - ABS(contentOffset.y)));
+	return CGRectMake(MAX(0,contentOffset.x), MAX(0,contentOffset.y), MAX(0, CGRectGetWidth(stackController.view.bounds) - ABS(contentOffset.x)), MAX(0, CGRectGetHeight(stackController.view.bounds) - ABS(contentOffset.y)));
 }
 
 @end

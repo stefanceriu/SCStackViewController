@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Stefan Ceriu. All rights reserved.
 //
 
-/** A stack navigation step defines a relative position in a view 
+/** A stack navigation step defines a relative position in a view
  * controller at which the scrolling should stop when reached.
- * I works as both a pagination point and a navigation contraint (the 
+ * I works as both a pagination point and a navigation contraint (the
  * scroll view bounces on it)
  *
  * It is initialized with a percentage which will be transform into an
@@ -19,9 +19,9 @@
 @import CoreGraphics;
 
 typedef NS_ENUM(NSUInteger, SCStackNavigationStepBlockType) {
-    SCStackNavigationStepBlockTypeNone,
-    SCStackNavigationStepBlockTypeForward,
-    SCStackNavigationStepBlockTypeReverse
+	SCStackNavigationStepBlockTypeNone,
+	SCStackNavigationStepBlockTypeForward,
+	SCStackNavigationStepBlockTypeReverse
 };
 
 @interface SCStackNavigationStep : NSObject

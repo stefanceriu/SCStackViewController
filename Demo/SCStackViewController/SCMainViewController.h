@@ -17,12 +17,12 @@ typedef NS_ENUM(NSUInteger, SCStackDemoType) {
 };
 
 typedef NS_ENUM(NSUInteger, SCStackLayouterType) {
-    SCStackLayouterTypePlain,
-    SCStackLayouterTypeSliding,
-    SCStackLayouterTypeParallax,
-    SCStackLayouterTypeReversed,
-    SCStacklayouterTypePlainResizing,
-    SCStackLayouterTypeCount
+	SCStackLayouterTypePlain,
+	SCStackLayouterTypeSliding,
+	SCStackLayouterTypeParallax,
+	SCStackLayouterTypeReversed,
+	SCStacklayouterTypePlainResizing,
+	SCStackLayouterTypeCount
 };
 
 @protocol SCMainViewControllerDelegate;
@@ -44,10 +44,10 @@ typedef NS_ENUM(NSUInteger, SCStackLayouterType) {
 		 didChangeDemoType:(SCStackDemoType)type;
 
 - (void)mainViewController:(SCMainViewController *)mainViewController
-     didChangeLayouterType:(SCStackLayouterType)type;
+	 didChangeLayouterType:(SCStackLayouterType)type;
 
 - (void)mainViewController:(SCMainViewController *)mainViewController
-    didChangeAnimationType:(SCEasingFunctionType)type;
+	didChangeAnimationType:(SCEasingFunctionType)type;
 
 - (void)mainViewController:(SCMainViewController *)mainViewController
 didChangeAnimationDuration:(NSTimeInterval)duration;

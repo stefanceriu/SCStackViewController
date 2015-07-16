@@ -21,8 +21,8 @@ typedef NS_ENUM(NSUInteger, SCStackViewControllerPosition) {
  * navigation is disabled
  */
 typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
-    SCStackViewControllerNavigationContraintTypeForward = 1 << 0, /** Scroll view bounces on steps only when unfolding the stack*/
-    SCStackViewControllerNavigationContraintTypeReverse = 1 << 1  /** Scroll view bounces on steps only when folding the stack*/
+	SCStackViewControllerNavigationContraintTypeForward = 1 << 0, /** Scroll view bounces on steps only when unfolding the stack*/
+	SCStackViewControllerNavigationContraintTypeReverse = 1 << 1  /** Scroll view bounces on steps only when folding the stack*/
 };
 
 
@@ -35,9 +35,9 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 
 @class SCStackNavigationStep;
 
-/** SCStackViewController is a container view controller which allows you to 
- * stack other view controllers on the top/left/bottom/right of the root and 
- * build custom transitions between them while providing correct physics and 
+/** SCStackViewController is a container view controller which allows you to
+ * stack other view controllers on the top/left/bottom/right of the root and
+ * build custom transitions between them while providing correct physics and
  * appearance calls.
  *
  * @warning One should not attempt to use the stack with both vertical and
@@ -67,12 +67,12 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 @property (nonatomic, assign) BOOL pagingEnabled;
 
 
-/** A Boolean value that determines whether the user can freely scroll between 
+/** A Boolean value that determines whether the user can freely scroll between
  * pages
  *
- * When set to true the Stack's scrollView bounces on every page. Navigating 
+ * When set to true the Stack's scrollView bounces on every page. Navigating
  * through more than 1 page will require multiple swipes.
- * 
+ *
  * Default value is set to false
  */
 @property (nonatomic, assign) BOOL continuousNavigationEnabled;
@@ -137,7 +137,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * layouter is responsible
  */
 - (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
-             forPosition:(SCStackViewControllerPosition)position __attribute__((deprecated));
+			 forPosition:(SCStackViewControllerPosition)position __attribute__((deprecated));
 
 
 /** Registers a layouter for the given position
@@ -152,8 +152,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param animated Controls whether the change will be animated
  */
 - (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
-             forPosition:(SCStackViewControllerPosition)position
-                animated:(BOOL)animated;
+			 forPosition:(SCStackViewControllerPosition)position
+				animated:(BOOL)animated;
 
 /** Retrieve the layouter for the given position
  *
@@ -179,10 +179,10 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param completion Completion block called when the push is done
  */
 - (void)pushViewController:(UIViewController *)viewController
-                atPosition:(SCStackViewControllerPosition)position
-                    unfold:(BOOL)unfold
-                  animated:(BOOL)animated
-                completion:(void(^)())completion;
+				atPosition:(SCStackViewControllerPosition)position
+					unfold:(BOOL)unfold
+				  animated:(BOOL)animated
+				completion:(void(^)())completion;
 
 
 - (void)registerNavigationSteps:(NSArray *)navigationSteps forViewController:(UIViewController *)viewController;
@@ -197,8 +197,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param completion Completion block called when the pop is done
  */
 - (void)popViewControllerAtPosition:(SCStackViewControllerPosition)position
-                           animated:(BOOL)animated
-                         completion:(void(^)())completion;
+						   animated:(BOOL)animated
+						 completion:(void(^)())completion;
 
 /** Pops the given view controller
  *
@@ -207,8 +207,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param completion Completion block called when the pop is done
  */
 - (void)popViewController:(UIViewController *)viewController
-                 animated:(BOOL)animated
-               completion:(void(^)())completion;
+				 animated:(BOOL)animated
+			   completion:(void(^)())completion;
 
 
 /** Pops all the view controllers from the given position
@@ -220,13 +220,13 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param completion Completion block called when the pop is done
  */
 - (void)popToRootViewControllerFromPosition:(SCStackViewControllerPosition)position
-                                   animated:(BOOL)animated
-                                 completion:(void(^)())completion;
+								   animated:(BOOL)animated
+								 completion:(void(^)())completion;
 
 
 /** Unfolds to the given view controller
  *
- * The root view controller may be passed in order to hide all the side views. 
+ * The root view controller may be passed in order to hide all the side views.
  * During the animation the layouters will be called and effects will be used
  *
  * @param viewController The view controller to displayed
@@ -234,8 +234,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param completion Completion block called when the action is finished
  */
 - (void)navigateToViewController:(UIViewController *)viewController
-                        animated:(BOOL)animated
-                      completion:(void(^)())completion;
+						animated:(BOOL)animated
+					  completion:(void(^)())completion;
 
 
 /** Unfolds to the given step
@@ -249,9 +249,9 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param completion Completion block called when the action is finished
  */
 - (void)navigateToStep:(SCStackNavigationStep *)step
-      inViewController:(UIViewController *)viewController
-              animated:(BOOL)animated
-            completion:(void(^)())completion;
+	  inViewController:(UIViewController *)viewController
+			  animated:(BOOL)animated
+			completion:(void(^)())completion;
 
 /**-----------------------------------------------------------------------------
  * @name Querying the Stack state
@@ -315,13 +315,13 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param controller The view controller that became visible
  * @param position The position where the view controller resides
  *
- * A view controller is visible when any part of it is visible (within the 
+ * A view controller is visible when any part of it is visible (within the
  * Stack's scrollView bounds and not covered by any other view)
  *
  */
 - (void)stackViewController:(SCStackViewController *)stackViewController
-      didShowViewController:(UIViewController *)controller
-                   position:(SCStackViewControllerPosition)position;
+	  didShowViewController:(UIViewController *)controller
+				   position:(SCStackViewControllerPosition)position;
 
 
 /** Delegate method that the Stack calls when a view controller is hidden
@@ -334,8 +334,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  *
  */
 - (void)stackViewController:(SCStackViewController *)stackViewController
-      didHideViewController:(UIViewController *)controller
-                   position:(SCStackViewControllerPosition)position;
+	  didHideViewController:(UIViewController *)controller
+				   position:(SCStackViewControllerPosition)position;
 
 
 /** Delegate method that the Stack calls when its scrollView scrolls
@@ -344,7 +344,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  *
  */
 - (void)stackViewController:(SCStackViewController *)stackViewController
-        didNavigateToOffset:(CGPoint)offset;
+		didNavigateToOffset:(CGPoint)offset;
 
 
 /** Delegate method that the Stack calls when its scrollView rests on a predefined step
@@ -354,8 +354,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  *
  */
 - (void)stackViewController:(SCStackViewController *)stackViewController
-          didNavigateToStep:(SCStackNavigationStep *)step
-           inViewController:(UIViewController *)controller;
+		  didNavigateToStep:(SCStackNavigationStep *)step
+		   inViewController:(UIViewController *)controller;
 
 @end
 

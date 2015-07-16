@@ -18,7 +18,7 @@
 								  inStackController:(SCStackViewController *)stackViewController
 {
 	CGFloat visiblePercentage = [stackViewController visiblePercentageForViewController:viewController];
-
+	
 	CATransform3D transform = CATransform3DIdentity;
 	
 	CGFloat translation = (1.0f - visiblePercentage) * 400;

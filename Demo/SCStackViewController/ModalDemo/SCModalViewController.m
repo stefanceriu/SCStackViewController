@@ -27,37 +27,37 @@
 
 - (instancetype)initWithPosition:(SCStackViewControllerPosition)position
 {
-    if(self = [super init]) {
-        self.position = position;
-    }
-    
-    return self;
+	if(self = [super init]) {
+		self.position = position;
+	}
+	
+	return self;
 }
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    [self updateShadow];
+	[super viewDidLoad];
+	[self updateShadow];
 	
 	[self.contentView setBackgroundColor:[UIColor randomColorWithAlpha:1.0f]];
 }
 
 - (void)viewWillLayoutSubviews
 {
-    [super viewWillLayoutSubviews];
-    [self updateShadow];
+	[super viewWillLayoutSubviews];
+	[self updateShadow];
 }
 
 - (void)setVisiblePercentage:(CGFloat)percentage
 {
-    [self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.3f%%", percentage]];
+	[self.visiblePercentageLabel setText:[NSString stringWithFormat:@"%.3f%%", percentage]];
 }
 
 - (IBAction)onPopButtonTap:(id)sender
 {
-    if([self.delegate respondsToSelector:@selector(stackedViewControllerDidRequestPop:)]) {
-        [self.delegate stackedViewControllerDidRequestPop:self];
-    }
+	if([self.delegate respondsToSelector:@selector(stackedViewControllerDidRequestPop:)]) {
+		[self.delegate stackedViewControllerDidRequestPop:self];
+	}
 }
 
 - (void)updateShadow
