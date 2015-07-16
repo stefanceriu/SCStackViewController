@@ -31,6 +31,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 
 @protocol SCStackViewControllerDelegate;
 
+@class SCScrollView;
+
 @class SCStackNavigationStep;
 
 /** SCStackViewController is a container view controller which allows you to 
@@ -55,28 +57,6 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 
 /** Stack Delegate */
 @property (nonatomic, weak) IBOutlet id<SCStackViewControllerDelegate> delegate;
-
-
-/** UIBezierPath inside which the stack's scrollView doesn't respond to touch 
- *events 
- */
-@property (nonatomic, strong) UIBezierPath *touchRefusalArea;
-
-
-/** Boolean value that controls whether the Stack's scrollView bounces past the
- *  edge of content and back again
- *
- * Default value is set to true
- */
-@property (nonatomic, assign) BOOL bounces;
-
-
-/** A Boolean value that determines whether scrolling is enabled for the Stack's
- * scrollView.
- *
- * Default value is set to true
- */
-@property (nonatomic, assign) BOOL scrollEnabled;
 
 
 /** A Boolean value that determines whether paging is enabled for the Stack's
@@ -108,14 +88,6 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 @property (nonatomic, assign) SCStackViewControllerNavigationContraintType navigationContaintType;
 
 
-/** A Boolean value that controls whether the Stack's scrollView indicators are 
- * visible.
- *
- * Default value is set to false
- */
-@property (nonatomic, assign) BOOL showsScrollIndicators;
-
-
 /** Timing function used in push/pop/navigate operations
  *
  * Default value is set to SCEasingFunctionTypeSineEaseInOut
@@ -130,25 +102,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 @property (nonatomic, assign) NSTimeInterval animationDuration;
 
 
-/** The minimum number of fingers that can be touching the view for this gesture to be recognized.
- *
- * Default value is set to 1
- */
-@property (nonatomic, assign) NSUInteger minimumNumberOfTouches;
-
-
-/** The maximum number of fingers that can be touching the view for this gesture to be recognized.
- *
- * Default value is set to NSUIntegerMax
- */
-@property (nonatomic, assign) NSUInteger maximumNumberOfTouches;
-
-
-/**
- * @return The current content offset in the stack's scrollView
- *
- */
-@property (nonatomic, readonly) CGPoint contentOffset;
+/** The stack's internal scroll view */
+@property (nonatomic, strong, readonly) SCScrollView *scrollView;
 
 
 /**

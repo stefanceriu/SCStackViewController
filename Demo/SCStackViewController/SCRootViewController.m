@@ -9,6 +9,8 @@
 #import "SCRootViewController.h"
 
 #import "SCStackViewController.h"
+#import "SCScrollView.h"
+
 #import "SCStackNavigationStep.h"
 #import "SCEasingFunction.h"
 
@@ -49,22 +51,22 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
-    self.overlayView = [SCOverlayView overlayView];
-    [self.overlayView setDelegate:self];
-    [self.overlayView setAlpha:0.0f];
-    [self.mainViewController.view addSubview:self.overlayView];
-    [self.overlayView setFrame:self.mainViewController.view.bounds];
-    
+	self.overlayView = [SCOverlayView overlayView];
+	[self.overlayView setDelegate:self];
+	[self.overlayView setAlpha:0.0f];
+	[self.mainViewController.view addSubview:self.overlayView];
+	[self.overlayView setFrame:self.mainViewController.view.bounds];
 	
-    [self.stackViewController willMoveToParentViewController:self];
-    
-    [self.view addSubview:self.stackViewController.view];
-    [self.stackViewController.view setFrame:self.view.bounds];
-    
-    [self addChildViewController:self.stackViewController];
-    [self.stackViewController didMoveToParentViewController:self];
+	
+	[self.stackViewController willMoveToParentViewController:self];
+	
+	[self.view addSubview:self.stackViewController.view];
+	[self.stackViewController.view setFrame:self.view.bounds];
+	
+	[self addChildViewController:self.stackViewController];
+	[self.stackViewController didMoveToParentViewController:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -115,31 +117,31 @@
 
 - (void)mainViewController:(SCMainViewController *)mainViewController didChangeLayouterType:(SCStackLayouterType)type
 {
-    static NSDictionary *typeToLayouter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        typeToLayouter = (@{
-                            @(SCStackLayouterTypePlain)         : [SCStackLayouter class],
-                            @(SCStackLayouterTypeSliding)       : [SCSlidingStackLayouter class],
-                            @(SCStackLayouterTypeParallax)      : [SCParallaxStackLayouter class],
-                            @(SCStackLayouterTypeReversed)      : [SCReversedStackLayouter class],
-                            @(SCStacklayouterTypePlainResizing) : [SCResizingStackLayouter class]
-                            });
-    });
+	static NSDictionary *typeToLayouter;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		typeToLayouter = (@{
+							@(SCStackLayouterTypePlain)         : [SCStackLayouter class],
+							@(SCStackLayouterTypeSliding)       : [SCSlidingStackLayouter class],
+							@(SCStackLayouterTypeParallax)      : [SCParallaxStackLayouter class],
+							@(SCStackLayouterTypeReversed)      : [SCReversedStackLayouter class],
+							@(SCStacklayouterTypePlainResizing) : [SCResizingStackLayouter class]
+							});
+	});
 	
-    id<SCStackLayouterProtocol> layouter = [[typeToLayouter[@(type)] alloc] init];
-    [layouter setShouldStackControllersAboveRoot:YES];
+	id<SCStackLayouterProtocol> layouter = [[typeToLayouter[@(type)] alloc] init];
+	[layouter setShouldStackControllersAboveRoot:YES];
 	[self _registerLayouter:layouter];
 }
 
 - (void)mainViewController:(SCMainViewController *)mainViewController didChangeAnimationType:(SCEasingFunctionType)type
 {
-    [self.stackViewController setEasingFunction:[SCEasingFunction easingFunctionWithType:type]];
+	[self.stackViewController setEasingFunction:[SCEasingFunction easingFunctionWithType:type]];
 }
 
 - (void)mainViewController:(SCMainViewController *)mainViewController didChangeAnimationDuration:(NSTimeInterval)duration
 {
-    [self.stackViewController setAnimationDuration:duration];
+	[self.stackViewController setAnimationDuration:duration];
 }
 
 #pragma mark - SCStackedViewControllerDelegate
@@ -165,48 +167,39 @@
 			break;
 		}
 	}
-
-    [newViewController setDelegate:self];
 	
-    [self.stackViewController pushViewController:newViewController
-                                      atPosition:menuViewController.position
-                                          unfold:YES
-                                        animated:YES
-                                      completion:nil];
+	[newViewController setDelegate:self];
+	
+	[self.stackViewController pushViewController:newViewController
+									  atPosition:menuViewController.position
+										  unfold:YES
+										animated:YES
+									  completion:nil];
 }
 
 - (void)stackedViewControllerDidRequestPop:(SCImageViewController *)menuViewController
 {
-    [self.stackViewController popViewControllerAtPosition:menuViewController.position
-                                                 animated:YES
-                                               completion:nil];
+	[self.stackViewController popViewControllerAtPosition:menuViewController.position
+												 animated:YES
+											   completion:nil];
 }
 
 #pragma mark - SCStackViewControllerDelegate
 
 - (void)stackViewController:(SCStackViewController *)stackViewController didNavigateToOffset:(CGPoint)offset
 {
-    [self.overlayView setAlpha:ABS((offset.x?:offset.y)/300.0f)];
-    
-    for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
-        for(SCImageViewController *viewController in [self.stackViewController viewControllersForPosition:position]) {
-            [viewController setVisiblePercentage:[stackViewController visiblePercentageForViewController:viewController]];
-        }
-    }
+	[self.overlayView setAlpha:ABS((offset.x?:offset.y)/300.0f)];
+	
+	for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
+		for(SCImageViewController *viewController in [self.stackViewController viewControllersForPosition:position]) {
+			[viewController setVisiblePercentage:[stackViewController visiblePercentageForViewController:viewController]];
+		}
+	}
 	
 	[self.mainViewController setVisiblePercentage:[stackViewController visiblePercentageForViewController:self.mainViewController]];
 	
 	
-	{
-		CGRect frame = self.leftMenuButton.frame;
-		frame.origin.x = (offset.x > 0.0f ? 0.0f : ABS(offset.x));
-		self.leftMenuButton.frame = frame;
-		
-		frame = self.rightMenuButton.frame;
-		frame.origin.x = CGRectGetWidth(self.stackViewController.view.bounds) - frame.size.width;
-		frame.origin.x += (offset.x < 0.0f ?: -offset.x);
-		self.rightMenuButton.frame = frame;
-	}
+	[self _updateMenuButtonsWithContentOffset:offset];
 }
 
 #pragma mark - SCOverlayViewDelegate
@@ -357,7 +350,7 @@
 
 - (void)_registerLayouter:(id<SCStackLayouterProtocol>)layouter
 {
-	for(NSUInteger i=SCStackViewControllerPositionTop; i<=SCStackViewControllerPositionRight; i++) {		
+	for(NSUInteger i=SCStackViewControllerPositionTop; i<=SCStackViewControllerPositionRight; i++) {
 		[self.stackViewController registerLayouter:layouter forPosition:(SCStackViewControllerPosition)i animated:NO];
 	}
 }
@@ -410,24 +403,36 @@
 
 - (void)_onLeftMenuButtonTap:(UIButton *)sender
 {
-	if(self.stackViewController.contentOffset.x >= 0.0f) {
+	if(self.stackViewController.scrollView.contentOffset.x >= 0.0f) {
 		[self.stackViewController navigateToViewController:[[self.stackViewController viewControllersForPosition:SCStackViewControllerPositionLeft] firstObject]
 												  animated:YES
 												completion:nil];
-	} else if(self.stackViewController.contentOffset.x < 0.0f) {
+	} else if(self.stackViewController.scrollView.contentOffset.x < 0.0f) {
 		[self.stackViewController navigateToViewController:self.stackViewController.rootViewController animated:YES completion:nil];
 	}
 }
 
 - (void)_onRightMenuButtonTap:(UIButton *)sender
 {
-	if(self.stackViewController.contentOffset.x <= 0.0f) {
+	if(self.stackViewController.scrollView.contentOffset.x <= 0.0f) {
 		[self.stackViewController navigateToViewController:[[self.stackViewController viewControllersForPosition:SCStackViewControllerPositionRight] firstObject]
 												  animated:YES
 												completion:nil];
-	} else if(self.stackViewController.contentOffset.x > 0.0f) {
+	} else if(self.stackViewController.scrollView.contentOffset.x > 0.0f) {
 		[self.stackViewController navigateToViewController:self.stackViewController.rootViewController animated:YES completion:nil];
 	}
+}
+
+- (void)_updateMenuButtonsWithContentOffset:(CGPoint)offset
+{
+	CGRect frame = self.leftMenuButton.frame;
+	frame.origin.x = (offset.x > 0.0f ? 0.0f : ABS(offset.x));
+	self.leftMenuButton.frame = frame;
+	
+	frame = self.rightMenuButton.frame;
+	frame.origin.x = CGRectGetWidth(self.stackViewController.view.bounds) - frame.size.width;
+	frame.origin.x += (offset.x < 0.0f ?: -offset.x);
+	self.rightMenuButton.frame = frame;
 }
 
 @end

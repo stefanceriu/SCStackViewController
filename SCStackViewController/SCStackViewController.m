@@ -14,8 +14,6 @@
 #import "SCStackNavigationStep.h"
 #import "SCStackLayouterProtocol.h"
 
-#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
-
 @interface SCStackViewController () <SCStackViewControllerViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UIViewController *rootViewController;
@@ -37,18 +35,13 @@
 @property (nonatomic, assign) BOOL isViewVisible;
 @property (nonatomic, assign) BOOL isRootViewControllerVisible;
 
+@property (nonatomic, assign) BOOL didIgnoreNavigationalConstraints;
+
 @property (nonatomic, strong) id<SCStackLayouterProtocol> lastUsedLayouter;
 
 @end
 
 @implementation SCStackViewController
-@dynamic bounces;
-@dynamic touchRefusalArea;
-@dynamic showsScrollIndicators;
-@dynamic minimumNumberOfTouches;
-@dynamic maximumNumberOfTouches;
-@dynamic scrollEnabled;
-@dynamic contentOffset;
 
 - (void)dealloc
 {
@@ -497,8 +490,8 @@
     [self.scrollView setDelegate:self];
 	
     [self setPagingEnabled:YES];
-	[self setShowsScrollIndicators:NO];
-    
+	[self.scrollView setShowsHorizontalScrollIndicator:NO];
+	[self.scrollView setShowsVerticalScrollIndicator:NO];
     
     [self.rootViewController.view setFrame:self.view.bounds];
     [self.rootViewController willMoveToParentViewController:self];
@@ -677,6 +670,7 @@
     
     if(CGPointEqualToPoint(self.scrollView.contentOffset, CGPointZero) || lastVisibleController == nil) {
         [self updateBoundsUsingDefaultNavigationContraints];
+		self.didIgnoreNavigationalConstraints = YES;
         return;
     }
 	
@@ -1058,13 +1052,7 @@
                     // Calculate the next step of the pagination (either a navigationStep or a controller edge)
                     *targetContentOffset = [self nextStepOffsetForViewController:viewController position:position velocity:velocity reversed:isReversed contentOffset:*targetContentOffset paginating:YES];
                 }
-                
-                // Pagination fix for iOS 5.x
-                if(SYSTEM_VERSION_LESS_THAN(@"6.0")) {
-                    targetContentOffset->y += 0.1f;
-                    targetContentOffset->x += 0.1f;
-                }
-                
+                                
                 keepGoing = NO;
                 *stop = YES;
             }
@@ -1204,6 +1192,11 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self updateFramesAndTriggerAppearanceCallbacks];
+	
+	if(self.didIgnoreNavigationalConstraints) {
+		[self updateBoundsUsingNavigationContraints];
+		self.didIgnoreNavigationalConstraints = NO;
+	}
     
     if([self.delegate respondsToSelector:@selector(stackViewController:didNavigateToOffset:)]) {
         [self.delegate stackViewController:self didNavigateToOffset:self.scrollView.contentOffset];
@@ -1278,31 +1271,6 @@
     // Normal pagination
     else {
         [self adjustTargetContentOffset:targetContentOffset withVelocity:velocity];
-    }
-}
-
-#pragma mark - Properties and fowarding
-
-- (BOOL)showsScrollIndicators
-{
-    return [self.scrollView showsHorizontalScrollIndicator] && [self.scrollView showsVerticalScrollIndicator];
-}
-
-- (void)setShowsScrollIndicators:(BOOL)showsScrollIndicators
-{
-    [self.scrollView setShowsHorizontalScrollIndicator:showsScrollIndicators];
-    [self.scrollView setShowsVerticalScrollIndicator:showsScrollIndicators];
-}
-
-- (id)forwardingTargetForSelector:(SEL)aSelector
-{
-    if([self.scrollView respondsToSelector:aSelector]) {
-        return self.scrollView;
-    } else if([self.scrollView.panGestureRecognizer respondsToSelector:aSelector]) {
-        return self.scrollView.panGestureRecognizer;
-    } else {
-        [NSException raise:@"SCStackViewControllerUnrecognizedSelectorException" format:@"Unrecognized selector %@", NSStringFromSelector(aSelector)];
-        return nil;
     }
 }
 
