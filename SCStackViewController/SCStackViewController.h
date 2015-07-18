@@ -113,6 +113,10 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 @property (nonatomic, assign) BOOL shouldBlockInteractionWhileAnimating;
 
 
+/** Whether the stack's view is visible or not */
+@property (nonatomic, readonly) BOOL visible;
+
+
 /**-----------------------------------------------------------------------------
  * @name Initializing the Stack
  * -----------------------------------------------------------------------------

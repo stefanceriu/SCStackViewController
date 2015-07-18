@@ -84,6 +84,16 @@
 	self.animationDuration = 0.25f;
 	
 	self.navigationContaintType = SCStackViewControllerNavigationContraintTypeForward | SCStackViewControllerNavigationContraintTypeReverse;
+	
+	self.scrollView = [[SCScrollView alloc] init];
+	[self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+	[self.scrollView setDirectionalLockEnabled:YES];
+	[self.scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
+	[self.scrollView setDelegate:self];
+	
+	[self setPagingEnabled:YES];
+	[self.scrollView setShowsHorizontalScrollIndicator:NO];
+	[self.scrollView setShowsVerticalScrollIndicator:NO];
 }
 
 #pragma mark - Public Methods
@@ -468,6 +478,11 @@
 	return [self.visiblePercentages[@([viewController hash])] floatValue];
 }
 
+- (BOOL)visible
+{
+	return self.isViewVisible;
+}
+
 #pragma mark - UIViewController View Events
 
 - (void)loadView
@@ -483,22 +498,13 @@
 	
 	[self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	
-	self.scrollView = [[SCScrollView alloc] initWithFrame:self.view.bounds];
-	[self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-	[self.scrollView setDirectionalLockEnabled:YES];
-	[self.scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
-	[self.scrollView setDelegate:self];
-	
-	[self setPagingEnabled:YES];
-	[self.scrollView setShowsHorizontalScrollIndicator:NO];
-	[self.scrollView setShowsVerticalScrollIndicator:NO];
-	
 	[self.rootViewController.view setFrame:self.view.bounds];
 	[self.rootViewController willMoveToParentViewController:self];
 	[self.scrollView addSubview:self.rootViewController.view];
 	[self addChildViewController:self.rootViewController];
 	[self.rootViewController didMoveToParentViewController:self];
 	
+	[self.scrollView setFrame:self.view.bounds];
 	[self.view addSubview:self.scrollView];
 }
 
