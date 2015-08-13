@@ -904,9 +904,11 @@
 				[viewController.view setFrame:nextFrame];
 				[viewController endAppearanceTransition];
 				
-				if([self.delegate respondsToSelector:@selector(stackViewController:didShowViewController:position:)]) {
-					[self.delegate stackViewController:self didShowViewController:viewController position:position];
-				}
+				dispatch_async(dispatch_get_main_queue(), ^{
+					if([self.delegate respondsToSelector:@selector(stackViewController:didShowViewController:position:)]) {
+						[self.delegate stackViewController:self didShowViewController:viewController position:position];
+					}
+				});
 				
 			} else if(!visible && [self.visibleControllers containsObject:viewController]) {
 				[self.visibleControllers removeObject:viewController];
@@ -914,9 +916,11 @@
 				[viewController.view setFrame:nextFrame];
 				[viewController endAppearanceTransition];
 				
-				if([self.delegate respondsToSelector:@selector(stackViewController:didHideViewController:position:)]) {
-					[self.delegate stackViewController:self didHideViewController:viewController position:position];
-				}
+				dispatch_async(dispatch_get_main_queue(), ^{
+					if([self.delegate respondsToSelector:@selector(stackViewController:didHideViewController:position:)]) {
+						[self.delegate stackViewController:self didHideViewController:viewController position:position];
+					}
+				});
 				
 			} else {
 				[viewController.view setFrame:nextFrame];
@@ -950,9 +954,11 @@
 		[self.rootViewController.view setFrame:newRootViewControllerFrame];
 		[self.rootViewController endAppearanceTransition];
 		
-		if([self.delegate respondsToSelector:@selector(stackViewController:didShowViewController:position:)]) {
-			[self.delegate stackViewController:self didShowViewController:self.rootViewController position:-1];
-		}
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if([self.delegate respondsToSelector:@selector(stackViewController:didShowViewController:position:)]) {
+				[self.delegate stackViewController:self didShowViewController:self.rootViewController position:-1];
+			}
+		});
 		
 	} else if(!visible && self.isRootViewControllerVisible) {
 		self.isRootViewControllerVisible = NO;
@@ -960,9 +966,11 @@
 		[self.rootViewController.view setFrame:newRootViewControllerFrame];
 		[self.rootViewController endAppearanceTransition];
 		
-		if([self.delegate respondsToSelector:@selector(stackViewController:didHideViewController:position:)]) {
-			[self.delegate stackViewController:self didHideViewController:self.rootViewController position:-1];
-		}
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if([self.delegate respondsToSelector:@selector(stackViewController:didHideViewController:position:)]) {
+				[self.delegate stackViewController:self didHideViewController:self.rootViewController position:-1];
+			}
+		});
 		
 	} else {
 		
