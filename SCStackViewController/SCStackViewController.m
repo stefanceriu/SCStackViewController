@@ -519,46 +519,27 @@
 	[self updateBoundsIgnoringNavigationContraints];
 	
 	UIViewController *lastVisibleViewController = [self.visibleViewControllers lastObject];
-	CGFloat visiblePercentage = [self visiblePercentageForViewController:lastVisibleViewController];
-	
-	[self navigateToStep:[SCStackNavigationStep navigationStepWithPercentage:visiblePercentage] inViewController:lastVisibleViewController animated:NO completion:nil];
+    if(lastVisibleViewController) {
+        CGFloat visiblePercentage = [self visiblePercentageForViewController:lastVisibleViewController];
+        [self navigateToStep:[SCStackNavigationStep navigationStepWithPercentage:visiblePercentage] inViewController:lastVisibleViewController animated:NO completion:nil];
+    }
 	
 	[self updateFramesAndTriggerAppearanceCallbacks];
 	[self updateBoundsUsingNavigationContraints];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	[self.rootViewController beginAppearanceTransition:YES animated:animated];
-	
-	self.isViewVisible = YES;
-	
-	[self updateFramesAndTriggerAppearanceCallbacks];
-	
-	[self.view setNeedsLayout];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
 	
-	[self.rootViewController endAppearanceTransition];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	
-	[self.rootViewController beginAppearanceTransition:NO animated:animated];
+    self.isViewVisible = YES;
+    
+    [self updateFramesAndTriggerAppearanceCallbacks];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
-	
-	[self.rootViewController endAppearanceTransition];
 	
 	self.isViewVisible = NO;
 	
