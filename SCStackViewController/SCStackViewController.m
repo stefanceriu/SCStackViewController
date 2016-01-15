@@ -419,7 +419,11 @@
 	// Navigate to the determined offset, restore the previous navigation states and update navigation contraints
 	__weak typeof(self) weakSelf = self;
 	void(^cleanup)() = ^{
-		[weakSelf registerNavigationSteps:self.previousNavigationSteps[@([viewController hash])] forViewController:viewController];
+        
+        NSArray *navigationSteps = self.previousNavigationSteps[@([viewController hash])];
+        if(navigationSteps.count) {
+            [weakSelf registerNavigationSteps:self.previousNavigationSteps[@([viewController hash])] forViewController:viewController];
+        }
 		
 		if(![weakSelf.scrollView isRunningAnimation]) {
 			[weakSelf.previousNavigationSteps removeObjectForKey:@([viewController hash])];
