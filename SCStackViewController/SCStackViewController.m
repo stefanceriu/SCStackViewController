@@ -104,6 +104,10 @@
 {
 	[self.layouters setObject:layouter forKey:@(position)];
 	
+	if (!self.viewIfLoaded) {
+		return;
+	}
+	
 	if(animated) {
 		[UIView animateWithDuration:self.animationDuration animations:^{
 			[self updateFramesAndTriggerAppearanceCallbacks];
@@ -502,7 +506,6 @@
 	
 	[self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	
-	[self.rootViewController.view setFrame:self.view.bounds];
 	[self.rootViewController willMoveToParentViewController:self];
 	[self.scrollView addSubview:self.rootViewController.view];
 	[self addChildViewController:self.rootViewController];
