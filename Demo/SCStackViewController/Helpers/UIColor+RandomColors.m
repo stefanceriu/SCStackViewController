@@ -20,9 +20,9 @@
 		UIColor *baseColor = [UIColor blueColor];
 		
 		colorArray = [NSMutableArray array];
-		[colorArray addObjectsFromArray:[NSArray arrayOfColorsWithColorScheme:ColorSchemeTriadic with:baseColor flatScheme:YES]];
-		[colorArray addObjectsFromArray:[NSArray arrayOfColorsWithColorScheme:ColorSchemeComplementary with:baseColor flatScheme:YES]];
-		[colorArray addObjectsFromArray:[NSArray arrayOfColorsWithColorScheme:ColorSchemeAnalogous with:baseColor flatScheme:YES]];
+		[colorArray addObjectsFromArray:[NSArray arrayOfColorsWithColorScheme:ColorSchemeTriadic usingColor:baseColor withFlatScheme:YES]];
+		[colorArray addObjectsFromArray:[NSArray arrayOfColorsWithColorScheme:ColorSchemeComplementary usingColor:baseColor withFlatScheme:YES]];
+		[colorArray addObjectsFromArray:[NSArray arrayOfColorsWithColorScheme:ColorSchemeAnalogous usingColor:baseColor withFlatScheme:YES]];
 	});
 	
 	return colorArray[(arc4random()%colorArray.count)];

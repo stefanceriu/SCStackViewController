@@ -52,11 +52,11 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  */
 
 /** The stack's root view controller. */
-@property (nonatomic, strong, readonly) UIViewController *rootViewController;
+@property (nonatomic, strong, nonnull, readonly) UIViewController *rootViewController;
 
 
 /** Stack Delegate */
-@property (nonatomic, weak) IBOutlet id<SCStackViewControllerDelegate> delegate;
+@property (nonatomic, nullable, weak) IBOutlet id<SCStackViewControllerDelegate> delegate;
 
 
 /** A Boolean value that determines whether paging is enabled for the Stack's
@@ -92,7 +92,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  *
  * Default value is set to SCEasingFunctionTypeSineEaseInOut
  */
-@property (nonatomic, strong) id<SCEasingFunctionProtocol> easingFunction;
+@property (nonatomic, strong, nonnull) id<SCEasingFunctionProtocol> easingFunction;
 
 
 /** Animation duration for push/pop/navigate operations
@@ -103,7 +103,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 
 
 /** The stack's internal scroll view */
-@property (nonatomic, strong, readonly) SCScrollView *scrollView;
+@property (nonatomic, strong, nonnull, readonly) SCScrollView *scrollView;
 
 
 /**
@@ -127,7 +127,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param rootViewController The view controller which provides the view for the
  * center area of the Stack.
  */
-- (instancetype)initWithRootViewController:(UIViewController *)rootViewController;
+- (nullable instancetype)initWithRootViewController:(nonnull UIViewController *)rootViewController;
 
 
 /** Registers a layouter for the given position
@@ -140,8 +140,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param position The SCStackViewControllerPosition for which the given
  * layouter is responsible
  */
-- (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
-			 forPosition:(SCStackViewControllerPosition)position __attribute__((deprecated));
+- (void)registerLayouter:(nonnull id<SCStackLayouterProtocol>)layouter
+			 forPosition:(SCStackViewControllerPosition)position __attribute((deprecated(" Use -registerLayouter:forPosition:animated: instead.")));
 
 
 /** Registers a layouter for the given position
@@ -155,7 +155,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * layouter is responsible
  * @param animated Controls whether the change will be animated
  */
-- (void)registerLayouter:(id<SCStackLayouterProtocol>)layouter
+- (void)registerLayouter:(nonnull id<SCStackLayouterProtocol>)layouter
 			 forPosition:(SCStackViewControllerPosition)position
 				animated:(BOOL)animated;
 
@@ -163,7 +163,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  *
  * @param position The SCStackViewControllerPosition to fetch the layouter for
  */
-- (id<SCStackLayouterProtocol>)layouterForPosition:(SCStackViewControllerPosition)position;
+- (nullable id<SCStackLayouterProtocol>)layouterForPosition:(SCStackViewControllerPosition)position;
 
 
 /**-----------------------------------------------------------------------------
@@ -182,14 +182,14 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param animated Controls whether the unfold will be animated
  * @param completion Completion block called when the push is done
  */
-- (void)pushViewController:(UIViewController *)viewController
+- (void)pushViewController:(nonnull UIViewController *)viewController
 				atPosition:(SCStackViewControllerPosition)position
 					unfold:(BOOL)unfold
 				  animated:(BOOL)animated
-				completion:(void(^)())completion;
+				completion:(nullable void(^)())completion;
 
 
-- (void)registerNavigationSteps:(NSArray *)navigationSteps forViewController:(UIViewController *)viewController;
+- (void)registerNavigationSteps:(nullable NSArray *)navigationSteps forViewController:(nonnull UIViewController *)viewController;
 
 
 /** Pops the last pushed view controller from the given position
@@ -202,7 +202,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  */
 - (void)popViewControllerAtPosition:(SCStackViewControllerPosition)position
 						   animated:(BOOL)animated
-						 completion:(void(^)())completion;
+						 completion:(nullable void(^)())completion;
 
 /** Pops the given view controller
  *
@@ -210,9 +210,9 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param animated Controls whether the pop will be animated
  * @param completion Completion block called when the pop is done
  */
-- (void)popViewController:(UIViewController *)viewController
+- (void)popViewController:(nonnull UIViewController *)viewController
 				 animated:(BOOL)animated
-			   completion:(void(^)())completion;
+			   completion:(nullable void(^)())completion;
 
 
 /** Pops all the view controllers from the given position
@@ -225,7 +225,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  */
 - (void)popToRootViewControllerFromPosition:(SCStackViewControllerPosition)position
 								   animated:(BOOL)animated
-								 completion:(void(^)())completion;
+								 completion:(nullable void(^)())completion;
 
 
 /** Unfolds to the given view controller
@@ -237,9 +237,9 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param animated Controls whether the navigation will be animated
  * @param completion Completion block called when the action is finished
  */
-- (void)navigateToViewController:(UIViewController *)viewController
+- (void)navigateToViewController:(nonnull UIViewController *)viewController
 						animated:(BOOL)animated
-					  completion:(void(^)())completion;
+					  completion:(nullable void(^)())completion;
 
 
 /** Unfolds to the given step
@@ -252,10 +252,10 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param animated Controls whether the navigation will be animated
  * @param completion Completion block called when the action is finished
  */
-- (void)navigateToStep:(SCStackNavigationStep *)step
-	  inViewController:(UIViewController *)viewController
+- (void)navigateToStep:(nonnull SCStackNavigationStep *)step
+	  inViewController:(nonnull UIViewController *)viewController
 			  animated:(BOOL)animated
-			completion:(void(^)())completion;
+			completion:(nullable void(^)())completion;
 
 /**-----------------------------------------------------------------------------
  * @name Querying the Stack state
@@ -268,14 +268,14 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * position
  * @param position The position for which to return the view controllers array
  */
-- (NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position;
+- (nonnull NSArray *)viewControllersForPosition:(SCStackViewControllerPosition)position;
 
 /**
  * @return An NSArray of view controllers that are currently visible. Includes
  * root view controller.
  *
  */
-- (NSArray *)visibleViewControllers;
+- (nonnull NSArray *)visibleViewControllers;
 
 
 /**
@@ -287,7 +287,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * Stack's scrollView bounds and not covered by any other view)
  *
  */
-- (BOOL)isViewControllerVisible:(UIViewController *)viewController;
+- (BOOL)isViewControllerVisible:(nonnull UIViewController *)viewController;
 
 /**
  * @return Float value representing the visible percentage
@@ -299,7 +299,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  *
  * Ranges from 0.0f to 1.0f
  */
-- (CGFloat)visiblePercentageForViewController:(UIViewController *)viewController;
+- (CGFloat)visiblePercentageForViewController:(nonnull UIViewController *)viewController;
 
 @end
 
@@ -323,8 +323,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * Stack's scrollView bounds and not covered by any other view)
  *
  */
-- (void)stackViewController:(SCStackViewController *)stackViewController
-	  didShowViewController:(UIViewController *)controller
+- (void)stackViewController:(nonnull SCStackViewController *)stackViewController
+	  didShowViewController:(nonnull UIViewController *)controller
 				   position:(SCStackViewControllerPosition)position;
 
 
@@ -337,8 +337,8 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * scrollView bounds or when it is fully overlapped by other views
  *
  */
-- (void)stackViewController:(SCStackViewController *)stackViewController
-	  didHideViewController:(UIViewController *)controller
+- (void)stackViewController:(nonnull SCStackViewController *)stackViewController
+	  didHideViewController:(nonnull UIViewController *)controller
 				   position:(SCStackViewControllerPosition)position;
 
 
@@ -347,7 +347,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param offset The current offset in the Stack's scrollView
  *
  */
-- (void)stackViewController:(SCStackViewController *)stackViewController
+- (void)stackViewController:(nonnull SCStackViewController *)stackViewController
 		didNavigateToOffset:(CGPoint)offset;
 
 
@@ -357,9 +357,9 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @param controller The view controller that own the step
  *
  */
-- (void)stackViewController:(SCStackViewController *)stackViewController
-		  didNavigateToStep:(SCStackNavigationStep *)step
-		   inViewController:(UIViewController *)controller;
+- (void)stackViewController:(nonnull SCStackViewController *)stackViewController
+		  didNavigateToStep:(nonnull SCStackNavigationStep *)step
+		   inViewController:(nonnull UIViewController *)controller;
 
 @end
 
@@ -377,7 +377,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  * @return First SCStackViewController instance found by looking up the
  * responder chain
  */
-- (SCStackViewController *)sc_stackViewController;
+- (nonnull SCStackViewController *)sc_stackViewController;
 
 
 /**
