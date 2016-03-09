@@ -104,7 +104,7 @@
 {
 	[self.layouters setObject:layouter forKey:@(position)];
 	
-	if (!self.viewIfLoaded) {
+	if (!self.isViewLoaded) {
 		return;
 	}
 	
