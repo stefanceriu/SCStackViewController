@@ -86,7 +86,7 @@
 	self.navigationContaintType = SCStackViewControllerNavigationContraintTypeForward | SCStackViewControllerNavigationContraintTypeReverse;
 	
 	self.scrollView = [[SCScrollView alloc] init];
-	[self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+	[self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[self.scrollView setDirectionalLockEnabled:YES];
 	[self.scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
 	[self.scrollView setDelegate:self];
@@ -504,7 +504,7 @@
 {
 	[super viewDidLoad];
 	
-	[self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	
 	[self.rootViewController willMoveToParentViewController:self];
 	[self.scrollView addSubview:self.rootViewController.view];
@@ -512,7 +512,13 @@
 	[self.rootViewController didMoveToParentViewController:self];
 	
 	[self.scrollView setFrame:self.view.bounds];
-	[self.view addSubview:self.scrollView];
+    
+    // Prevents _adjustContentOffsetIfNecessary from triggering
+    UIView *scrollViewWrapper = [[UIView alloc] initWithFrame:self.view.bounds];
+    [scrollViewWrapper setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [scrollViewWrapper addSubview:self.scrollView];
+    
+	[self.view addSubview:scrollViewWrapper];
 }
 
 - (void)viewWillLayoutSubviews
