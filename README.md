@@ -8,19 +8,19 @@ It was built with versatility in mind so it can be applied to quite a few differ
 
 ### Demo - for more, 'pod try scstackviewcontroller' or see the included project
 ##### Top stacked view controllers with elastic ease out easing function and perspective transform
-![Images](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/ImagesDemo.gif)
+![Images](https://drive.google.com/uc?export=download&id=0ByLCkUO90ltoOFo5dnUyWUZKb0U)
 
 ##### Side stacked with parallax and root resizing
-![SideMenus](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/SideMenusDemo.gif)
+![SideMenus](https://drive.google.com/uc?export=download&id=0ByLCkUO90ltobzJzclBuZmxkV3M)
 
 ##### Title bar with custom navigation steps and a bounce ease out easing function
-![TitleBar](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/TitleBarDemo.gif)
+![TitleBar](https://drive.google.com/uc?export=download&id=0ByLCkUO90ltoZTh2SW5kdHl2YlU)
 
 #### A modal view controller using a scale and rotation transform
-![Modal](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCStackViewController/v3.2.0/ModalDemo.gif)
+![Modal](https://drive.google.com/uc?export=download&id=0ByLCkUO90ltoZjRqUk1iWlpScEE)
 
 #### And even a [navigation controller](https://github.com/stefanceriu/SCNavigationController) :)
-![SCNavigationController](https://dl.dropboxusercontent.com/u/12748201/Recordings/SCNavigationController/Parallax%20-%20Sine%20Ease%20In%20Out%20-%20Right.gif)
+![SCNavigationController](https://drive.google.com/uc?export=download&id=0ByLCkUO90ltoVFVNR1A2b0wwa1k)
 
 ## License
 SCStackViewController is released under the MIT License (MIT) (see the LICENSE file)
