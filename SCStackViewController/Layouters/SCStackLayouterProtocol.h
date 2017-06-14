@@ -21,7 +21,7 @@
  * @param viewController The view controller for which to calculate the frame
  * @param index The index of the view controller in the Stack's children array
  * @param position The position in the stack
- * @param viewController The full children array for the given position
+ * @param viewControllers The full children array for the given position
  * @param stackViewController The calling StackViewController
  *
  * @return The frame for the viewController's view
@@ -92,9 +92,8 @@
 /** Returns the root view controller sublayer transformation that should be used
  * for the currnet stack offset
  *
- * @param viewController The view controller for which to calculate the frame
- * @param index The index of the view controller in the Stack's children array
- * @param position The position in the stack
+ * @param rootViewController the stack's root view controller
+ * @param contentOffset current offset in the Stack's scrollView
  * @param stackViewController The calling StackViewController
  *
  * @return The sublayer transformation to be applied

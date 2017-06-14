@@ -18,6 +18,8 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
 	[self.imageView.layer setCornerRadius:10.0f];
 }
 

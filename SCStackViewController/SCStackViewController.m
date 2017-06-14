@@ -94,6 +94,8 @@
 	[self setPagingEnabled:YES];
 	[self.scrollView setShowsHorizontalScrollIndicator:NO];
 	[self.scrollView setShowsVerticalScrollIndicator:NO];
+	
+	[self.scrollView setContentOffset:CGPointZero]; // Overrides whatever _adjustContentOffsetIfNecessary might do
 }
 
 #pragma mark - Public Methods
