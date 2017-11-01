@@ -49,7 +49,7 @@
 		18FEAAE817B3ED2F00788EF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE717B3ED2F00788EF0 /* Foundation.framework */; };
 		18FEAAEA17B3ED2F00788EF0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */; };
 		18FEAAF217B3ED2F00788EF0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FEAAF117B3ED2F00788EF0 /* main.m */; };
-		A3BBEC421749042B6A2646AD /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBCFE08D7F870C09CCE0F816 /* libPods.a */; };
+		337A2AFDA433D08548B8EAAD /* libPods-SCStackViewController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3860B666A25773930F16D279 /* libPods-SCStackViewController.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,9 +121,12 @@
 		18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		18FEAAED17B3ED2F00788EF0 /* SCStackViewController-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SCStackViewController-Info.plist"; sourceTree = "<group>"; };
 		18FEAAF117B3ED2F00788EF0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3860B666A25773930F16D279 /* libPods-SCStackViewController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SCStackViewController.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		642CD41E6249C9730BE87603 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B350B7897D79F062B8C2C2FC /* Pods-SCStackViewController.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SCStackViewController.release.xcconfig"; path = "Pods/Target Support Files/Pods-SCStackViewController/Pods-SCStackViewController.release.xcconfig"; sourceTree = "<group>"; };
 		EBCFE08D7F870C09CCE0F816 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD53A29BD55EE85F062AF39 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		F5F7A1638BCE9DE9FE3728FD /* Pods-SCStackViewController.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SCStackViewController.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SCStackViewController/Pods-SCStackViewController.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,7 +138,7 @@
 				18FEAAE617B3ED2F00788EF0 /* UIKit.framework in Frameworks */,
 				18FEAAE817B3ED2F00788EF0 /* Foundation.framework in Frameworks */,
 				18FEAAEA17B3ED2F00788EF0 /* CoreGraphics.framework in Frameworks */,
-				A3BBEC421749042B6A2646AD /* libPods.a in Frameworks */,
+				337A2AFDA433D08548B8EAAD /* libPods-SCStackViewController.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +286,7 @@
 				18FEAAE717B3ED2F00788EF0 /* Foundation.framework */,
 				18FEAAE917B3ED2F00788EF0 /* CoreGraphics.framework */,
 				EBCFE08D7F870C09CCE0F816 /* libPods.a */,
+				3860B666A25773930F16D279 /* libPods-SCStackViewController.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -329,6 +333,8 @@
 			children = (
 				EBD53A29BD55EE85F062AF39 /* Pods.debug.xcconfig */,
 				642CD41E6249C9730BE87603 /* Pods.release.xcconfig */,
+				F5F7A1638BCE9DE9FE3728FD /* Pods-SCStackViewController.debug.xcconfig */,
+				B350B7897D79F062B8C2C2FC /* Pods-SCStackViewController.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -340,12 +346,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18FEAB0517B3ED2F00788EF0 /* Build configuration list for PBXNativeTarget "SCStackViewController" */;
 			buildPhases = (
-				710405C2CB1B685FF914CDEF /* Check Pods Manifest.lock */,
+				21D9A396F93B88E1EB241738 /* [CP] Check Pods Manifest.lock */,
 				18FEAADE17B3ED2F00788EF0 /* Sources */,
 				18FEAADF17B3ED2F00788EF0 /* Frameworks */,
 				18FEAAE017B3ED2F00788EF0 /* Resources */,
-				5526F188093DCCE9984E6EA4 /* Copy Pods Resources */,
-				FD505D4476EBC34EF455BAA8 /* Embed Pods Frameworks */,
+				1A11E5B23902903FCF335764 /* [CP] Embed Pods Frameworks */,
+				902C904DA49472C377C079CF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -409,49 +415,52 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5526F188093DCCE9984E6EA4 /* Copy Pods Resources */ = {
+		1A11E5B23902903FCF335764 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SCStackViewController/Pods-SCStackViewController-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		710405C2CB1B685FF914CDEF /* Check Pods Manifest.lock */ = {
+		21D9A396F93B88E1EB241738 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SCStackViewController-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FD505D4476EBC34EF455BAA8 /* Embed Pods Frameworks */ = {
+		902C904DA49472C377C079CF /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SCStackViewController/Pods-SCStackViewController-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -553,12 +562,36 @@
 		};
 		18FEAB0617B3ED2F00788EF0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EBD53A29BD55EE85F062AF39 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = F5F7A1638BCE9DE9FE3728FD /* Pods-SCStackViewController.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES_ERROR;
+				CLANG_WARN_BOOL_CONVERSION = YES_ERROR;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_FLOAT_CONVERSION = NO;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES_ERROR;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
+				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				INFOPLIST_FILE = "SCStackViewController/SCStackViewController-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.stefanceriu.${PRODUCT_NAME:rfc1034identifier}";
@@ -570,12 +603,36 @@
 		};
 		18FEAB0717B3ED2F00788EF0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 642CD41E6249C9730BE87603 /* Pods.release.xcconfig */;
+			baseConfigurationReference = B350B7897D79F062B8C2C2FC /* Pods-SCStackViewController.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES_ERROR;
+				CLANG_WARN_BOOL_CONVERSION = YES_ERROR;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_FLOAT_CONVERSION = NO;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES_ERROR;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
+				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				INFOPLIST_FILE = "SCStackViewController/SCStackViewController-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.stefanceriu.${PRODUCT_NAME:rfc1034identifier}";

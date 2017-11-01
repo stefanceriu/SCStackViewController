@@ -26,3 +26,4 @@
 - (void)stackedViewControllerDidRequestPop:(id<SCStackedViewControllerProtocol>)stackedViewController;
 
 @end
+

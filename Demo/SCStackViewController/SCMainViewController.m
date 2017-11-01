@@ -55,7 +55,7 @@ typedef NS_ENUM(NSUInteger, SCPickerViewComponentType) {
 	[UIView animateWithDuration:(animated ? 0.25f : 0.0f) animations:^{
 		[self.pickerView setAlpha:visible];
 		
-		for(NSUInteger i=0; i<SCPickerViewComponentTypeAnimationDuration+1; i++) {
+		for(SCPickerViewComponentType i=0; i<SCPickerViewComponentTypeAnimationDuration+1; i++) {
 			[self.pickerView selectRow:0 inComponent:i animated:YES];
 		}
 	}];

@@ -149,7 +149,7 @@
 				atPosition:(SCStackViewControllerPosition)position
 					unfold:(BOOL)unfold
 				  animated:(BOOL)animated
-				completion:(void(^)())completion
+				completion:(void(^)(void))completion
 {
 	if(self.scrollView.isRunningAnimation && self.shouldBlockInteractionWhileAnimating) {
 		return;
@@ -197,7 +197,7 @@
 	__weak typeof(self) weakSelf = self;
 	if(unfold) {
 		
-		void(^cleanup)() = ^{
+		void(^cleanup)(void) = ^{
 			[weakSelf updateBoundsUsingNavigationContraints];
 			if(completion) {
 				completion();
@@ -222,7 +222,7 @@
 
 - (void)popViewControllerAtPosition:(SCStackViewControllerPosition)position
 						   animated:(BOOL)animated
-						 completion:(void(^)())completion
+						 completion:(void(^)(void))completion
 {
 	if(self.scrollView.isRunningAnimation && self.shouldBlockInteractionWhileAnimating) {
 		return;
@@ -245,7 +245,7 @@
 
 - (void)popViewController:(UIViewController *)viewController
 				 animated:(BOOL)animated
-			   completion:(void(^)())completion
+			   completion:(void(^)(void))completion
 {
 	if(self.scrollView.isRunningAnimation && self.shouldBlockInteractionWhileAnimating) {
 		return;
@@ -264,7 +264,7 @@
 		previousViewController = [self.loadedControllers[@(position)] objectAtIndex:[self.loadedControllers[@(position)] indexOfObject:viewController] - 1];
 	}
 	
-	void(^cleanup)() = ^{
+	void(^cleanup)(void) = ^{
 		[self.loadedControllers[@(position)] removeObject:viewController];
 		[self.finalFrames removeObjectForKey:@([viewController hash])];
 		[self.visiblePercentages removeObjectForKey:@([viewController hash])];
@@ -300,7 +300,7 @@
 
 - (void)popToRootViewControllerFromPosition:(SCStackViewControllerPosition)position
 								   animated:(BOOL)animated
-								 completion:(void(^)())completion
+								 completion:(void(^)(void))completion
 {
 	[self navigateToViewController:self.rootViewController
 						  animated:animated
@@ -321,7 +321,7 @@
 
 - (void)navigateToViewController:(UIViewController *)viewController
 						animated:(BOOL)animated
-					  completion:(void(^)())completion
+					  completion:(void(^)(void))completion
 {
 	[self navigateToStep:[SCStackNavigationStep navigationStepWithPercentage:1.0f] inViewController:viewController animated:animated completion:completion];
 }
@@ -329,7 +329,7 @@
 - (void)navigateToStep:(SCStackNavigationStep *)step
 	  inViewController:(UIViewController *)viewController
 			  animated:(BOOL)animated
-			completion:(void(^)())completion
+			completion:(void(^)(void))completion
 {
 	if(self.scrollView.isRunningAnimation && self.shouldBlockInteractionWhileAnimating) {
 		return;
@@ -424,7 +424,7 @@
 	
 	// Navigate to the determined offset, restore the previous navigation states and update navigation contraints
 	__weak typeof(self) weakSelf = self;
-	void(^cleanup)() = ^{
+	void(^cleanup)(void) = ^{
         
         NSArray *navigationSteps = self.previousNavigationSteps[@([viewController hash])];
         if(navigationSteps.count) {
@@ -527,7 +527,7 @@
 {
 	[super viewWillLayoutSubviews];
 	
-	for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
+    for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
 		[self updateFinalFramesForPosition:position];
 	}
 	
@@ -792,7 +792,7 @@
 	
 	__block CGRect rootRemainder = CGRectIntersection(self.scrollView.bounds, newRootViewControllerFrame);
 	
-	for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
+	for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
 		
 		id<SCStackLayouterProtocol> layouter = self.layouters[@(position)];
 		
@@ -995,7 +995,7 @@
 		return;
 	}
 	
-	for(int position=SCStackViewControllerPositionTop; position<=SCStackViewControllerPositionRight; position++) {
+	for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
 		
 		BOOL isReversed = NO;
 		if([self.layouters[@(position)] respondsToSelector:@selector(isReversed)]) {
@@ -1312,7 +1312,7 @@
 
 - (SCStackViewControllerPosition)positionForViewController:(UIViewController *)viewController
 {
-	for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <=SCStackViewControllerPositionRight; position++) {
+	for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
 		if([self.loadedControllers[@(position)] containsObject:viewController]) {
 			return position;
 		}

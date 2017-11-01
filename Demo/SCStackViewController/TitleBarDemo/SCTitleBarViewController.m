@@ -105,7 +105,7 @@
 								  });
 	});
 	
-	[self.view castShadowWithPosition:[positionToShadowEdge[@(self.position)] intValue]];
+	[self.view castShadowWithPosition:(SCShadowEdge)[positionToShadowEdge[@(self.position)] intValue]];
 }
 
 @end

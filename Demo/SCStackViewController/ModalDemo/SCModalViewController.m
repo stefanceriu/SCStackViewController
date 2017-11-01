@@ -71,7 +71,7 @@
 								  @(SCStackViewControllerPositionRight)  : @(SCShadowEdgeRight)});
 	});
 	
-	[self.contentView castShadowWithPosition:[positionToShadowEdge[@(self.position)] intValue]];
+	[self.contentView castShadowWithPosition:(SCShadowEdge)[positionToShadowEdge[@(self.position)] intValue]];
 }
 
 @end

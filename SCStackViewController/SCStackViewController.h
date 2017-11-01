@@ -186,7 +186,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 				atPosition:(SCStackViewControllerPosition)position
 					unfold:(BOOL)unfold
 				  animated:(BOOL)animated
-				completion:(nullable void(^)())completion;
+				completion:(nullable void(^)(void))completion;
 
 
 - (void)registerNavigationSteps:(nullable NSArray *)navigationSteps forViewController:(nonnull UIViewController *)viewController;
@@ -202,7 +202,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  */
 - (void)popViewControllerAtPosition:(SCStackViewControllerPosition)position
 						   animated:(BOOL)animated
-						 completion:(nullable void(^)())completion;
+						 completion:(nullable void(^)(void))completion;
 
 /** Pops the given view controller
  *
@@ -212,7 +212,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  */
 - (void)popViewController:(nonnull UIViewController *)viewController
 				 animated:(BOOL)animated
-			   completion:(nullable void(^)())completion;
+			   completion:(nullable void(^)(void))completion;
 
 
 /** Pops all the view controllers from the given position
@@ -225,7 +225,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  */
 - (void)popToRootViewControllerFromPosition:(SCStackViewControllerPosition)position
 								   animated:(BOOL)animated
-								 completion:(nullable void(^)())completion;
+								 completion:(nullable void(^)(void))completion;
 
 
 /** Unfolds to the given view controller
@@ -239,7 +239,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
  */
 - (void)navigateToViewController:(nonnull UIViewController *)viewController
 						animated:(BOOL)animated
-					  completion:(nullable void(^)())completion;
+					  completion:(nullable void(^)(void))completion;
 
 
 /** Unfolds to the given step
@@ -255,7 +255,7 @@ typedef NS_OPTIONS(NSUInteger, SCStackViewControllerNavigationContraintType) {
 - (void)navigateToStep:(nonnull SCStackNavigationStep *)step
 	  inViewController:(nonnull UIViewController *)viewController
 			  animated:(BOOL)animated
-			completion:(nullable void(^)())completion;
+			completion:(nullable void(^)(void))completion;
 
 /**-----------------------------------------------------------------------------
  * @name Querying the Stack state

@@ -1,4 +1,10 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-pod 'SCScrollView', '~> 1.1'
-pod 'ChameleonFramework'
+platform :ios, '9.0'
+
+target 'SCStackViewController' do
+
+	pod 'SCScrollView', '~> 1.1'
+	pod 'ChameleonFramework'
+
+end

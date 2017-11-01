@@ -188,7 +188,7 @@
 
 - (void)stackViewController:(SCStackViewController *)stackViewController didNavigateToOffset:(CGPoint)offset
 {
-	[self.overlayView setAlpha:ABS((offset.x?:offset.y)/300.0f)];
+	[self.overlayView setAlpha:ABS((offset.x ?: offset.y) / 300.0f)];
 	
 	for(SCStackViewControllerPosition position = SCStackViewControllerPositionTop; position <= SCStackViewControllerPositionRight; position++) {
 		for(SCImageViewController *viewController in [self.stackViewController viewControllersForPosition:position]) {
