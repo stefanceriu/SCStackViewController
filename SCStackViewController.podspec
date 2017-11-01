@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name     = 'SCStackViewController'
-  s.version  = '3.3.5'
+  s.version  = '3.3.6'
   s.platform = :ios
-  s.ios.deployment_target = '5.0'
+  s.ios.deployment_target = '6.0'
 
   s.summary  = 'SCStackViewController is a container controller which allows you to stack other view controllers and build custom transitions between them.'
   s.description = <<-DESC
