@@ -27,4 +27,4 @@ SCStackViewController is released under the MIT License (MIT) (see the LICENSE f
 
 ## Contact
 Any suggestions or improvements are more than welcome.
-Feel free to contact me at [stefan.ceriu@yahoo.com](mailto:stefan.ceriu@yahoo.com) or [@stefanceriu](https://twitter.com/stefanceriu).
+Feel free to contact me at [stefan.ceriu@gmail.com](mailto:stefan.ceriu@gmail.com) or [@stefanceriu](https://twitter.com/stefanceriu).
