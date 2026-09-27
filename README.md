@@ -1,4 +1,7 @@
-# SCStackViewController
+## This project is now archived and superseeded by [SCEdgeStack](https://github.com/stefanceriu/SCEdgeStack), a direct Swift and SwiftUI replacement.
+
+
+## SCStackViewController
 
 ![Version](https://img.shields.io/cocoapods/v/SCStackViewController.svg)&nbsp;![License](https://img.shields.io/cocoapods/l/SCStackViewController.svg)&nbsp;![Platform](https://img.shields.io/cocoapods/p/SCStackViewController.svg)
 
